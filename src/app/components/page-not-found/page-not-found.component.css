@@ -1,0 +1,66 @@
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+/* color verde -> #226706  --  34 103 6
+color verde claro -> #C1C164  -- 193, 193, 100 */
+
+#background {
+  background-image: linear-gradient(
+      to bottom,
+      rgba(34, 103, 6, 0.35),
+      rgba(80, 81, 79, 0.35)
+    ),
+    url("../../../assets/image/not-found.jpg");
+  -webkit-background-size: cover;
+  -moz-background-size: center cover;
+  background-size: cover;
+  background-position: center top;
+  font-family: "Roboto Mono", "Liberation Mono", monospace;
+  height: 100%;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.container,
+.container > .row,
+.container > .row > div {
+  height: 100%;
+}
+
+#countUp {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #fff;
+}
+
+.button {
+  margin-top: 8px;
+  text-transform: uppercase;
+  text-decoration: none;
+  background-color: #c1c164;
+  padding: 1rem 4rem;
+  border-radius: 4rem;
+  font-size: 0.875rem;
+  letter-spacing: 0.05rem;
+}
+
+.text {
+  font-weight: 300;
+  margin-top: 4px;
+  text-align: center;
+}
+
+.number {
+  font-size: 4rem;
+  font-weight: 500;
+  margin-bottom: 18px;
+}
