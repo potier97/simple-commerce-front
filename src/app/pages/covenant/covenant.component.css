@@ -1,0 +1,15 @@
+.root {
+    background-color: #bdc3c7;
+    height: calc(100% - 80px);
+    width: -webkit-fill-available;
+}
+
+.space {
+    height: 24px;
+}
+
+.container {
+    height: 100%;
+    padding-left: 16px;
+    padding-right: 16px;
+}

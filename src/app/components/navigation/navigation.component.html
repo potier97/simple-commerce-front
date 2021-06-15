@@ -1,0 +1,68 @@
+<mat-sidenav-container class="sidenav-container">
+    <mat-sidenav 
+      #drawer 
+      [class]="statusSideVar ? 'sidenav mat-elevation-z3' : 'sidenavClose mat-elevation-z3'" 
+      fixedInViewport
+      mode='side'
+      opened="true">
+      <!-- Logo de la tienda [mode]="(isHandset$ | async) ? 'over' : 'side'" -->
+      <mat-toolbar class="toolbar-sidenav"> 
+        <img *ngIf="statusSideVar; else avatarLogo" src="../../../assets/image/logo-Horizontal.png" class="logoTienda" />
+        <ng-template #avatarLogo >
+          <img src="../../../assets/image/ms-icon-150x150.png" class="logoTienda" />
+        </ng-template>
+      </mat-toolbar>
+      <!-- Navegacion -->
+      <mat-nav-list *ngIf="statusSideVar; else sideVarList" >
+        <div class="container-button" *ngFor="let buttonItem of navigationList"> 
+          <button mat-flat-button routerLinkActive="active-link" class="navigation-button" [routerLink]="[buttonItem.link]"  > 
+            <!-- fxLayoutGap="0px"  -->
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutWrap>
+            <mat-icon class="child-1" fxFlex="20" fxFlexOrder="1">{{buttonItem.iconName}}</mat-icon> 
+            <div class="child-2" fxFlex="60" fxFlexOrder="2" >{{buttonItem.pagaName}}</div>
+            </div>
+          </button>
+        </div>   
+        <div class="container-button"> 
+          <button mat-flat-button class="navigation-button"  (click)="logout()"> 
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutWrap>
+            <mat-icon class="child-1" fxFlex="20" fxFlexOrder="1">chevron_left</mat-icon> 
+            <div class="child-2" fxFlex="60" fxFlexOrder="2" >Salir</div>
+            </div>
+          </button>
+        </div>   
+      </mat-nav-list> 
+      <ng-template #sideVarList >
+        <mat-nav-list>
+          <div class="container-button" *ngFor="let buttonItem of navigationList"> 
+            <button mat-fab color="accent" routerLinkActive="active-link" class="navigation-button" [routerLink]="[buttonItem.link]" >
+              <mat-icon>{{buttonItem.fabIcon}}</mat-icon>
+            </button>
+          </div>   
+          <div class="container-button"> 
+            <button mat-fab color="accent" (click)="logout()" class="navigation-button" >
+              <mat-icon>logout</mat-icon>
+            </button>
+          </div>   
+        </mat-nav-list> 
+      </ng-template>
+ 
+
+    </mat-sidenav>
+    <!-- Contenido Derecho -->
+    <mat-sidenav-content [class]="statusSideVar ? 'sidenav-content' : 'sidenav-content-close'">
+      <mat-toolbar class="toolbar">
+        <button
+          type="button"
+          aria-label="Toggle sidenav"
+          mat-icon-button
+          (click)="toggleSideVar()" >
+          <mat-icon aria-label="Side nav toggle icon" class="menuIcon">menu</mat-icon>
+        </button>
+        <h2 class="tittle">{{currentRouteTittle}}</h2>
+      </mat-toolbar>
+      <!-- Add Content Here -->
+      <router-outlet></router-outlet> 
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+

@@ -5,21 +5,22 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { AuthService } from '../../services/auth/auth.service';
+import { Router } from '@angular/router';
 
 
 @Component({
   selector: 'app-log-in',
   templateUrl: './log-in.component.html',
-  styleUrls: ['./log-in.component.css']
+  styleUrls: ['./log-in.component.css'],
 })
 export class LogInComponent implements OnInit {
-
   angForm: FormGroup = new FormGroup({
     email: new FormControl(''),
     password: new FormControl(''),
   });
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {}
 
   account_validation_messages = {
     email: [
@@ -34,12 +35,14 @@ export class LogInComponent implements OnInit {
       { type: 'required', message: 'Contraseña requerida' },
       {
         type: 'pattern',
-        message:'Su contraseña debe contener mínimo una letra mayuscula, una minuscula y un número',
+        message:
+          'Su contraseña debe contener mínimo una letra mayuscula, una minuscula y un número',
       },
     ],
   };
 
   ngOnInit(): void {
+    
     this.angForm = this.fb.group({
       email: new FormControl(
         '',
@@ -65,12 +68,21 @@ export class LogInComponent implements OnInit {
     this.angForm.reset();
   }
 
-  sendReqest(): void {
+  loginUser(): void {
     if (this.angForm.valid) {
-      console.log('USER', this.angForm.value);
+      const userReq = this.angForm.value;
+      console.log('USER', userReq);
+      // this.authService.login(userReq).subscribe({
+      //   complete: () => {
+      //     // (res) => 
+      //     // console.log("User: ", res)
+      //     // if(res){
+      //     //   this.router.navigate(['/pay'])
+      //     // }
+      //   },
+      // });
     } else {
       console.log('No valido');
     }
   }
-
 }

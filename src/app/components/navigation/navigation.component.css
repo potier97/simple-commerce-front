@@ -1,0 +1,83 @@
+.sidenav-container {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  /* background-color: red; */
+}
+
+.sidenav {
+  max-width: 250px;
+  background-color: #e4e4e4;
+}
+
+.sidenavClose {
+  max-width: 80px;
+  background-color: #e4e4e4;
+}
+
+
+.toolbar-sidenav {
+  height: 72px;
+  background-color: #e4e4e4;
+}
+
+.toolbar {
+  height: 80px;
+  background-color: #C1C164;
+}
+
+.tittle {
+  color: #226706;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-left: 8px;
+}
+
+.menuIcon {
+  color: #226706;
+  margin: 8px;
+}
+
+.logoTienda {
+  width: -webkit-fill-available;
+  padding: 10px 0px;
+}
+ 
+.child-2, .child-1 {
+  color: #fff;
+}
+
+.container-button {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  /* background-color: red; */
+  justify-content: center;
+  margin: 10px 8px;
+}
+
+.navigation-button {
+  border-radius: 16px;
+  margin: 0px 4px;
+  background-color: #bdbdbd; 
+}
+
+.active-link {
+  background-color: #C1C164AA; 
+}
+ 
+ 
+
+
+.sidenav-content {
+  background-color: #e4e4e4;
+  width: -webkit-fill-available;
+  margin-left: 250px !important;
+}
+
+.sidenav-content-close {
+  background-color: #e4e4e4;
+  width: -webkit-fill-available;
+  margin-left: 80px !important;
+}
