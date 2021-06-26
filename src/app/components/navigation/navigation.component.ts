@@ -21,7 +21,7 @@ export class NavigationComponent implements OnInit {
     );
 
   currentRouteTittle: string = "";
-  statusSideVar: boolean = true;
+  statusSideVar: boolean = false;
  
   navigationList: Navigation[] = [
     {
@@ -35,13 +35,7 @@ export class NavigationComponent implements OnInit {
       link: '/products',
       iconName: 'chevron_left',
       fabIcon: 'inventory_2',
-    },
-    {
-      pagaName: 'Categorias',
-      link: '/categories',
-      iconName: 'chevron_left',
-      fabIcon: 'category',
-    },
+    }, 
     {
       pagaName: 'Clientes',
       link: '/clients',
@@ -61,10 +55,22 @@ export class NavigationComponent implements OnInit {
       fabIcon: 'shopping_bag',
     },
     {
+      pagaName: 'Convenios',
+      link: '/covenants',
+      iconName: 'chevron_left',
+      fabIcon: 'account_balance',
+    },
+    {
       pagaName: 'Pagos',
       link: '/pay',
       iconName: 'chevron_left',
       fabIcon: 'paid',
+    },
+    {
+      pagaName: 'Errores',
+      link: '/mistakes',
+      iconName: 'chevron_left',
+      fabIcon: 'error',
     },
     {
       pagaName: 'Perfíl',

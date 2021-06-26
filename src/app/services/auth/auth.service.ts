@@ -45,7 +45,7 @@ export class AuthService {
   }
 
   private validateToken(): void{
-    const userToken = JSON.parse(localStorage.getItem("token") || '{}'); 
+    //const userToken = JSON.parse(localStorage.getItem("token") || '{}'); 
     //const isExpired = helper.isTokenExpired(userToken);
     // console.log("Estatus token: ", isExpired);
     // if(!isExpired){
