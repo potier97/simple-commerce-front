@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { 
+  Component, 
+  OnDestroy, 
+  OnInit 
+} from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -7,6 +11,7 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -14,7 +19,10 @@ import { Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
+
+  private subscription: Subscription[] = [];
+
   angForm: FormGroup = new FormGroup({
     userDocument: new FormControl(''),
     password: new FormControl(''),
@@ -25,6 +33,7 @@ export class LoginComponent implements OnInit {
       private authService: AuthService, 
       private router: Router) 
       {}
+  
 
   account_validation_messages = {
     userDocument: [
@@ -39,8 +48,13 @@ export class LoginComponent implements OnInit {
     ],
   };
 
-  ngOnInit(): void {
-    
+  ngOnDestroy(): void {
+    for(const sub of this.subscription) {
+      sub.unsubscribe();
+  } 
+  }
+
+  ngOnInit(): void { 
     this.angForm = this.fb.group({
       userDocument: new FormControl(
         '10324945632',
@@ -71,17 +85,19 @@ export class LoginComponent implements OnInit {
         username: userReq.userDocument,
         password: userReq.password
       }
-      //console.log('USER', userReq);
-      this.authService.login(userCredentials).subscribe(
-        res => {
-          console.log('del formato', res)
-          this.router.navigate(['/payment']);
-        },
-        err => {
-          console.log(err)
-          this.resetForm();
-        }
-      ) 
+      this.subscription.push(
+        this.authService.login(userCredentials).subscribe(
+          res => {
+            //console.log('del formato', res)
+            this.router.navigate(['/payment']);
+          },
+          err => {
+            console.log(err)
+            this.resetForm();
+          }
+        ) 
+      )
+      
     }
   }
 }

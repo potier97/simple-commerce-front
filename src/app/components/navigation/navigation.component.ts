@@ -92,7 +92,7 @@ export class NavigationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("Actualizo")
+    // console.log("Actualizo")
   }
  
   toggleSideVar(): void {

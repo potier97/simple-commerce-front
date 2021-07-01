@@ -21,7 +21,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
       return this.authService.isLogged.pipe(
         take(1),
         map((isLogged: boolean) => {
-          console.log(isLogged)
+          //console.log('isLogged ', isLogged)
           if(!isLogged) this.route.navigate(['/login'])
           return isLogged 
         })) 

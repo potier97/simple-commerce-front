@@ -6,6 +6,7 @@ import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators'; 
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { Router } from '@angular/router';
+import { Token } from '@app/models/token';
  
 const helper = new JwtHelperService();
 
@@ -15,6 +16,8 @@ const helper = new JwtHelperService();
 export class AuthService {
 
   private loggedIn = new BehaviorSubject<boolean>(false);
+  
+  private userToken = new BehaviorSubject<string>('');
 
   constructor(private httpClient: HttpClient,
       private router: Router  
@@ -27,13 +30,17 @@ export class AuthService {
     return this.loggedIn.asObservable();
   }
  
+  get userTokenValue(): string {
+    return this.userToken.getValue();
+  }
  
-  login(authData: LogInUser): Observable<LogInResponse | void | any >{
+  login(authData: LogInUser): Observable<LogInResponse | void >{
     return this.httpClient.post<LogInResponse>(`${environment.API_PATH}/auth/authenticate`, authData)
     .pipe(
       map( (res: LogInResponse) => {
         console.log('Ingresando al sistema')
         this.loggedIn.next(true);
+        this.userToken.next(res.jwt);
         this.saveToken(res.jwt);
         return res;
       }),
@@ -45,17 +52,32 @@ export class AuthService {
     console.log("Saliendo...")
     localStorage.removeItem("token");
     this.loggedIn.next(false);
+    this.userToken.next('');
     this.router.navigate(['/login']);
   }
 
   private validateToken(): void{
     const userToken = localStorage.getItem("token") ||  ''; 
-    const isExpired = helper.isTokenExpired(userToken);
+    const isExpired = helper.isTokenExpired(userToken); 
     //console.log("Estatus token: ", isExpired);
-    if(!isExpired) this.loggedIn.next(true)
-    else this.logout();
+    if(!isExpired){
+      this.loggedIn.next(true)
+      this.userToken.next(userToken);
+    } else this.logout();
     
   }
+
+  refreshToken(tokenData: string): Observable<LogInResponse | void | any >{
+    return this.httpClient.post<LogInResponse>(`${environment.API_PATH}/auth/refresh`, tokenData)
+    .pipe(
+      map( (res: LogInResponse) => {  
+        this.saveToken(res.jwt);
+        return res;
+      }),
+      catchError( err => this.handleError(err))
+    );
+  }
+ 
   
   private saveToken(token: string): void{
     localStorage.setItem("token", token);

@@ -7,12 +7,16 @@
 }
 
 .sidenav {
-  max-width: 250px;
+  width: 250px;
+  overflow-x: hidden;
+  transition: all, 0.5s;
   background-color: #e4e4e4;
 }
 
 .sidenavClose {
-  max-width: 80px;
+  width: 80px;
+  transition: all, 0.5s;
+  overflow-x: hidden;
   background-color: #e4e4e4;
 }
 
@@ -41,7 +45,12 @@
 
 .logoTienda {
   width: -webkit-fill-available;
+  padding: 10px 0px; 
+}
+
+.logoTiendacirculo{ 
   padding: 10px 0px;
+  height: -webkit-fill-available; 
 }
  
 .child-2, .child-1 {
@@ -51,8 +60,7 @@
 .container-button {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  /* background-color: red; */
+  align-items: stretch; 
   justify-content: center;
   margin: 10px 8px;
 }
@@ -66,18 +74,19 @@
 .active-link {
   background-color: #C1C164AA; 
 }
- 
- 
-
-
-.sidenav-content {
+   
+.sidenav-content { 
+  overflow-x: hidden;
   background-color: #e4e4e4;
   width: -webkit-fill-available;
   margin-left: 250px !important;
+  transition: all, 0.5s;
 }
 
 .sidenav-content-close {
+  overflow-x: hidden;
   background-color: #e4e4e4;
   width: -webkit-fill-available;
+  transition: all, 0.5s;
   margin-left: 80px !important;
 }

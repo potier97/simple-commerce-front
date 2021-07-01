@@ -1,11 +1,15 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
-import { HttpClientModule } from  '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from  '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { JwtModule } from "@auth0/angular-jwt";
 import { AppRoutingModule } from './core/app-routing.module';
 import { AngularMaterialModule } from './core/angular-material.module'; 
+
+//Interceptors
+import { JwtInterceptorInterceptor } from './interceptor/jwtInterceptor/jwt-interceptor.interceptor'
+
 
 //Services
 import { AuthService } from './services/auth/auth.service'
@@ -29,7 +33,8 @@ import { PayComponent } from './pages/pay/pay.component';
 import { CovenantComponent } from './pages/covenant/covenant.component';
 import { MistakesComponent } from './pages/mistakes/mistakes.component';
 import { ProfileComponent } from './pages/profile/profile.component';
-import { LoginComponent } from './pages/login/login.component'; 
+import { LoginComponent } from './pages/login/login.component';
+import { TableListComponent } from './components/table-list/table-list.component'; 
 
 
 @NgModule({
@@ -47,7 +52,8 @@ import { LoginComponent } from './pages/login/login.component';
     CovenantComponent,
     MistakesComponent,
     ProfileComponent,
-    LoginComponent
+    LoginComponent,
+    TableListComponent
   ],
   imports: [
     BrowserModule,
@@ -63,7 +69,10 @@ import { LoginComponent } from './pages/login/login.component';
   providers: [
     AuthService, 
     AuthGuard,
-    LoginGuard
+    LoginGuard,
+    {
+      provide: HTTP_INTERCEPTORS, useClass: JwtInterceptorInterceptor, multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })
