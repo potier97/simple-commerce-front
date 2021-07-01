@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router'; 
-//Pàginas
+//Pages
 import { LoginComponent } from '../pages/login/login.component';
 import { PageNotFoundComponent } from '../pages/page-not-found/page-not-found.component';
 import { NavigationComponent } from '../components/navigation/navigation.component';
@@ -13,15 +13,21 @@ import { InvocesComponent } from '../pages/invoces/invoces.component';
 import { PayComponent } from '../pages/pay/pay.component';
 import { MistakesComponent } from '../pages/mistakes/mistakes.component';
 import { ProfileComponent } from '../pages/profile/profile.component';
+//Guards
 import { AuthGuard } from '../../app/guards/auth/auth.guard'
+import { LoginGuard } from '../../app/guards/login/login.guard'
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent},
+  { 
+    path: 'login', 
+    component: LoginComponent,
+    canActivate: [LoginGuard]
+  },
   { path: '', redirectTo: '/login', pathMatch: 'full'},
   {
     path: '',
     component: NavigationComponent,  
-    //canActivate: [AuthGuard],
+    canActivateChild: [AuthGuard], 
     children: [
       { path: 'payment',   component: PaymentComponent,data: {title: 'Caja'} },
       { path: 'products', component: ProductsComponent, data: {title: 'Productos'} }, 

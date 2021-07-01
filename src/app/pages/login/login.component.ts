@@ -16,27 +16,25 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
   angForm: FormGroup = new FormGroup({
-    email: new FormControl(''),
+    userDocument: new FormControl(''),
     password: new FormControl(''),
   });
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {}
+  constructor(
+      private fb: FormBuilder, 
+      private authService: AuthService, 
+      private router: Router) 
+      {}
 
   account_validation_messages = {
-    email: [
+    userDocument: [
       { type: 'required', message: 'Cédula requerida' },
       { type: 'pattern', message: 'Ingrese una cédula valida' },
     ],
     password: [
-      {
-        type: 'minlength',
-        message: 'La contraseña debe ser de mínimo 5 carácterres',
-      },
+      { type: 'minlength', message: 'La contraseña debe ser de mínimo 5 carácterres', }, 
       { type: 'required', message: 'Contraseña requerida' },
-      {
-        type: 'pattern',
-        message:
-          'Su contraseña debe contener mínimo una letra mayuscula, una minuscula y un número',
+      { type: 'pattern', message: 'Su contraseña debe contener mínimo una letra mayuscula, una minuscula y un número',
       },
     ],
   };
@@ -44,24 +42,22 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     
     this.angForm = this.fb.group({
-      email: new FormControl(
-        '',
+      userDocument: new FormControl(
+        '10324945632',
         Validators.compose([
-          Validators.required,
-          //Validators.,
-          Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$'),
+          Validators.required, 
+          Validators.pattern('^[0-9]*$'),
         ])
       ),
       password: new FormControl(
-        '',
+        'Telot3ngo',
         Validators.compose([
           Validators.minLength(5),
           Validators.required,
           Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$'),
         ])
       ),
-    });
-    //this.angForm.get("email")?.hasError
+    }); 
   }
 
   resetForm(): void {
@@ -71,18 +67,21 @@ export class LoginComponent implements OnInit {
   loginUser(): void {
     if (this.angForm.valid) {
       const userReq = this.angForm.value;
-      console.log('USER', userReq);
-      // this.authService.login(userReq).subscribe({
-      //   complete: () => {
-      //     // (res) => 
-      //     // console.log("User: ", res)
-      //     // if(res){
-      //     //   this.router.navigate(['/pay'])
-      //     // }
-      //   },
-      // });
-    } else {
-      console.log('No valido');
+      const userCredentials = {
+        username: userReq.userDocument,
+        password: userReq.password
+      }
+      //console.log('USER', userReq);
+      this.authService.login(userCredentials).subscribe(
+        res => {
+          console.log('del formato', res)
+          this.router.navigate(['/payment']);
+        },
+        err => {
+          console.log(err)
+          this.resetForm();
+        }
+      ) 
     }
   }
 }

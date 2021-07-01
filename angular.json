@@ -72,7 +72,8 @@
               "browserTarget": "TELOTENGO-FRONT:build:production"
             },
             "development": {
-              "browserTarget": "TELOTENGO-FRONT:build:development"
+              "browserTarget": "TELOTENGO-FRONT:build:development",
+              "proxyConfig": "proxy.config.json"
             }
           },
           "defaultConfiguration": "development"

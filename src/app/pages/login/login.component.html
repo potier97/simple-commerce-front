@@ -14,14 +14,14 @@
           <mat-form-field class="example-full-width">
             <input
               matInput
-              type="email"
+              type="text"
               required  
-              placeholder="Correo"
-              formControlName="email"
+              placeholder="Cédula"
+              formControlName="userDocument"
             /> 
-            <mat-error *ngFor="let validation of account_validation_messages.email">
+            <mat-error *ngFor="let validation of account_validation_messages.userDocument">
               <mat-error class="error-message" 
-                *ngIf="angForm.get('email')?.hasError(validation.type) && (angForm.get('email')?.dirty || angForm.get('email')?.touched)"
+                *ngIf="angForm.get('userDocument')?.hasError(validation.type) && (angForm.get('userDocument')?.dirty || angForm.get('userDocument')?.touched)"
                 >
                 {{validation.message}}
               </mat-error>

@@ -1,11 +1,12 @@
 export interface LogInUser {
-    mail: string,
+    username: string,
     password: string
 }
 
 
 export interface LogInResponse {
+    status: string, 
+    code: number,
     message: string,
-    token: string,
-    userId: string
+    jwt: string,  
 }

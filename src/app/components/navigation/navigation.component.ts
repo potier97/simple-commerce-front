@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { Navigation } from '../../models/navigation';
 import { ActivatedRoute, Router, Event, NavigationEnd } from '@angular/router';
-//import { AuthService } from '@app/services/auth/auth.service';
+import { AuthService } from '@app/services/auth/auth.service';
 
 
 @Component({
@@ -84,32 +84,23 @@ export class NavigationComponent implements OnInit {
     private breakpointObserver: BreakpointObserver,
     private route: ActivatedRoute,
     private router: Router, 
-    //private authService: AuthService
+    private authService: AuthService
   ) { 
     this.router.events.subscribe((ev: Event) => {
-      if(ev instanceof NavigationEnd){
-        this.currentRouteTittle = this.route.snapshot.firstChild?.data['title'];
-        //console.log(this.currentRouteTittle);
-      }
+      if(ev instanceof NavigationEnd) this.currentRouteTittle = this.route.snapshot.firstChild?.data['title']; 
     }); 
   }
 
   ngOnInit(): void {
     console.log("Actualizo")
   }
-
-  button(): void {
-    console.log('hola');
-  }
-
+ 
   toggleSideVar(): void {
     this.statusSideVar = !this.statusSideVar
   }
 
-  logout(): void {
-    console.log("salio")
-    //this.authService.logout();
-
+  onLogout(): void {
+    this.authService.logout();
   }
 
   

@@ -12,6 +12,7 @@ import { AuthService } from './services/auth/auth.service'
 
 //Guards
 import { AuthGuard } from "./guards/auth/auth.guard";
+import { LoginGuard } from "./guards/login/login.guard";
 
 //Components
 import { AppComponent } from './app.component';
@@ -59,7 +60,11 @@ import { LoginComponent } from './pages/login/login.component';
     FlexLayoutModule,  
     JwtModule,
   ],
-  providers: [AuthService, AuthGuard ],
+  providers: [
+    AuthService, 
+    AuthGuard,
+    LoginGuard
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
