@@ -34,7 +34,8 @@ import { CovenantComponent } from './pages/covenant/covenant.component';
 import { MistakesComponent } from './pages/mistakes/mistakes.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { LoginComponent } from './pages/login/login.component';
-import { TableListComponent } from './components/table-list/table-list.component'; 
+import { TableListComponent } from './components/table-list/table-list.component';
+import { FilterDataPipe } from './pipes/filterData/filter-data.pipe'; 
 
 
 @NgModule({
@@ -53,7 +54,8 @@ import { TableListComponent } from './components/table-list/table-list.component
     MistakesComponent,
     ProfileComponent,
     LoginComponent,
-    TableListComponent
+    TableListComponent,
+    FilterDataPipe
   ],
   imports: [
     BrowserModule,

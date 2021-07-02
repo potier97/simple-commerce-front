@@ -1,6 +1,42 @@
 <div class="root">
     <div class="container">
         <div class="space"></div>
-        <mat-card>Productos Card</mat-card>
+        <mat-card> 
+            <h2>Buscador</h2>
+            <mat-form-field class="full-width-field">
+                <input
+                    matInput
+                    type="text"
+                    placeholder="DNI Producto" 
+                    [(ngModel)]="searchDni"
+                    name="searchDni"
+                    (keyup)="applyFilter()"
+                    /> 
+            </mat-form-field>
+            <button
+            mat-stroked-button
+            color="secundary"
+            type="submit"
+            class="btn-block"
+            (click)="clearSearch()">
+                Limpiar
+            </button>
+        </mat-card>
+        <div class="space"></div>
+        <mat-card> 
+            <table mat-table matSort  [dataSource]="dataSource" > 
+                <!-- Position Column -->
+                <ng-container *ngFor="let column of columns" matColumnDef="{{column.name}}">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{column.title}}</th>
+                    <td mat-cell *matCellDef="let element"> {{element[column.name]}} </td>
+                </ng-container>
+             
+            
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table> 
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </mat-card>
+        <div class="space"></div>
     </div>
 </div>

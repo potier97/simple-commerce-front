@@ -1,15 +1,31 @@
 .root {
-    background-color: #bdc3c7;
-    height: calc(100% - 80px);
-    width: -webkit-fill-available;
+  background-color: #bdc3c7;
+  min-height: calc(100% - 80px);
+  width: -webkit-fill-available;
 }
 
 .space {
-    height: 24px;
+  height: 24px;
 }
 
 .container {
-    height: 100%;
-    padding-left: 16px;
-    padding-right: 16px;
+  height: 100%;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+table {
+  width: 100%;
+}
+
+.full-width-field {
+  width: 100%;
+} 
+
+.mat-row:nth-child(even){
+    background-color: #fff;
+}
+        
+.mat-row:nth-child(odd){
+    background-color: #f5f5f5;
 }
