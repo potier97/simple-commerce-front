@@ -32,6 +32,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialogModule } from '@angular/material/dialog';
+
  
 @NgModule({
   imports: [
@@ -68,6 +70,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatRadioModule,
     MatDatepickerModule,
     MatTooltipModule,
+    MatDialogModule,
   ],
   exports: [
     CdkTreeModule,
@@ -102,6 +105,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatRadioModule,
     MatDatepickerModule,
     MatTooltipModule,
+    MatDialogModule,
   ], 
 })
 export class AngularMaterialModule {}

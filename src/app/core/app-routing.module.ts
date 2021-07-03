@@ -7,6 +7,7 @@ import { NavigationComponent } from '../components/navigation/navigation.compone
 import { PaymentComponent } from '../pages/payment/payment.component';
 import { CovenantComponent } from '../pages/covenant/covenant.component';
 import { ProductsComponent } from '../pages/products/products.component'; 
+import { NewProductComponent } from '../pages/new-product/new-product.component'; 
 import { ClientsComponent } from '../pages/clients/clients.component';
 import { OffersComponent } from '../pages/offers/offers.component';
 import { InvocesComponent } from '../pages/invoces/invoces.component';
@@ -31,6 +32,7 @@ const routes: Routes = [
     children: [
       { path: 'payment',   component: PaymentComponent,data: {title: 'Caja'} },
       { path: 'products', component: ProductsComponent, data: {title: 'Productos'} }, 
+      { path: 'products/newProduct', component: NewProductComponent, data: {title: 'Nuevo Producto'} }, 
       { path: 'clients', component: ClientsComponent, data: {title: 'Clientes'} },
       { path: 'offers', component: OffersComponent, data: {title: 'Ofertas'} },
       { path: 'invoces', component: InvocesComponent, data: {title: 'Ventas'} },

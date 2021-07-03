@@ -2,10 +2,13 @@ import {AfterViewInit, Component, ViewChild, OnInit, OnDestroy} from '@angular/c
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table'; 
 import {MatSort} from '@angular/material/sort';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { ProductsService } from '@app/services/products/products.service';
 import { Subscription } from 'rxjs';
 import { ProductsData } from '@app/models/products';
+import { CustomDialogComponent } from '@app/components/custom-dialog/custom-dialog.component';
 import Swal from 'sweetalert2'
+import { Router } from '@angular/router';
   
 
 @Component({
@@ -21,11 +24,11 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
   displayedColumns: string[] = ['idProduct', 'name', 'idCode', 'amount', 'tax', 'accion']; 
   dataSource = new MatTableDataSource<ProductsData>();
   columns = [
-    { title: 'Id', name: 'idProduct',  size: "15%"},
+    { title: 'Id', name: 'idProduct',  size: "5%"},
     { title: 'Nombre', name: 'name',  size: "30%"},
-    { title: 'DNI', name: 'idCode',  size: "10%"},
+    { title: 'DNI', name: 'idCode',  size: "15%"},
     { title: 'Stock', name: 'amount',  size: "15%"},
-    { title: 'Iva', name: 'tax',  size:"10%"},
+    { title: 'Iva', name: 'tax',  size:"15%"},
     { title: 'Precio', name: 'price',  size: "10%"},
     { title: 'Acción', name: 'accion', size: "10$"},
   ]
@@ -34,7 +37,11 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor( private productService: ProductsService) { }
+  constructor(  
+      private dialog: MatDialog,  
+      private productService: ProductsService, 
+      private router: Router
+    ) { }
 
   ngOnInit(): void { 
     this.subscription.push(
@@ -65,6 +72,10 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
     } 
   } 
 
+  openDialog() {
+    this.dialog.open(CustomDialogComponent);
+  }
+
   clearSearch(): void { 
     this.searchDni = '';
     this.dataSource.filter = "";
@@ -75,7 +86,8 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
   }  
 
   addProduct(): void {
-    console.log("Añadiendo producto")
+    //console.log("Añadiendo producto")
+    this.router.navigate(['/products/newProduct'])
   } 
 
   editProduct(product: ProductsData): void {
@@ -84,7 +96,7 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
 
   updateStock(product: ProductsData): void {
     console.log('Amentando stock de producto -> ' , product.idCode)
-
+    this.openDialog();
   }
 
   deleteProduct(product: ProductsData): void {

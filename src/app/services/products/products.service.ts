@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CustomResponse } from '@app/models/custom-response';
+import { ProductsData } from '@app/models/products'; 
 import { environment } from '@environments/environment'; 
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -18,6 +19,16 @@ export class ProductsService {
     .pipe(
       map((res: CustomResponse) => {
         //console.log('Listando los prodctos', res) 
+        return res;
+      }),
+      catchError( err => this.handleError(err))
+    );
+  }
+
+  createProduct(newProduct: ProductsData): Observable<CustomResponse>{
+    return this.httpClient.post<CustomResponse>(`${environment.API_PATH}/product/`, newProduct)
+    .pipe(
+      map((res: CustomResponse) => {
         return res;
       }),
       catchError( err => this.handleError(err))

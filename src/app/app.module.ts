@@ -35,7 +35,9 @@ import { MistakesComponent } from './pages/mistakes/mistakes.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { LoginComponent } from './pages/login/login.component';
 import { TableListComponent } from './components/table-list/table-list.component';
-import { FilterDataPipe } from './pipes/filterData/filter-data.pipe'; 
+import { FilterDataPipe } from './pipes/filterData/filter-data.pipe';
+import { NewProductComponent } from './pages/new-product/new-product.component';
+import { CustomDialogComponent } from './components/custom-dialog/custom-dialog.component'; 
 
 
 @NgModule({
@@ -55,7 +57,9 @@ import { FilterDataPipe } from './pipes/filterData/filter-data.pipe';
     ProfileComponent,
     LoginComponent,
     TableListComponent,
-    FilterDataPipe
+    FilterDataPipe,
+    NewProductComponent,
+    CustomDialogComponent
   ],
   imports: [
     BrowserModule,
