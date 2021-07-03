@@ -16,10 +16,11 @@ export class JwtInterceptorInterceptor implements HttpInterceptor {
   constructor( private authService: AuthService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    
-    if(request.url.includes("payment") || request.url.includes("products") || request.url.includes("clients") ||
+    //console.log("Interceptor generated", request.url)
+    if(request.url.includes("payment") || request.url.includes("product") || request.url.includes("clients") ||
     request.url.includes("offers") || request.url.includes("invoces") || request.url.includes("covenants") || 
     request.url.includes("pay") || request.url.includes("mistakes") || request.url.includes("profile") ){
+      //console.log("Entró")
       const authToken = this.authService.userTokenValue;
       const authReq = request.clone({
         setHeaders: {

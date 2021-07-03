@@ -1,0 +1,194 @@
+@import '~@angular/material/theming';
+@include mat-core();
+ 
+$md-myappprimary: (
+    50 : #f8f8ec,
+    100 : #ececd1,
+    200 : #e0e0b2,
+    300 : #d4d493,
+    400 : #caca7b,
+    500 : #c1c164,
+    600 : #bbbb5c,
+    700 : #b3b352,
+    800 : #abab48,
+    900 : #9e9e36,
+    A100 : #ffffea,
+    A200 : #ffffb7,
+    A400 : #ffff84,
+    A700 : #ffff6a,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #000000,
+        600 : #000000,
+        700 : #000000,
+        800 : #000000,
+        900 : #000000,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+$md-myappsecundary: (
+    50 : #e4ede1,
+    100 : #bdd1b4,
+    200 : #91b383,
+    300 : #649551,
+    400 : #437e2b,
+    500 : #226706,
+    600 : #1e5f05,
+    700 : #195404,
+    800 : #144a03,
+    900 : #0c3902,
+    A100 : #7dff6f,
+    A200 : #4fff3c,
+    A400 : #21ff09,
+    A700 : #17ef00,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #ffffff,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+$md-myappinfo: (
+    50 : #eaf0ff,
+    100 : #cadbff,
+    200 : #a7c3ff,
+    300 : #84aaff,
+    400 : #6998ff,
+    500 : #4f86ff,
+    600 : #487eff,
+    700 : #3f73ff,
+    800 : #3669ff,
+    900 : #2656ff,
+    A100 : #ffffff,
+    A200 : #ffffff,
+    A400 : #d4dcff,
+    A700 : #bac8ff,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #000000,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+$md-myappwarn: (
+    50 : #ffece6,
+    100 : #ffd0c2,
+    200 : #ffb199,
+    300 : #ff9170,
+    400 : #ff7a51,
+    500 : #ff6232,
+    600 : #ff5a2d,
+    700 : #ff5026,
+    800 : #ff461f,
+    900 : #ff3413,
+    A100 : #ffffff,
+    A200 : #fffafa,
+    A400 : #ffcdc7,
+    A700 : #ffb7ad,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #000000,
+        600 : #000000,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+$md-myapperror: (
+    50 : #ffeeef,
+    100 : #ffd5d6,
+    200 : #ffb9bb,
+    300 : #ff9ca0,
+    400 : #ff878b,
+    500 : #ff7277,
+    600 : #ff6a6f,
+    700 : #ff5f64,
+    800 : #ff555a,
+    900 : #ff4247,
+    A100 : #ffffff,
+    A200 : #ffffff,
+    A400 : #ffeaea,
+    A700 : #ffd0d1,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #000000,
+        600 : #000000,
+        700 : #000000,
+        800 : #000000,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+ //Light Theme
+$my-app-primary: mat-palette($md-myappprimary, 500);
+$my-app-secundary: mat-palette($md-myappsecundary, 500);
+//$my-app-info: mat-palette($md-myappinfo, 500); 
+$my-app-warn: mat-palette($md-myappwarn, 500);
+//$my-app-error: mat-palette($md-myapperror, 500);
+$my-light-theme: mat-light-theme($my-app-primary, $my-app-secundary, $my-app-warn);
+@include angular-material-theme($my-light-theme);
+
+
+//Dark Theme
+$my-app-dark-primary: mat-palette($md-myappprimary, A700);
+$my-app-dark-secundary: mat-palette($md-myappsecundary, A100);
+$my-app-dark-warn: mat-palette($md-myappwarn, A700);
+$my-dark-theme: mat-dark-theme($my-app-dark-primary, $my-app-dark-secundary, $my-app-dark-warn);
+
+.light-theme {
+    @include angular-material-theme($my-light-theme);
+    color: #222;
+}
+
+.light-theme {
+    @include angular-material-theme($my-dark-theme);
+    color: #fff;
+}
+

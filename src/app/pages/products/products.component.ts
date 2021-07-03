@@ -1,72 +1,69 @@
-import {AfterViewInit, Component, ViewChild, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ViewChild, OnInit, OnDestroy} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table'; 
 import {MatSort} from '@angular/material/sort';
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
- 
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-  {position: 11, name: 'Sodium', weight: 22.9897, symbol: 'Na'},
-  {position: 12, name: 'Magnesium', weight: 24.305, symbol: 'Mg'},
-  {position: 13, name: 'Aluminum', weight: 26.9815, symbol: 'Al'},
-  {position: 14, name: 'Silicon', weight: 28.0855, symbol: 'Si'},
-  {position: 15, name: 'Phosphorus', weight: 30.9738, symbol: 'P'},
-  {position: 16, name: 'Sulfur', weight: 32.065, symbol: 'S'},
-  {position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl'},
-  {position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar'},
-  {position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K'},
-  {position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca'},
-];
+import { ProductsService } from '@app/services/products/products.service';
+import { Subscription } from 'rxjs';
+import { ProductsData } from '@app/models/products';
+import Swal from 'sweetalert2'
+  
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css']
 })
-export class ProductsComponent implements OnInit, AfterViewInit  {
+export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
+
+  private subscription: Subscription[] = [];
 
   searchDni: string = ""
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  displayedColumns: string[] = ['idProduct', 'name', 'idCode', 'amount', 'tax', 'accion']; 
+  dataSource = new MatTableDataSource<ProductsData>();
   columns = [
-    { title: 'Id', name: 'position'},
-    { title: 'Nombre', name: 'name'},
-    { title: 'Tamaño', name: 'weight'},
-    { title: 'Simbolo', name: 'symbol'},
+    { title: 'Id', name: 'idProduct',  size: "15%"},
+    { title: 'Nombre', name: 'name',  size: "30%"},
+    { title: 'DNI', name: 'idCode',  size: "10%"},
+    { title: 'Stock', name: 'amount',  size: "15%"},
+    { title: 'Iva', name: 'tax',  size:"10%"},
+    { title: 'Precio', name: 'price',  size: "10%"},
+    { title: 'Acción', name: 'accion', size: "10$"},
   ]
+ 
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor() { }
- 
+  constructor( private productService: ProductsService) { }
 
-  ngAfterViewInit() {
+  ngOnInit(): void { 
+    this.subscription.push(
+      this.productService.getAllProducts().subscribe(
+        res => {
+          this.dataSource.data = res.content;
+          //console.log('del formato', res.content) 
+        },
+        err => {
+          console.log(err) 
+        }
+      ) 
+    )
+  }
+ 
+  ngAfterViewInit() { 
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
-      return data.name.toLowerCase().includes(filter);
+    this.dataSource.filterPredicate = (data: ProductsData, filter: string): boolean => {
+      //console.log("data  del filtro: ", data.idCode, " - - filter: ", filter) 
+      return data.idCode.toString().includes(filter) &&  data.active === 1 ;
      };
   }
 
-  ngOnInit(): void {
-  }
+  ngOnDestroy(): void { 
+    for(const sub of this.subscription) {
+      sub.unsubscribe();
+    } 
+  } 
 
   clearSearch(): void { 
     this.searchDni = '';
@@ -75,6 +72,73 @@ export class ProductsComponent implements OnInit, AfterViewInit  {
 
   applyFilter(): void { 
     this.dataSource.filter = this.searchDni.trim().toLowerCase();
-  }   
+  }  
+
+  addProduct(): void {
+    console.log("Añadiendo producto")
+  } 
+
+  editProduct(product: ProductsData): void {
+    console.log('Editando producto -> ' , product.idCode)
+  }
+
+  updateStock(product: ProductsData): void {
+    console.log('Amentando stock de producto -> ' , product.idCode)
+
+  }
+
+  deleteProduct(product: ProductsData): void {
+    //console.log('Eliminando producto -> ' , product.idCode)
+    Swal.fire({
+      title: 'Eliminar producto',
+      text: `¿Desea eliminar el producto ${product.idCode}?`,
+      icon: 'warning',
+      heightAuto: false,
+      showCancelButton: true,
+      confirmButtonColor: '#c1c164',
+      cancelButtonColor: '#226706',
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Eliminar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.subscription.push(
+          this.productService.deleteProduct(product.idProduct).subscribe(
+            res => { 
+              this.subscription.push(
+                this.productService.getAllProducts().subscribe(
+                  res => {
+                    this.dataSource.data = res.content;
+                  },
+                  err => {
+                    console.log(err) 
+                  }
+                ) 
+              )
+              Swal.fire({
+                title: 'Eliminado',
+                text: `Producto ${product.idCode} eliminado`,
+                icon: 'success',
+                heightAuto: false, 
+                confirmButtonColor: '#c1c164', 
+                confirmButtonText: 'Cerrar'
+              })
+            },
+            err => {
+              console.log(err)  
+              Swal.fire({
+                title: 'Error',
+                text: `Producto ${product.idCode} no ha podido ser eliminado`,
+                icon: 'error',
+                heightAuto: false, 
+                confirmButtonColor: '#c1c164', 
+                confirmButtonText: 'Cerrar'
+              })
+            }
+          ) 
+        )
+        
+      }
+    })
+  }
 
 }
