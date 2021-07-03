@@ -7,3 +7,9 @@ export interface ProductsData {
     price: number;
     tax: number
 }
+
+export interface incrementeProduct {
+    idProduct: number; 
+    amount: number; 
+    idCode: number;
+}

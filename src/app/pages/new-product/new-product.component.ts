@@ -40,7 +40,7 @@ export class NewProductComponent implements OnInit, OnDestroy {
     ],
     amount: [
       { type: 'required', message: 'Ingrese la cantidad de productos disponibles' },
-      { type: 'pattern', message: 'Ingrese un número valido de solo números' },
+      { type: 'pattern', message: 'Ingrese una cantidad valida (solo números)' },
       { type: 'min', message: 'Ingrese un valor positivo' },  
     ], 
     tax: [
@@ -57,7 +57,7 @@ export class NewProductComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy(): void {
-    console.log("se destruyo el componente") 
+    //console.log("Desubs all observers") 
     for(const sub of this.subscription) {
       sub.unsubscribe();
     }
@@ -122,24 +122,14 @@ export class NewProductComponent implements OnInit, OnDestroy {
       this.subscription.push(
         this.productService.createProduct(productData).subscribe(
           res => {
-            console.log('Response ->', res)
+            //console.log('Response ->', res)
             this.resetForm();
-            this.snackbar.open(res.message, undefined , {
-              horizontalPosition: 'right',
-              verticalPosition: 'top',
-              duration: 6500,
-              panelClass: ["succes-snack"],
-            })
+            this.showSnack(true, res.message); 
             this.router.navigate(['/products']);
           },
           err => {
-            console.log(err)
-            this.snackbar.open(err.message, undefined , {
-              horizontalPosition: 'right',
-              verticalPosition: 'top',
-              duration: 6500,
-              panelClass: ["error-snack"],
-            })
+            //console.log(err)
+            this.showSnack(false, err.message);  
             this.resetForm();
           }
         ) 
@@ -150,11 +140,15 @@ export class NewProductComponent implements OnInit, OnDestroy {
 
   resetForm(): void {
     this.angForm.reset();
-  }
+  } 
 
-  cancelForm(): void {
-    console.log("retornando")
-    this.router.navigate(['/products'])
+  showSnack(status: boolean, message: string, timer: number = 6500): void {
+    this.snackbar.open(message, undefined , {
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+      duration: timer,
+      panelClass: [status ? "succes-snack" : "error-snack"],
+    })
   }
 
 }

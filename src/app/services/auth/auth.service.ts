@@ -59,7 +59,7 @@ export class AuthService {
   private validateToken(): void{
     const userToken = localStorage.getItem("token") ||  ''; 
     const isExpired = helper.isTokenExpired(userToken); 
-    //console.log("Estatus token: ", isExpired);
+    //console.log("Validando expiración del token -> ", isExpired) 
     if(!isExpired){
       this.loggedIn.next(true)
       this.userToken.next(userToken);

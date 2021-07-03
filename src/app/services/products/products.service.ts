@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CustomResponse } from '@app/models/custom-response';
-import { ProductsData } from '@app/models/products'; 
+import { incrementeProduct, ProductsData } from '@app/models/products'; 
 import { environment } from '@environments/environment'; 
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -35,6 +35,16 @@ export class ProductsService {
     );
   }
 
+  increaseProduct(productData: incrementeProduct): Observable<CustomResponse>{
+    return this.httpClient.put<CustomResponse>(`${environment.API_PATH}/product/stock/`, productData)
+    .pipe(
+      map((res: CustomResponse) => {
+        return res;
+      }),
+      //catchError( err => this.handleError(err))
+    );
+  }
+
   deleteProduct(id: number): Observable<CustomResponse>{
     return this.httpClient.delete<CustomResponse>(`${environment.API_PATH}/product/${id}`)
     .pipe(
@@ -49,9 +59,11 @@ export class ProductsService {
   
   private handleError(err: any): Observable<never>{
     let errorMessage = "Ocurrió un error"; 
-    if(err) errorMessage = `Error code: ${err.code}`;
-    console.log(err)
-    //window.alert(errorMessage); 
+    if(err){
+      errorMessage = `Error code: ${err.code}`;
+      console.log("Error generado -> ", err)
+      //window.alert(errorMessage); 
+    }
     return throwError(errorMessage);
   }
 }
