@@ -13,7 +13,6 @@ export class ProductsService {
 
   constructor(private httpClient: HttpClient) { }
 
-
   getAllProducts(): Observable<CustomResponse>{
     return this.httpClient.get<CustomResponse>(`${environment.API_PATH}/product/all`)
     .pipe(
@@ -31,7 +30,7 @@ export class ProductsService {
       map((res: CustomResponse) => {
         return res;
       }),
-      catchError( err => this.handleError(err))
+      //catchError( err => this.handleError(err))
     );
   }
 
@@ -53,6 +52,27 @@ export class ProductsService {
         return res;
       }),
       catchError( err => this.handleError(err))
+    );
+  }
+
+  getProduct(id: number): Observable<CustomResponse>{
+    return this.httpClient.get<CustomResponse>(`${environment.API_PATH}/product/${id}`)
+    .pipe(
+      map((res: CustomResponse) => {
+        //console.log('Prodcto Obtenido', res) 
+        return res;
+      }),
+      //catchError( err => this.handleError(err))
+    );
+  }   
+ 
+  updateProduct(newProduct: ProductsData): Observable<CustomResponse>{
+    return this.httpClient.put<CustomResponse>(`${environment.API_PATH}/product/`, newProduct)
+    .pipe(
+      map((res: CustomResponse) => {
+        return res;
+      }),
+      //catchError( err => this.handleError(err))
     );
   }
   

@@ -21,11 +21,13 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
   private subscription: Subscription[] = [];
 
   searchDni: string = ""
+  //Flag to Spinner data 
+  loadingData: boolean = false;
   displayedColumns: string[] = ['idProduct', 'name', 'idCode', 'amount', 'tax', 'accion']; 
   dataSource = new MatTableDataSource<ProductsData>();
   columns = [
-    { title: 'Id', name: 'idProduct',  size: "5%"},
-    { title: 'Nombre', name: 'name',  size: "30%"},
+    { title: 'No.', name: 'idProduct',  size: "8%"},
+    { title: 'Nombre', name: 'name',  size: "25%"},
     { title: 'DNI', name: 'idCode',  size: "15%"},
     { title: 'Stock', name: 'amount',  size: "15%"},
     { title: 'Iva', name: 'tax',  size:"15%"},
@@ -51,10 +53,12 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
         res => {
           this.dataSource.data = res.content;
           //console.log('Prodctos ->', res.content) 
+          this.loadingData = true
         },
         err => {
           console.log(err) 
           this.showSnack(false, 'Imposible Obtener Productos'); 
+          this.loadingData = true
         }
       ) 
     )
@@ -94,12 +98,12 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
             amount: result.data.amount,
             idCode: product.idCode
           } 
-          console.log(updateProductData);
+          //console.log(updateProductData);
           //Al cerrar el modal - se envia al api la peticion de incrementar la cantidad de registros
           this.subscription.push(
             this.productService.increaseProduct(updateProductData).subscribe(
               res => { 
-                console.log('de actualizar el producto', res.content) 
+                //console.log('de actualizar el producto', res.content) 
                 this.showSnack(true, res.message);  
                 this.getProducts();
               },
@@ -123,11 +127,7 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
     //Filtra los porductos por el DNI
     this.dataSource.filter = this.searchDni.trim().toLowerCase();
   }  
- 
-  editProduct(product: ProductsData): void {
-    console.log('Editando producto -> ' , product.idCode)
-  } 
-
+   
   deleteProduct(product: ProductsData): void {
     //console.log('Eliminando producto -> ' , product.idCode)
     //Modal de eliminar el producto

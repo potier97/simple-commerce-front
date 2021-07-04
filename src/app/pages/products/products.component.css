@@ -46,7 +46,15 @@ table {
 }
 
 .fav-add-product {
-  position: absolute;
+  position: fixed;
   right: 24px;
   bottom: 24px;
 }
+
+
+.container-spinner {
+  height: 100%;
+  padding: 24px 16px;
+  min-height: calc(100vh - 80px);
+}
+

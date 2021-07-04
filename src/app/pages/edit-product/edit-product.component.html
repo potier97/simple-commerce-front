@@ -1,14 +1,15 @@
 <div class="root">
-    <div class="container">
+    <div class="container" *ngIf="product != undefined; else spinnerView">
         <div class="space"></div>
-        <mat-card>  
+        <mat-card >  
+            <!-- product -->
             <div class="title-form-text">
-                <h2 style="color: #226706">Ingrese todos los valores para poder crear un producto</h2>
+                <h2 style="color: #226706">Ingrese los valores para editar - <b>{{product.name}}</b></h2>
             </div>
             <form
                 class="example-form"
                 [formGroup]="angForm" 
-                (submit)="createProduct()"
+                (submit)="updateProduct()"
                  >
                  <!-- novalidate -->
                 <mat-card-content fxLayout="column" fxLayoutAlign="space-between stretch" class="container-form">
@@ -108,13 +109,18 @@
                     type="submit"
                     class="btn-block"
                     [disabled]="angForm.invalid">
-                    Crear
+                    Actualizar
                     </button>
                 </div>
             </form> 
-
         </mat-card>
         <div class="space"></div> 
-        
     </div> 
+
+    <ng-template #spinnerView >
+        <div class="container-spinner" fxLayout="row" fxLayoutAlign="center center"  > 
+            <mat-spinner color='accent' diameter="150" strokeWidth="14"></mat-spinner>
+        </div>   
+    </ng-template>  
 </div>
+

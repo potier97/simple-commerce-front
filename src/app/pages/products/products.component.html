@@ -1,5 +1,5 @@
 <div class="root">
-    <div class="container">
+    <div class="container" [hidden]="!loadingData">
         <div class="space"></div>
         <mat-card> 
             <h2 class="title">Buscador</h2>
@@ -33,7 +33,13 @@
                 <!-- Column Data -->
                 <ng-container *ngFor="let column of columns" matColumnDef="{{column.name}}">
                     <!-- Columns -- HEADER --> 
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header width="{{column.size}}" [disabled]="column.name=='accion' ? true : false ">{{column.title}}</th>
+                    <th 
+                        mat-header-cell 
+                        *matHeaderCellDef 
+                        mat-sort-header 
+                        width="{{column.size}}" 
+                        [disabled]="column.name=='accion' || column.name=='idProduct' ? true : false ">
+                        {{column.title}}</th>
                     <!-- Columns -- DATA -->
                         <!-- VALIDATION - DATA  -->
                         <ng-container *ngIf="column.name!=='accion'; else doActions">
@@ -54,11 +60,10 @@
                                         Opciones
                                     </button>
                                     <mat-menu #menu="matMenu">
-                                        <button mat-menu-item (click)="editProduct(element)">Editar</button>
+                                        <button mat-menu-item [routerLink]="['/products/editProduct/', element.idProduct]">Editar</button>
                                         <button mat-menu-item (click)="updateStock(element)">Aumentar Stock</button>
                                         <button mat-menu-item (click)="deleteProduct(element)">Eliminar</button>
                                     </mat-menu>
-                            
                     
                                   </div>    
                             </td>       
@@ -71,10 +76,7 @@
             <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
         </mat-card>
         <div class="space"></div>
-
-        
     </div>
-    
     
     <div class="fav-add-product">
         <button mat-fab color="primary" class="mat-elevation-z4" routerLink="/products/newProduct" >
@@ -82,6 +84,13 @@
         </button>
     </div>
 
+    <div 
+        class="container-spinner" 
+        *ngIf="!loadingData" 
+        fxLayout="row" 
+        fxLayoutAlign="center center"> 
+        <mat-spinner color='accent' diameter="150" strokeWidth="14"></mat-spinner>
+    </div>   
 </div>
 
     

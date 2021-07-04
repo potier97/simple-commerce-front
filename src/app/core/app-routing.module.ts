@@ -17,6 +17,7 @@ import { ProfileComponent } from '../pages/profile/profile.component';
 //Guards
 import { AuthGuard } from '../../app/guards/auth/auth.guard'
 import { LoginGuard } from '../../app/guards/login/login.guard'
+import { EditProductComponent } from '@app/pages/edit-product/edit-product.component';
 
 const routes: Routes = [
   { 
@@ -33,6 +34,7 @@ const routes: Routes = [
       { path: 'payment',   component: PaymentComponent,data: {title: 'Caja'} },
       { path: 'products', component: ProductsComponent, data: {title: 'Productos'} }, 
       { path: 'products/newProduct', component: NewProductComponent, data: {title: 'Nuevo Producto'} }, 
+      { path: 'products/editProduct/:id', component: EditProductComponent, data: {title: 'Editar Producto'} }, 
       { path: 'clients', component: ClientsComponent, data: {title: 'Clientes'} },
       { path: 'offers', component: OffersComponent, data: {title: 'Ofertas'} },
       { path: 'invoces', component: InvocesComponent, data: {title: 'Ventas'} },

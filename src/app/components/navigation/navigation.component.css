@@ -20,7 +20,10 @@
   background-color: #e4e4e4;
 }
 
-
+.generalNav{
+  color: red
+}
+ 
 .toolbar-sidenav {
   height: 72px;
   background-color: #e4e4e4;

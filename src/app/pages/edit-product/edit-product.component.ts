@@ -1,20 +1,20 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ProductsService } from '@app/services/products/products.service';
 import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
+import { ProductsData } from '@app/models/products';
 
 @Component({
-  selector: 'app-new-product',
-  templateUrl: './new-product.component.html',
-  styleUrls: ['./new-product.component.css']
+  selector: 'app-edit-product',
+  templateUrl: './edit-product.component.html',
+  styleUrls: ['./edit-product.component.css']
 })
-export class NewProductComponent implements OnInit, OnDestroy {
+export class EditProductComponent implements OnInit, OnDestroy  {
 
   private subscription: Subscription[] = [];
-
+ 
   angForm: FormGroup = new FormGroup({
     name: new FormControl(''),
     idCode: new FormControl(''),
@@ -22,8 +22,11 @@ export class NewProductComponent implements OnInit, OnDestroy {
     tax: new FormControl(''),
     price: new FormControl(''),
   });
+  product: ProductsData;
+  idProduct: number;
 
   constructor( 
+    private route: ActivatedRoute, 
     private snackbar: MatSnackBar, 
     private fb: FormBuilder,  
     private router: Router,
@@ -63,24 +66,45 @@ export class NewProductComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit(): void { 
+  ngOnInit(): void {  
+    this.route.params.subscribe(params => {
+      this.idProduct = params['id'];
+    }) 
+    this.subscription.push(
+      this.productService.getProduct(this.idProduct).subscribe(
+        res => {
+          //console.log('Response ->', res)
+          this.product = res.content;
+          this.showSnack(true, res.message);  
+          this.loadData();
+        },
+        err => {
+          //console.log(err)
+          this.showSnack(false, err.error.message);   
+          this.router.navigate(['/products'])
+        }
+      )
+    )  
+  }
+
+  loadData(): void {
     this.angForm = this.fb.group({
       name: new FormControl(
-        '',
+        this.product.name,
         Validators.compose([
           Validators.required, 
           Validators.maxLength(30),
         ])
       ),
       idCode: new FormControl(
-        '',
+        this.product.idCode,
         Validators.compose([ 
           Validators.required,
           Validators.pattern('^[0-9]*$'),
         ])
       ),
       amount: new FormControl(
-        '',
+        this.product.amount,
         Validators.compose([ 
           Validators.required,
           Validators.pattern('^[0-9]*$'),
@@ -88,7 +112,7 @@ export class NewProductComponent implements OnInit, OnDestroy {
         ])
       ),
       tax: new FormControl(
-        '',
+        this.product.tax,
         Validators.compose([ 
           Validators.required,
           Validators.pattern('^[0-9]*$'),
@@ -96,7 +120,7 @@ export class NewProductComponent implements OnInit, OnDestroy {
         ])
       ),
       price: new FormControl(
-        '',
+        this.product.price,
         Validators.compose([ 
           Validators.required,
           Validators.pattern('^[0-9]*$'),
@@ -106,11 +130,11 @@ export class NewProductComponent implements OnInit, OnDestroy {
     }); 
   }
 
-  createProduct(): void {
+  updateProduct(): void {
     if (this.angForm.valid) {
       const userReq = this.angForm.value;
       const productData = {
-        idProduct: 0,
+        idProduct:  this.product.idProduct,
         name: userReq.name,
         idCode: userReq.idCode,
         amount: userReq.amount,
@@ -120,7 +144,7 @@ export class NewProductComponent implements OnInit, OnDestroy {
       }     
       //console.log("Producto creado -> ", productData)
       this.subscription.push(
-        this.productService.createProduct(productData).subscribe(
+        this.productService.updateProduct(productData).subscribe(
           res => {
             //console.log('Response ->', res)
             this.resetForm();
@@ -134,12 +158,12 @@ export class NewProductComponent implements OnInit, OnDestroy {
           }
         ) 
       )
-    }
-      
+    } 
   }
 
   resetForm(): void {
-    this.angForm.reset();
+    this.angForm.reset(); 
+    this.loadData();
   } 
 
   showSnack(status: boolean, message: string, timer: number = 6500): void {
