@@ -4,7 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProductsService } from '@app/services/products/products.service';
 import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ProductsData } from '@app/models/products';
+import { ProductsData } from '@app/models/products'; 
+
 
 @Component({
   selector: 'app-edit-product',

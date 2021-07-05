@@ -5,11 +5,10 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from  '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { JwtModule } from "@auth0/angular-jwt";
 import { AppRoutingModule } from './core/app-routing.module';
-import { AngularMaterialModule } from './core/angular-material.module'; 
+import { AngularMaterialModule } from './core/angular-material.module';  
 
 //Interceptors
 import { JwtInterceptorInterceptor } from './interceptor/jwtInterceptor/jwt-interceptor.interceptor'
-
 
 //Services
 import { AuthService } from './services/auth/auth.service'
@@ -72,7 +71,7 @@ import { EditProductComponent } from './pages/edit-product/edit-product.componen
     AngularMaterialModule,
     HttpClientModule,
     FlexLayoutModule,  
-    JwtModule,
+    JwtModule, 
   ],
   providers: [
     AuthService, 
