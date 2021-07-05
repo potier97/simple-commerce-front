@@ -1,15 +1,35 @@
 .root {
-    background-color: #bdc3c7;
-    height: calc(100% - 80px);
-    width: -webkit-fill-available;
+  background-color: #bdc3c7;
+  height: calc(100% - 80px);
+  width: -webkit-fill-available;
 }
 
 .space {
-    height: 24px;
+  height: 24px;
 }
 
 .container {
-    height: 100%;
-    padding-left: 16px;
-    padding-right: 16px;
+  height: 100%;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.tittleDocument {
+  color: #236707;
+  font-weight: bold;
+}
+
+.cardDocument-container {
+  margin: 32px 16px; 
+}
+
+.btn-block {
+  color: #fff;
+  font-size: large;
+  padding: 8px 24px;
+  margin: 16px 0;
+}
+
+.cardDocument {
+  background-color: #e4e4e4;
 }

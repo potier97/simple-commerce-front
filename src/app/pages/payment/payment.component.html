@@ -1,6 +1,42 @@
 <div class="root">
     <div class="container">
         <div class="space"></div>
-        <mat-card>Caja Card</mat-card>
+        <mat-card>
+            <h2 >Escoger el documento otra cosa</h2>
+            <!-- <input type="file"  (change)="loadCovenantFile($event)"> -->
+            <input #txtInput class="ng-hide" hidden=true (change)="loadCovenantFile($event)" id="input-file-id" accept=".txt" type="file" />
+            <button [disabled]="file !== null" mat-flat-button color="primary" class="btn-block" (click)="txtInput.click()">Choose File</button>
+
+            <div *ngIf="file !== null" class="cardDocument-container"> 
+                <mat-card class="cardDocument mat-elevation-z0" fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="20px">
+                    <div class="tittleDocument">
+                        {{file.name  | uppercase}} 
+                    </div>
+                    <button mat-fab color="warn" (click)="deleteFile()">
+                        <mat-icon style="color:#fff;">delete</mat-icon>
+                    </button>
+                </mat-card> 
+            </div>
+            <div fxLayout="row" fxLayoutAlign="end stretch" fxLayoutGap="16px"> 
+                <button
+                mat-raised-button
+                type="button"
+                color="warn" 
+                class="btn-block"
+                (click)="cancelFile()">
+                Cancelar
+                </button>
+                <button
+                mat-raised-button
+                color="primary"
+                type="submit"
+                class="btn-block"
+                (click)="sendFile()"
+                [disabled]="file === null">
+                Enviar
+                </button>
+            </div>
+        </mat-card>
+        <div class="space"></div> 
     </div>
 </div>

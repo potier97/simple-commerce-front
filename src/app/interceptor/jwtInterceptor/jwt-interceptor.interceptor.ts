@@ -19,8 +19,9 @@ export class JwtInterceptorInterceptor implements HttpInterceptor {
     //console.log("Interceptor generated", request.url)
     if(request.url.includes("payment") || request.url.includes("product") || request.url.includes("clients") ||
     request.url.includes("offers") || request.url.includes("invoces") || request.url.includes("covenants") || 
-    request.url.includes("pay") || request.url.includes("mistakes") || request.url.includes("profile") ){
-      //console.log("Entró")
+    request.url.includes("pay") || request.url.includes("mistakes") || request.url.includes("profile") 
+    || request.url.includes("agreementPay") ){
+      //console.log("Entró") 
       const authToken = this.authService.userTokenValue;
       const authReq = request.clone({
         setHeaders: {
