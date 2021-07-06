@@ -62,7 +62,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
         },
         err => {
           console.log(err) 
-          this.showSnack(false, err.error.message);  
+          this.showSnack(false, err.error.message || "Error al enviar documento");  
         }
       ) 
     )  

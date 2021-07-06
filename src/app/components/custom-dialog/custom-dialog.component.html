@@ -5,17 +5,17 @@
     class="example-form"
     [formGroup]="angForm">  
       <mat-form-field fxLayout="column" fxLayoutAlign="space-between stretch"  class="imput-form-text" appearance="outline">
-        <mat-label>Stock</mat-label>
+        <mat-label>{{data.label}}</mat-label>
         <input
         matInput
         type="text"
         required  
         placeholder="Nombre"
-        formControlName="amount"/> 
+        formControlName="inputData"/> 
       </mat-form-field>  
-      <mat-error *ngFor="let validation of account_validation_messages.amount">
+      <mat-error *ngFor="let validation of account_validation_messages.inputData">
         <mat-error class="error-message" 
-            *ngIf="angForm.get('amount')?.hasError(validation.type) && (angForm.get('amount')?.dirty || angForm.get('amount')?.touched)">
+            *ngIf="angForm.get('inputData')?.hasError(validation.type) && (angForm.get('inputData')?.dirty || angForm.get('inputData')?.touched)">
             {{validation.message}}
         </mat-error>
       </mat-error>
@@ -35,5 +35,5 @@
     [disabled]="angForm.invalid" 
     style="color: #fff;"  
     type="submit" 
-    [mat-dialog-close]="closeDialog(true)">Incrementar</button>
+    [mat-dialog-close]="closeDialog(true)">{{data.buttonLabel}}</button>
 </mat-dialog-actions>

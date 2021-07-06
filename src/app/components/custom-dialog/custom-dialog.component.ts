@@ -11,14 +11,14 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class CustomDialogComponent implements OnInit {
 
   angForm: FormGroup = new FormGroup({ 
-    amount: new FormControl(''), 
+    inputData: new FormControl(''), 
   });
   account_validation_messages = { 
-    amount: [
-      { type: 'required', message: 'Ingrese la cantidad de productos disponibles' },
-      { type: 'pattern', message: 'Ingrese un número valido de solo números' },
-      { type: 'min', message: 'Ingrese un valor positivo' },  
-    ],  
+    inputData: [
+      { type: 'required', message: 'Ingrese información válida' },
+      { type: 'pattern', message: 'Ingrese información válida' },
+      { type: 'min', message: 'Ingrese información válida' },  
+    ]
   };  
   tittle: string;
   animal: string;
@@ -27,17 +27,18 @@ export class CustomDialogComponent implements OnInit {
   constructor(
     private fb: FormBuilder,  
     // public dialogRef: MatDialogRef<CustomDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) {}
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {}
 
   
- 
   ngOnInit(): void {
+    if(this.data.account_validation_messages) this.account_validation_messages = this.data.account_validation_messages; 
     this.angForm = this.fb.group({ 
-      amount: new FormControl(
+      inputData: new FormControl(
         '',
         Validators.compose([ 
           Validators.required,
-          Validators.pattern('^[0-9]*$'),
+          Validators.pattern(this.data.constrainInput),
           Validators.min(1), 
         ])
       ), 

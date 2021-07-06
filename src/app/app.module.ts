@@ -37,7 +37,8 @@ import { TableListComponent } from './components/table-list/table-list.component
 import { FilterDataPipe } from './pipes/filterData/filter-data.pipe';
 import { NewProductComponent } from './pages/new-product/new-product.component';
 import { CustomDialogComponent } from './components/custom-dialog/custom-dialog.component';
-import { EditProductComponent } from './pages/edit-product/edit-product.component'; 
+import { EditProductComponent } from './pages/edit-product/edit-product.component';
+import { NewCovenantComponent } from './pages/new-covenant/new-covenant.component'; 
 
 
 @NgModule({
@@ -60,7 +61,8 @@ import { EditProductComponent } from './pages/edit-product/edit-product.componen
     FilterDataPipe,
     NewProductComponent,
     CustomDialogComponent,
-    EditProductComponent
+    EditProductComponent,
+    NewCovenantComponent
   ],
   imports: [
     BrowserModule,

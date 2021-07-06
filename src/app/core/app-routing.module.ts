@@ -18,6 +18,7 @@ import { ProfileComponent } from '../pages/profile/profile.component';
 import { AuthGuard } from '../../app/guards/auth/auth.guard'
 import { LoginGuard } from '../../app/guards/login/login.guard'
 import { EditProductComponent } from '@app/pages/edit-product/edit-product.component';
+import { NewCovenantComponent } from '@app/pages/new-covenant/new-covenant.component';
 
 const routes: Routes = [
   { 
@@ -39,6 +40,7 @@ const routes: Routes = [
       { path: 'offers', component: OffersComponent, data: {title: 'Ofertas'} },
       { path: 'invoces', component: InvocesComponent, data: {title: 'Ventas'} },
       { path: 'covenants', component: CovenantComponent, data: {title: 'Convenios'} }, 
+      { path: 'covenants/newCovenant', component: NewCovenantComponent, data: {title: 'Nuevo Convenio'} }, 
       { path: 'pay', component: PayComponent, data: {title: 'Pagos'} },
       { path: 'mistakes', component: MistakesComponent, data: {title: 'Errores'} }, 
       { path: 'profile', component: ProfileComponent, data: {title: 'Perfil'} },

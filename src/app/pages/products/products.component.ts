@@ -32,7 +32,7 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
     { title: 'Stock', name: 'amount',  size: "15%"},
     { title: 'Iva', name: 'tax',  size:"15%"},
     { title: 'Precio', name: 'price',  size: "10%"},
-    { title: 'Acción', name: 'accion', size: "10$"},
+    { title: 'Acción', name: 'accion', size: "10%"},
   ] 
   @ViewChild(MatPaginator) paginator: MatPaginator; 
   @ViewChild(MatSort) sort: MatSort;
@@ -87,7 +87,16 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
       disableClose: true, 
       data: {
         tittle: `Añadir Stock a ${product.name}`,
-         animal: 'sdcsdcsdc'
+        label: 'Stock',
+        buttonLabel: "Incrementar",
+        account_validation_messages: { 
+          inputData: [
+            { type: 'required', message: 'Ingrese la cantidad de productos disponibles' },
+            { type: 'pattern', message: 'Ingrese un número valido de solo números' },
+            { type: 'min', message: 'Ingrese un valor positivo' },  
+          ],  
+        },
+        constrainInput: '^[0-9]*$'  
         }
     });
     this.subscription.push(
@@ -95,7 +104,7 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
         if(result.status){  
           const updateProductData = {
             idProduct: product.idProduct,
-            amount: result.data.amount,
+            amount: result.data.inputData,
             idCode: product.idCode
           } 
           //console.log(updateProductData);
