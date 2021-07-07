@@ -19,6 +19,8 @@ import { AuthGuard } from '../../app/guards/auth/auth.guard'
 import { LoginGuard } from '../../app/guards/login/login.guard'
 import { EditProductComponent } from '@app/pages/edit-product/edit-product.component';
 import { NewCovenantComponent } from '@app/pages/new-covenant/new-covenant.component';
+import { NewOfferComponent } from '@app/pages/new-offer/new-offer.component';
+import { EditOfferComponent } from '@app/pages/edit-offer/edit-offer.component';
 
 const routes: Routes = [
   { 
@@ -37,7 +39,9 @@ const routes: Routes = [
       { path: 'products/newProduct', component: NewProductComponent, data: {title: 'Nuevo Producto'} }, 
       { path: 'products/editProduct/:id', component: EditProductComponent, data: {title: 'Editar Producto'} }, 
       { path: 'clients', component: ClientsComponent, data: {title: 'Clientes'} },
-      { path: 'offers', component: OffersComponent, data: {title: 'Ofertas'} },
+      { path: 'offers', component: OffersComponent, data: {title: 'Ofertas'} }, 
+      { path: 'offers/newOffer', component: NewOfferComponent, data: {title: 'Nueva Oferta'} }, 
+      { path: 'offers/editOffer/:id', component: EditOfferComponent, data: {title: 'Editar Oferta'} },  
       { path: 'invoces', component: InvocesComponent, data: {title: 'Ventas'} },
       { path: 'covenants', component: CovenantComponent, data: {title: 'Convenios'} }, 
       { path: 'covenants/newCovenant', component: NewCovenantComponent, data: {title: 'Nuevo Convenio'} }, 

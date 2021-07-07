@@ -5,7 +5,7 @@ import {MatSort} from '@angular/material/sort';
 import {MatDialog, } from '@angular/material/dialog';
 import { ProductsService } from '@app/services/products/products.service';
 import { Subscription } from 'rxjs';
-import { ProductsData } from '@app/models/products';
+import { IncrementeProduct, ProductsData } from '@app/models/products';
 import { CustomDialogComponent } from '@app/components/custom-dialog/custom-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2' 
@@ -52,11 +52,11 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
       this.productService.getAllProducts().subscribe(
         res => {
           this.dataSource.data = res.content;
-          //console.log('Prodctos ->', res.content) 
+          //console.log('Productos ->', res.content) 
           this.loadingData = true
         },
         err => {
-          console.log(err) 
+          //console.log(err) 
           this.showSnack(false, 'Imposible Obtener Productos'); 
           this.loadingData = true
         }
@@ -88,6 +88,7 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
       data: {
         tittle: `Añadir Stock a ${product.name}`,
         label: 'Stock',
+        placeholder: 'Cantidad',
         buttonLabel: "Incrementar",
         account_validation_messages: { 
           inputData: [
@@ -102,8 +103,8 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
     this.subscription.push(
       dialogRef.afterClosed().subscribe((result: any) => {
         if(result.status){  
-          const updateProductData = {
-            idProduct: product.idProduct,
+          const updateProductData: IncrementeProduct = {
+            idProduct: product.idProduct as number,
             amount: result.data.inputData,
             idCode: product.idCode
           } 
@@ -117,8 +118,8 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
                 this.getProducts();
               },
               err => {
-                console.log(err.error) 
-                this.showSnack(false, err.error.message); 
+                //console.log(err.error) 
+                this.showSnack(false, err.error.message || `No se pudo incrementar el Stock de ${product.name}`); 
               }
             ) 
           )
@@ -138,30 +139,31 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
   }  
    
   deleteProduct(product: ProductsData): void {
-    //console.log('Eliminando producto -> ' , product.idCode)
-    //Modal de eliminar el producto
+    //console.log('desactivar producto -> ' , product.idCode)
+    //Modal de desactivar el producto
     Swal.fire({
-      title: 'Eliminar producto',
-      text: `¿Desea eliminar el producto ${product.idCode}?`,
+      title: 'desactivar producto',
+      text: `¿Desea desactivar el producto ${product.idCode}?`,
       icon: 'warning',
       heightAuto: false,
       showCancelButton: true,
       confirmButtonColor: '#c1c164',
       cancelButtonColor: '#226706',
       cancelButtonText: 'Cancelar',
-      confirmButtonText: 'Eliminar',
+      confirmButtonText: 'Desactivar',
       customClass: {
         popup: 'animated swing', 
       }, 
     }).then((result) => {
       if (result.isConfirmed) {
+        const idProduct: number = product.idProduct as number
         this.subscription.push(
-          this.productService.deleteProduct(product.idProduct).subscribe(
+          this.productService.deleteProduct(idProduct).subscribe(
             res => {  
               this.getProducts();
               Swal.fire({
-                title: 'Eliminado',
-                text: `Producto ${product.idCode} eliminado`,
+                title: 'Desactivar',
+                text: `Producto ${product.idCode} desactivado`,
                 icon: 'success',
                 heightAuto: false, 
                 confirmButtonColor: '#c1c164', 
@@ -173,13 +175,13 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
               console.log(err.error)  
               Swal.fire({
                 title: 'Error',
-                text: `Producto ${product.idCode} no ha podido ser eliminado`,
+                text: `Producto ${product.idCode} no ha podido ser desactivado`,
                 icon: 'error',
                 heightAuto: false, 
                 confirmButtonColor: '#c1c164', 
                 confirmButtonText: 'Cerrar'
               })
-              this.showSnack(false, err.error.message);
+              this.showSnack(false, err.error.message || 'Imposible Borrar Producto');
             }
           ) 
         )

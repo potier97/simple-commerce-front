@@ -1,4 +1,4 @@
 export interface CovenantData { 
-    idCovenant: number,
+    idCovenant: number | null,
     name: string
 }

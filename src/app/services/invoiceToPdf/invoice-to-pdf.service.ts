@@ -269,7 +269,7 @@ export class InvoiceToPdfService {
         },  
         //Tabla de detalle
         {  
-          text: 'Detaller Compra',  
+          text: 'Detalle Compra',  
           style: 'sectionHeader'  
         },    
         {           

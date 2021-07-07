@@ -1,5 +1,5 @@
 export interface ProductsData {
-    idProduct: number;
+    idProduct: number | null;
     name: string;
     idCode: number;
     amount: number;
@@ -8,7 +8,7 @@ export interface ProductsData {
     tax: number
 }
 
-export interface incrementeProduct {
+export interface IncrementeProduct {
     idProduct: number; 
     amount: number; 
     idCode: number;

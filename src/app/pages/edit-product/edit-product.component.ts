@@ -68,24 +68,28 @@ export class EditProductComponent implements OnInit, OnDestroy  {
   }
 
   ngOnInit(): void {  
-    this.route.params.subscribe(params => {
-      this.idProduct = params['id'];
-    }) 
-    this.subscription.push(
-      this.productService.getProduct(this.idProduct).subscribe(
-        res => {
-          //console.log('Response ->', res)
-          this.product = res.content;
-          this.showSnack(true, res.message);  
-          this.loadData();
-        },
-        err => {
-          //console.log(err)
-          this.showSnack(false, err.error.message);   
-          this.router.navigate(['/products'])
-        }
+      this.subscription.push(
+        this.route.params.subscribe(params => {
+          this.idProduct = params['id'];
+        }) 
       )
-    )  
+      
+      this.subscription.push(
+        this.productService.getProduct(this.idProduct).subscribe(
+          res => {
+            //console.log('Response ->', res)
+            this.product = res.content;
+            this.showSnack(true, res.message);  
+            this.loadData();
+          },
+          err => {
+            //console.log(err)
+            this.showSnack(false, err.error.message);   
+            this.router.navigate(['/products'])
+          }
+        )
+      )  
+    
   }
 
   loadData(): void {

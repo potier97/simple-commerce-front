@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CustomResponse } from '@app/models/custom-response';
-import { incrementeProduct, ProductsData } from '@app/models/products'; 
+import { IncrementeProduct, ProductsData } from '@app/models/products'; 
 import { environment } from '@environments/environment'; 
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -34,7 +34,7 @@ export class ProductsService {
     );
   }
 
-  increaseProduct(productData: incrementeProduct): Observable<CustomResponse>{
+  increaseProduct(productData: IncrementeProduct): Observable<CustomResponse>{
     return this.httpClient.put<CustomResponse>(`${environment.API_PATH}/product/stock/`, productData)
     .pipe(
       map((res: CustomResponse) => {
@@ -48,7 +48,7 @@ export class ProductsService {
     return this.httpClient.delete<CustomResponse>(`${environment.API_PATH}/product/${id}`)
     .pipe(
       map((res: CustomResponse) => {
-        //console.log('Listando los prodctos', res) 
+        //console.log('Eliminado la oferta', res) 
         return res;
       }),
       catchError( err => this.handleError(err))
@@ -59,15 +59,15 @@ export class ProductsService {
     return this.httpClient.get<CustomResponse>(`${environment.API_PATH}/product/${id}`)
     .pipe(
       map((res: CustomResponse) => {
-        //console.log('Prodcto Obtenido', res) 
+        //console.log('Producto Obtenido', res) 
         return res;
       }),
       //catchError( err => this.handleError(err))
     );
   }   
  
-  updateProduct(newProduct: ProductsData): Observable<CustomResponse>{
-    return this.httpClient.put<CustomResponse>(`${environment.API_PATH}/product/`, newProduct)
+  updateProduct(product: ProductsData): Observable<CustomResponse>{
+    return this.httpClient.put<CustomResponse>(`${environment.API_PATH}/product/`, product)
     .pipe(
       map((res: CustomResponse) => {
         return res;

@@ -55,10 +55,10 @@ export class NewCovenantComponent implements OnInit, OnDestroy {
     if (this.angForm.valid) {
       const userReq = this.angForm.value;
       const covenantData = {
-        idCovenant: 0,
+        idCovenant: null,
         name: userReq.name, 
       }     
-      console.log("Convenio creado -> ", covenantData)
+      //console.log("Convenio creado -> ", covenantData)
       this.subscription.push(
         this.covenantService.createCovenant(covenantData).subscribe(
           res => {

@@ -1,73 +1,152 @@
-import { Component, OnInit } from '@angular/core';
-import { CustomerPdf, InvoicePdf } from '@app/models/invoice-pdf';
-import { InvoiceToPdfService } from '@app/services/invoiceToPdf/invoice-to-pdf.service';
-
-
+import {AfterViewInit, Component, ViewChild, OnInit, OnDestroy} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material/table'; 
+import {MatSort} from '@angular/material/sort'; 
+import { Subscription } from 'rxjs'; 
+import { OfferData } from '@app/models/offer';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import Swal from 'sweetalert2' 
+import { OfferService } from '@app/services/offer/offer.service';
+ 
 @Component({
   selector: 'app-offers',
   templateUrl: './offers.component.html',
   styleUrls: ['./offers.component.css']
 })
-export class OffersComponent implements OnInit {
+export class OffersComponent implements OnInit, AfterViewInit, OnDestroy  {
 
-  constructor(
-    private pdfGenerator: InvoiceToPdfService
-  ) { }
+  private subscription: Subscription[] = [];
+  
+  searchDescription: string = ""
+  //Flag to Spinner data 
+  loadingData: boolean = false;
+  displayedColumns: string[] = ['idOffer', 'description', 'idOfferType', 'percentage', 'accion']; 
+  dataSource = new MatTableDataSource<OfferData>();
+  columns = [
+    { title: 'Id', name: 'idOffer',  size: "8%"},
+    { title: 'Descripción', name: 'description',  size: "25%"},
+    { title: 'Tipo', name: 'idOfferType',  size: "15%"},
+    { title: 'Porcentaje', name: 'percentage',  size: "15%"}, 
+    { title: 'Acción', name: 'accion', size: "10%"},
+  ] 
+  @ViewChild(MatPaginator) paginator: MatPaginator; 
+  @ViewChild(MatSort) sort: MatSort;
 
-  ngOnInit(): void {
+  constructor(  
+      private snackbar: MatSnackBar,  
+      private offerService: OfferService,  
+    ) { }
+
+  ngOnInit(): void { 
+    this.getProducts();
   }
 
-  generatePdf() {
-    const customerData: CustomerPdf = {
-      customerName: 'Pepito Perez',
-      address: 'Trv 39a 23 SUR',
-      email: 'pepitoPeres@email.com',
-      contactNo: '314569852'
-    }
-    const  productsData: InvoicePdf[] = [
-      {
-        name: 'Tv Samsung 32 Plgadas', 
-        price: 1250000, 
-        qty: 3,
-        tax: 18,
-        total: 3550000 
-        //el valor del producto sin iva total/(tax/100 + 1) =>  3550000/1.18 = 3008474.57
-        // el valor del iva es igual a => total - valorSinIva => 3550000 - 3008474.57 = 541525.43
-        //taxValue: 541525.43
-      },
-      {
-        name: 'Usb 32 Gb', 
-        price: 80000, 
-        qty: 5,
-        tax: 18,
-        total: 400000 
-        //el valor del producto sin iva total/(tax/100 + 1) =>  400000/1.18 = 338983.05
-        // el valor del iva es igual a => total - valorSinIva => 400000 - 338983.05 = 61016.95
-        //taxValue: 61016.95
-      },
-      {
-        name: 'Celular Xiamoi S9', 
-        price: 950000, 
-        qty: 1,
-        tax: 0,
-        total: 950000 
-        //el valor del producto sin iva total/(tax/100 + 1) =>  400000 (no aplica iva) = 400000
-        // el valor del iva es igual a => 0
-        //taxValue: 0
-      },
-    ]  
-    
-    const invoiceId = 753
-    const subtotal = 4900000
-    //541525.43 +  61016.95 + 0 
-    const totalTax = 602542.38 
-    // en el caso de que aplique un descuento del 17% a la compra
-    // El Valor del descuento =>  subtotal*(descuento/100) => 4900000*0.17
-    // el descuento es del => 833000
-    const discount = 833000
-    //El total es el subtotal menos el descuento aplicado - si no aplica, el valor de la compra es igual al del total
-    const total = 4067000
-
-    this.pdfGenerator.generatePdf(customerData, productsData, invoiceId, subtotal, totalTax, discount, total);
+  getProducts(): void {
+    this.subscription.push(
+      this.offerService.getAllOffers().subscribe(
+        res => {
+          this.dataSource.data = res.content;
+          //console.log('Ofertas ->', res.content) 
+          this.loadingData = true
+        },
+        err => {
+          //console.log(err) 
+          this.showSnack(false, 'Imposible Obtener Productos'); 
+          this.loadingData = true
+        }
+      ) 
+    )
   }
+ 
+  ngAfterViewInit() { 
+    //Configuración de datos iniciales
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator; 
+    this.dataSource.filterPredicate = (data: OfferData, filter: string): boolean => { 
+      return data.description.toLowerCase().includes(filter.toLowerCase());
+     };
+  }
+
+  ngOnDestroy(): void { 
+    //Desubs de todos los observadores cuando se destruye el componente
+    for(const sub of this.subscription) {
+      sub.unsubscribe();
+    } 
+  } 
+  
+  clearSearch(): void { 
+    this.searchDescription = '';
+    this.dataSource.filter = "";
+  }
+
+  applyFilter(): void { 
+    //Filtra los porductos por la descripción de la oferta
+    this.dataSource.filter = this.searchDescription.trim().toLowerCase();
+  }  
+   
+  deleteProduct(offer: OfferData): void {
+    //console.log('Eliminando oferta -> ', offer)
+    //Modal de desctivar la oferta
+    Swal.fire({
+      title: 'Desactivar Oferta',
+      text: `¿Desea desactivar la oferta ${offer.idOffer}?`,
+      icon: 'warning',
+      heightAuto: false,
+      showCancelButton: true,
+      confirmButtonColor: '#c1c164',
+      cancelButtonColor: '#226706',
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Eliminar',
+      customClass: {
+        popup: 'animated swing', 
+      }, 
+    }).then((result) => {
+        //Si el resultado es verdad se envia una peticion para desactivar (borrado logico)
+        //la oferta del sistema
+        // se llama al servicio que desactiva la oferta
+        if (result.isConfirmed) {
+          // const id: number = offer.idOffer as number
+          // this.subscription.push(
+          //   this.offerService.deleteOffert(id).subscribe(
+          //     res => { 
+          //       console.log('Se desactivo la oferta', res.content) 
+          //       this.showSnack(true, res.message);  
+          //       this.getProducts();
+          //     },
+          //     err => {
+          //       console.log(err.error) 
+          //       this.showSnack(false, err.error.message || "Imposible Desactivar"); 
+          //     }
+          //   ) 
+          // )
+          Swal.fire({
+            title: 'Desactivado',
+            text: `Convenio ${offer.idOffer} desactivado`,
+            icon: 'success',
+            heightAuto: false, 
+            confirmButtonColor: '#c1c164', 
+            confirmButtonText: 'Cerrar'
+          }) 
+        }else {
+          Swal.fire({
+            title: 'Cancelado',
+            text: `Convenio ${offer.idOffer} no ha sido desactivado`,
+            icon: 'info',
+            heightAuto: false, 
+            confirmButtonColor: '#c1c164', 
+            confirmButtonText: 'Cerrar'
+          }) 
+        }
+      }) 
+  }
+
+  showSnack(status: boolean, message: string, timer: number = 6500): void {
+    this.snackbar.open(message, undefined , {
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+      duration: timer,
+      panelClass: [status ? "succes-snack" : "error-snack"],
+    })
+  }
+
 }

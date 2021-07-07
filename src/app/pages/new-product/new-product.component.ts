@@ -110,7 +110,7 @@ export class NewProductComponent implements OnInit, OnDestroy {
     if (this.angForm.valid) {
       const userReq = this.angForm.value;
       const productData = {
-        idProduct: 0,
+        idProduct: null,
         name: userReq.name,
         idCode: userReq.idCode,
         amount: userReq.amount,

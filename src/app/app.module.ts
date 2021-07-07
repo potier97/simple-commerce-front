@@ -38,7 +38,9 @@ import { FilterDataPipe } from './pipes/filterData/filter-data.pipe';
 import { NewProductComponent } from './pages/new-product/new-product.component';
 import { CustomDialogComponent } from './components/custom-dialog/custom-dialog.component';
 import { EditProductComponent } from './pages/edit-product/edit-product.component';
-import { NewCovenantComponent } from './pages/new-covenant/new-covenant.component'; 
+import { NewCovenantComponent } from './pages/new-covenant/new-covenant.component';
+import { NewOfferComponent } from './pages/new-offer/new-offer.component';
+import { EditOfferComponent } from './pages/edit-offer/edit-offer.component'; 
 
 
 @NgModule({
@@ -62,7 +64,9 @@ import { NewCovenantComponent } from './pages/new-covenant/new-covenant.componen
     NewProductComponent,
     CustomDialogComponent,
     EditProductComponent,
-    NewCovenantComponent
+    NewCovenantComponent,
+    NewOfferComponent,
+    EditOfferComponent
   ],
   imports: [
     BrowserModule,

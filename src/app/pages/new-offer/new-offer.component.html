@@ -1,0 +1,103 @@
+<div class="root">
+    <div class="container">
+        <div class="space"></div>
+        <mat-card>  
+            <div class="title-form-text">
+                <h2 style="color: #226706">Ingrese todos los valores para poder crear una oferta</h2>
+            </div>
+            <form
+                class="example-form"
+                [formGroup]="angForm" 
+                (ngSubmit)="createNewOffer()"
+                 >
+                 <!-- novalidate -->
+                <mat-card-content fxLayout="column" fxLayoutAlign="space-between stretch" class="container-form">
+                    <mat-form-field class="imput-form-text" appearance="outline">
+                        <mat-label>Descripción Oferta</mat-label>
+                        <input
+                        matInput
+                        type="text"
+                        required  
+                        placeholder="Nombre"
+                        formControlName="description"/> 
+                    </mat-form-field>
+                    <mat-error *ngFor="let validation of account_validation_messages.description" class="error-message-form">
+                        <mat-error class="error-message" 
+                            *ngIf="angForm.get('description')?.hasError(validation.type) && (angForm.get('description')?.dirty || angForm.get('description')?.touched)">
+                            {{validation.message}}
+                        </mat-error>
+                    </mat-error>
+
+                    <mat-form-field class="imput-form-text" appearance="outline">
+                        <mat-label>Tipo Oferta</mat-label>
+                        <mat-select formControlName="typeOffer" required >
+                            <mat-option value="" disabled>SELECCIONAR TIPO OFERTA</mat-option>
+                            <mat-option *ngFor="let category of listCategory;" [value]="category" >{{category.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-error *ngFor="let validation of account_validation_messages.typeOffer" class="error-message-form">
+                        <mat-error class="error-message" 
+                            *ngIf="angForm.get('typeOffer')?.hasError(validation.type) && (angForm.get('typeOffer')?.dirty || angForm.get('typeOffer')?.touched)">
+                            {{validation.message}}
+                        </mat-error>
+                    </mat-error>
+            
+                    <mat-form-field class="imput-form-text" appearance="outline">
+                        <mat-label>Porcentaje</mat-label>
+                        <input
+                        matInput
+                        type="text"
+                        required 
+                        placeholder="Porcentaje descuento"
+                        formControlName="percentage" /> 
+                    </mat-form-field>
+                    <mat-error *ngFor="let validation of account_validation_messages.percentage" class="error-message-form">
+                        <mat-error class="error-message" 
+                        *ngIf="angForm.get('percentage')?.hasError(validation.type) && (angForm.get('percentage')?.dirty || angForm.get('percentage')?.touched)">
+                            {{validation.message}}
+                        </mat-error>
+                    </mat-error>
+
+                    <mat-form-field class="imput-form-text" appearance="outline">
+                        <mat-label>Valor</mat-label>
+                        <input
+                        matInput
+                        type="text"
+                        required 
+                        placeholder="Valor a aplicar oferta"
+                        formControlName="value" /> 
+                    </mat-form-field>
+                    <mat-error *ngFor="let validation of account_validation_messages.value" class="error-message-form">
+                        <mat-error class="error-message" 
+                        *ngIf="angForm.get('value')?.hasError(validation.type) && (angForm.get('value')?.dirty || angForm.get('value')?.touched)" >
+                        {{validation.message}}
+                        </mat-error>
+                    </mat-error> 
+
+                </mat-card-content>
+
+                <div fxLayout="row" fxLayoutAlign="end stretch" fxLayoutGap="16px"> 
+                    <button
+                    mat-raised-button
+                    type="button"
+                    color="warn" 
+                    class="btn-block"
+                    routerLink="/offers">
+                    Cancelar
+                    </button>
+                    <button
+                    mat-raised-button
+                    color="primary"
+                    type="submit"
+                    class="btn-block"
+                    [disabled]="angForm.invalid">
+                    Crear
+                    </button>
+                </div>
+            </form> 
+
+        </mat-card>
+        <div class="space"></div> 
+        
+    </div> 
+</div>

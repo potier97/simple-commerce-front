@@ -10,7 +10,7 @@
         matInput
         type="text"
         required  
-        placeholder="Nombre"
+        placeholder={{data.placeholder}}
         formControlName="inputData"/> 
       </mat-form-field>  
       <mat-error *ngFor="let validation of account_validation_messages.inputData">

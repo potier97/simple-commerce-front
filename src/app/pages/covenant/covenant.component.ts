@@ -1,8 +1,8 @@
-import {AfterViewInit, Component, ViewChild, OnInit, OnDestroy} from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatTableDataSource} from '@angular/material/table'; 
-import {MatSort} from '@angular/material/sort';
-import {MatDialog, } from '@angular/material/dialog';
+import { AfterViewInit, Component, ViewChild, OnInit, OnDestroy} from '@angular/core';
+import { MatPaginator} from '@angular/material/paginator';
+import { MatTableDataSource} from '@angular/material/table'; 
+import { MatSort } from '@angular/material/sort';
+import { MatDialog } from '@angular/material/dialog';
 import { CovenantService } from '@app/services/covenant/covenant.service';
 import { Subscription } from 'rxjs';
 import { CovenantData } from '@app/models/covenant';
@@ -30,13 +30,14 @@ export class CovenantComponent implements OnInit, AfterViewInit, OnDestroy  {
     { title: 'Acción', name: 'accion', size: "10%"},
   ] 
   @ViewChild(MatPaginator) paginator: MatPaginator; 
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, { static: false}) sort: MatSort;
 
   constructor(  
       private snackbar: MatSnackBar, 
       private dialog: MatDialog,  
       private covenantService: CovenantService,  
-    ) { }
+    ) {  
+  }
 
   ngOnInit(): void { 
     this.getCovenants();
@@ -47,7 +48,7 @@ export class CovenantComponent implements OnInit, AfterViewInit, OnDestroy  {
       this.covenantService.getAllCovenants().subscribe(
         res => {
           this.dataSource.data = res.content;
-          console.log('Convenios ->', res.content) 
+          //console.log('Convenios ->', res.content) 
           this.loadingData = true
         },
         err => {
@@ -61,12 +62,12 @@ export class CovenantComponent implements OnInit, AfterViewInit, OnDestroy  {
  
   ngAfterViewInit() { 
     //Configuración de datos iniciales
+    this.dataSource.paginator = this.paginator;    
     this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator; 
     this.dataSource.filterPredicate = (data: CovenantData, filter: string): boolean => { 
       //console.log('data -> ' , data.name)
       //console.log('filter -> ' , filter)
-      return data.name.toLocaleLowerCase().includes(filter.toLowerCase());  //&&  data.active === 1 ;
+      return data.name.toLocaleLowerCase().includes(filter.toLowerCase());
      };
   }
 
@@ -85,6 +86,7 @@ export class CovenantComponent implements OnInit, AfterViewInit, OnDestroy  {
       data: {
         tittle: `Renombrar Convenio ${covenant.idCovenant}`,
         label: 'Nombre',
+        placeholder: 'Convenio',
         buttonLabel: "Cambiar",
         account_validation_messages: { 
           inputData: [
@@ -103,12 +105,12 @@ export class CovenantComponent implements OnInit, AfterViewInit, OnDestroy  {
             idCovenant: covenant.idCovenant,
             name: result.data.inputData, 
           } 
-          console.log(updateCovenantData);
+          //console.log(updateCovenantData);
           //Al cerrar el modal - se envia al api la peticion de cambiar el nombre del convenio
           this.subscription.push(
             this.covenantService.updateCovenant(updateCovenantData).subscribe(
               res => { 
-                console.log('de actualizo el convenio', res.content) 
+                //console.log('de actualizo el convenio', res.content) 
                 this.showSnack(true, res.message);  
                 this.getCovenants();
               },
@@ -134,26 +136,43 @@ export class CovenantComponent implements OnInit, AfterViewInit, OnDestroy  {
   }  
    
   deleteCovenant(covenant: CovenantData): void {
-    //console.log('Eliminando Convenio -> ', covenant.name)
-    //Modal de eliminar el convenio
+    //console.log('Desactivar Convenio -> ', covenant.name)
+    //Modal de desactivar el convenio
     Swal.fire({
-      title: 'Eliminar Convenio',
-      text: `¿Desea eliminar el Convenio ${covenant.name}?`,
+      title: 'Desactivar Convenio',
+      text: `¿Desea desactivar el Convenio ${covenant.name}?`,
       icon: 'warning',
       heightAuto: false,
       showCancelButton: true,
       confirmButtonColor: '#c1c164',
       cancelButtonColor: '#226706',
       cancelButtonText: 'Cancelar',
-      confirmButtonText: 'Eliminar',
+      confirmButtonText: 'Desactivar',
       customClass: {
         popup: 'animated swing', 
       }, 
     }).then((result) => {
-        if (result.isConfirmed) { 
+        //Si el resultado es verdad se envia una peticion para desactivar (borrado logico)
+        //el convenio del sistema
+        // se llama al servicio que desactiva el convenio
+        if (result.isConfirmed) {
+          // const id: number = covenant.idCovenant as number
+          // this.subscription.push(
+          //   this.covenantService.deleteCovenant(id).subscribe(
+          //     res => { 
+          //       console.log('Se desactivo el convenio', res.content) 
+          //       this.showSnack(true, res.message);  
+          //       this.getCovenants();
+          //     },
+          //     err => {
+          //       console.log(err.error) 
+          //       this.showSnack(false, err.error.message || "Imposible Desactivar"); 
+          //     }
+          //   ) 
+          // )
           Swal.fire({
-            title: 'Eliminado',
-            text: `Convenio ${covenant.name} eliminado`,
+            title: 'Desactivado',
+            text: `Convenio ${covenant.name} desactivado`,
             icon: 'success',
             heightAuto: false, 
             confirmButtonColor: '#c1c164', 
@@ -162,47 +181,14 @@ export class CovenantComponent implements OnInit, AfterViewInit, OnDestroy  {
         }else {
           Swal.fire({
             title: 'Cancelado',
-            text: `Convenio ${covenant.name} no ha sido eliminado`,
-            icon: 'warning',
+            text: `Convenio ${covenant.name} no ha sido desactivado`,
+            icon: 'info',
             heightAuto: false, 
             confirmButtonColor: '#c1c164', 
             confirmButtonText: 'Cerrar'
           }) 
         }
-      })
-    //.then((result) => {
-    //   if (result.isConfirmed) {
-    //     this.subscription.push(
-    //       this.covenantService.deleteCovenant(covenant.idCovenant).subscribe(
-    //         res => {  
-    //           this.getCovenants();
-    //           Swal.fire({
-    //             title: 'Eliminado',
-    //             text: `Convenio ${covenant.name} eliminado`,
-    //             icon: 'success',
-    //             heightAuto: false, 
-    //             confirmButtonColor: '#c1c164', 
-    //             confirmButtonText: 'Cerrar'
-    //           })
-    //           this.showSnack(true, res.message);
-    //         },
-    //         err => {
-    //           console.log(err.error)  
-    //           Swal.fire({
-    //             title: 'Error',
-    //             text: `Convenio ${covenant.name} no ha podido ser eliminado`,
-    //             icon: 'error',
-    //             heightAuto: false, 
-    //             confirmButtonColor: '#c1c164', 
-    //             confirmButtonText: 'Cerrar'
-    //           })
-    //           this.showSnack(false, err.error.message);
-    //         }
-    //       ) 
-    //     )
-        
-    //   }
-    // })
+      }) 
   }
 
   showSnack(status: boolean, message: string, timer: number = 6500): void {
