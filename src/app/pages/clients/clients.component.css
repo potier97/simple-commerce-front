@@ -1,15 +1,57 @@
 .root {
-    background-color: #bdc3c7;
-    height: calc(100% - 80px);
-    width: -webkit-fill-available;
+  background-color: #bdc3c7;
+  min-height: calc(100% - 80px);
+  width: -webkit-fill-available;
 }
 
 .space {
-    height: 24px;
+  height: 24px;
 }
 
 .container {
-    height: 100%;
-    padding-left: 16px;
-    padding-right: 16px;
+  height: 100%;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+table {
+  width: 100%;
+}
+
+.full-width-field {
+  width: 100%;
+}
+
+::ng-deep .mat-form-field-wrapper {
+  padding-bottom: 0;
+}
+
+.mat-row:nth-child(even) {
+  background-color: #fff;
+}
+
+.mat-row:nth-child(odd) {
+  background-color: #f5f5f5;
+}
+
+.title {
+  color: #226706;
+  font-weight: bold;
+}
+
+.btn-block {
+  background-color: #226706;
+  color: #fff;
+}
+
+.fav-add-product {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+}
+
+.container-spinner {
+  height: 100%;
+  padding: 24px 16px;
+  min-height: calc(100vh - 80px);
 }

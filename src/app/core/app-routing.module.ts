@@ -21,6 +21,9 @@ import { EditProductComponent } from '@app/pages/edit-product/edit-product.compo
 import { NewCovenantComponent } from '@app/pages/new-covenant/new-covenant.component';
 import { NewOfferComponent } from '@app/pages/new-offer/new-offer.component';
 import { EditOfferComponent } from '@app/pages/edit-offer/edit-offer.component';
+import { NewClientComponent } from '@app/pages/new-client/new-client.component';
+import { EditClientComponent } from '@app/pages/edit-client/edit-client.component';
+import { ViewClientComponent } from '@app/pages/view-client/view-client.component';
 
 const routes: Routes = [
   { 
@@ -39,6 +42,9 @@ const routes: Routes = [
       { path: 'products/newProduct', component: NewProductComponent, data: {title: 'Nuevo Producto'} }, 
       { path: 'products/editProduct/:id', component: EditProductComponent, data: {title: 'Editar Producto'} }, 
       { path: 'clients', component: ClientsComponent, data: {title: 'Clientes'} },
+      { path: 'clients/newClient', component: NewClientComponent, data: {title: 'Nuevo Cliente'} },
+      { path: 'clients/editClient/:id', component: EditClientComponent, data: {title: 'Editar Cliente'} },
+      { path: 'clients/viewClient/:id', component: ViewClientComponent, data: {title: 'Detalle Cliente'} },
       { path: 'offers', component: OffersComponent, data: {title: 'Ofertas'} }, 
       { path: 'offers/newOffer', component: NewOfferComponent, data: {title: 'Nueva Oferta'} }, 
       { path: 'offers/editOffer/:id', component: EditOfferComponent, data: {title: 'Editar Oferta'} },  

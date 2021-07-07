@@ -40,7 +40,10 @@ import { CustomDialogComponent } from './components/custom-dialog/custom-dialog.
 import { EditProductComponent } from './pages/edit-product/edit-product.component';
 import { NewCovenantComponent } from './pages/new-covenant/new-covenant.component';
 import { NewOfferComponent } from './pages/new-offer/new-offer.component';
-import { EditOfferComponent } from './pages/edit-offer/edit-offer.component'; 
+import { EditOfferComponent } from './pages/edit-offer/edit-offer.component';
+import { NewClientComponent } from './pages/new-client/new-client.component';
+import { EditClientComponent } from './pages/edit-client/edit-client.component';
+import { ViewClientComponent } from './pages/view-client/view-client.component'; 
 
 
 @NgModule({
@@ -66,7 +69,10 @@ import { EditOfferComponent } from './pages/edit-offer/edit-offer.component';
     EditProductComponent,
     NewCovenantComponent,
     NewOfferComponent,
-    EditOfferComponent
+    EditOfferComponent,
+    NewClientComponent,
+    EditClientComponent,
+    ViewClientComponent
   ],
   imports: [
     BrowserModule,

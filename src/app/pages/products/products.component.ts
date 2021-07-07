@@ -1,8 +1,8 @@
-import {AfterViewInit, Component, ViewChild, OnInit, OnDestroy} from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatTableDataSource} from '@angular/material/table'; 
-import {MatSort} from '@angular/material/sort';
-import {MatDialog, } from '@angular/material/dialog';
+import { AfterViewInit, Component, ViewChild, OnInit, OnDestroy} from '@angular/core';
+import { MatPaginator} from '@angular/material/paginator';
+import { MatTableDataSource} from '@angular/material/table'; 
+import { MatSort} from '@angular/material/sort';
+import { MatDialog } from '@angular/material/dialog';
 import { ProductsService } from '@app/services/products/products.service';
 import { Subscription } from 'rxjs';
 import { IncrementeProduct, ProductsData } from '@app/models/products';
@@ -142,7 +142,7 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
     //console.log('desactivar producto -> ' , product.idCode)
     //Modal de desactivar el producto
     Swal.fire({
-      title: 'desactivar producto',
+      title: 'Desactivar producto',
       text: `¿Desea desactivar el producto ${product.idCode}?`,
       icon: 'warning',
       heightAuto: false,
