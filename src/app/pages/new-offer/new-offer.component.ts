@@ -62,15 +62,17 @@ export class NewOfferComponent implements OnInit, OnDestroy {
  
 
   ngOnInit(): void { 
-    this.offerService.getAllTypeOffers().subscribe(
-      res => { 
-        this.listCategory = res.content;  
-      },
-      err => {
-        //console.log(err)
-        this.showSnack(false, err.error.message || "No se pudo obtener los tipos de Ofertas");   
-      }
-    )  
+    this.subscription.push(
+      this.offerService.getAllTypeOffers().subscribe(
+        res => { 
+          this.listCategory = res.content;  
+        },
+        err => {
+          //console.log(err)
+          this.showSnack(false, err.error.message || "No se pudo obtener los tipos de Ofertas");   
+        }
+      )  
+    )
     this.angForm = this.fb.group({
       description: new FormControl(
         '',

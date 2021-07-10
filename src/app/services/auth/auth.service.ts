@@ -67,6 +67,14 @@ export class AuthService {
     
   }
 
+  getToken(): string{
+    const userToken = localStorage.getItem("token") ||  ''; 
+    const isExpired = helper.isTokenExpired(userToken); 
+    if(!isExpired) return userToken
+    else return ''
+
+  }
+
   refreshToken(tokenData: string): Observable<LogInResponse | void | any >{
     return this.httpClient.post<LogInResponse>(`${environment.API_PATH}/auth/refresh`, tokenData)
     .pipe(

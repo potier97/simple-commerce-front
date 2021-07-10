@@ -24,6 +24,7 @@ import { EditOfferComponent } from '@app/pages/edit-offer/edit-offer.component';
 import { NewClientComponent } from '@app/pages/new-client/new-client.component';
 import { EditClientComponent } from '@app/pages/edit-client/edit-client.component';
 import { ViewClientComponent } from '@app/pages/view-client/view-client.component';
+import { ViewMistakeComponent } from '@app/pages/view-mistake/view-mistake.component';
 
 const routes: Routes = [
   { 
@@ -53,6 +54,7 @@ const routes: Routes = [
       { path: 'covenants/newCovenant', component: NewCovenantComponent, data: {title: 'Nuevo Convenio'} }, 
       { path: 'pay', component: PayComponent, data: {title: 'Pagos'} },
       { path: 'mistakes', component: MistakesComponent, data: {title: 'Errores'} }, 
+      { path: 'mistakes/:id', component: ViewMistakeComponent, data: {title: 'Detalle Error'} }, 
       { path: 'profile', component: ProfileComponent, data: {title: 'Perfil'} },
     ],
   }, 

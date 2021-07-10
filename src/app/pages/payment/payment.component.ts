@@ -1,8 +1,10 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core'; 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CustomerPdf, InvoicePdf } from '@app/models/invoice-pdf';
+import { UserData } from '@app/models/user';
 import { InvoiceToPdfService } from '@app/services/invoiceToPdf/invoice-to-pdf.service';
 import { UploadFileService } from '@app/services/uploadFile/upload-file.service';
+import { UsersService } from '@app/services/users/users.service';
 import { Subscription } from 'rxjs'; 
  
 
@@ -15,18 +17,31 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   private subscription: Subscription[] = [];
 
-  file: File | null = null;
-  fileSelected: string | ArrayBuffer; 
+  file: File | null = null; 
+  userAdmin: UserData;
 
   @ViewChild('txtInput') inputFile: ElementRef;
 
   constructor(
+    private userService: UsersService,
     private pdfGenerator: InvoiceToPdfService,
     private snackbar: MatSnackBar,
     private uploadFileService: UploadFileService,  
   ) { }
 
   ngOnInit(): void {
+    this.subscription.push(
+      this.userService.getAdminProfile().subscribe(
+        async res => { 
+          //console.log("Admin ", res) 
+          this.userAdmin = res.content; 
+        },
+        err => {
+          console.log(err)  
+          return null 
+        }
+      )
+    )
   }
 
   ngOnDestroy(): void { 
@@ -56,25 +71,22 @@ export class PaymentComponent implements OnInit, OnDestroy {
   
 
   sendFile(): void {
-    console.log("Enviando documento")
-    this.subscription.push(
-      this.uploadFileService.uploadPayment(this.file).subscribe(
-        res => {
-          console.log('documento enviado -> ', res)
-          this.showSnack(true, 'Documento Procesado');   
-        },
-        err => {
-          console.log(err) 
-          this.showSnack(false, err.error.message || "Error al enviar documento");  
-        }
-      ) 
-    )  
+    //Envio de los pagos de los convenios
+    //console.log("Enviando documento") 
+    this.uploadFileService.uploadPayment(this.file).subscribe(
+      res => {
+        console.log('documento enviado -> ', res);
+        this.showSnack(true, 'Documento Procesado');    
+      },
+      err => {
+        console.log(err) 
+        this.showSnack(false, err.error.message || "Error al enviar documento");  
+      }, 
+    )   
+    this.showSnack(true, 'Documento Enviado');   
+    this.deleteFile();  
   }
-
-  cancelFile(): void {
-    console.log("Envio cancelado")
-    this.deleteFile()
-  }
+ 
 
   showSnack(status: boolean, message: string, timer: number = 6500): void {
     this.snackbar.open(message, undefined , {
@@ -87,6 +99,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
 
   generatePdf() {
+ 
+
     const customerData: CustomerPdf = {
       customerName: 'Pepito Perez',
       address: 'Trv 39a 23 SUR',
@@ -137,7 +151,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
     //El total es el subtotal menos el descuento aplicado - si no aplica, el valor de la compra es igual al del total
     const total = 4067000
 
-    this.pdfGenerator.generatePdf(customerData, productsData, invoiceId, subtotal, totalTax, discount, total);
+    const AdminData = `${this.userAdmin.name} ${this.userAdmin.lastName}`
+    this.pdfGenerator.generatePdf( AdminData, customerData, productsData, invoiceId, subtotal, totalTax, discount, total);
   }
 
 }

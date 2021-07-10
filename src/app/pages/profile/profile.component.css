@@ -1,15 +1,58 @@
 .root {
-    background-color: #bdc3c7;
-    height: calc(100% - 80px);
-    width: -webkit-fill-available;
+  background-color: #bdc3c7;
+  min-height: calc(100% - 80px);
+  width: -webkit-fill-available;
 }
 
 .space {
-    height: 24px;
+  height: 24px;
+}
+
+.title-text {
+  margin-top: 32px !important;
+}
+
+.container-user-info {
+  margin-top: 32px !important;
+  margin-bottom: 32px !important;
+  margin-left: 16px;
+}
+
+.title-info-text {
+  margin-left: 16px;
+  margin-right: 16px; 
+  margin-bottom: 32px; 
 }
 
 .container {
-    height: 100%;
-    padding-left: 16px;
-    padding-right: 16px;
+  height: 100%;
+  padding-left: 16px;
+  padding-right: 16px;
+} 
+
+.child{
+  color: #226706; 
+  font-size: 50px;
+  width: 50px;
+  height: 50px; 
+} 
+
+.admin-data {
+  color: #226706; 
+  font-weight: bold;
+  font-style: italic;
+  text-transform: uppercase;
+}
+
+.tittle-admin {
+  color: #226706;
+  font-weight: bold;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+
+.container-spinner {
+  height: 100%;
+  padding: 24px 16px;
+  min-height: calc(100vh - 80px);
 }

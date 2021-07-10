@@ -8,27 +8,20 @@
   height: 24px;
 }
 
-.container-form {
-  margin-top: 32px;
-  /* background-color: green; */
-  /* margin: 24px, 64px !important; */
-}
-
-.title-form-text {
-  margin-top: 24px !important;
+.title-text {
+  margin-top: 32px !important;
   margin-left: 16px;
 }
 
-.imput-form-text {
-  margin-left: 8px;
-  margin-right: 8px;
-  margin-top: 12px;
+.container-mistake-info {
+  margin-top: 32px;
+  margin-bottom: 32px;
+  margin-left: 32px;
 }
 
-.error-message-form {
-  margin-left: 8px;
-  margin-right: 8px;
-  padding-top: 4px;
+.container-info-mistake {
+  margin-left: 16px;
+  margin-right: 16px; 
 }
 
 .container {
@@ -41,11 +34,6 @@
   color: #fff;
   font-size: large;
   padding: 8px 24px;
-}
-
-.succesSnack {
-  background-color: green !important;
-  color: #fff !important;
 }
 
 .container-spinner {

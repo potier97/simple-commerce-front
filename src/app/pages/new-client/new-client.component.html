@@ -1,1 +1,207 @@
-<p>new-client works!</p>
+
+<div class="root">
+    <div class="container" [hidden]="!loadingData">
+        <div class="space"></div>
+       
+        <mat-card>  
+            <div class="title-form-text">
+                <h2 style="color: #226706">Ingrese todos los valores para poder crear un cliente</h2>
+            </div>
+            <form
+                class="example-form"
+                [formGroup]="angForm" 
+                (submit)="createClient()"  >
+                 <!-- novalidate -->
+                 
+                <mat-card-content fxLayout="column" fxLayoutAlign="space-between stretch" class="container-form">
+
+                    <mat-form-field class="imput-form-text" appearance="outline">
+                        <mat-label>Tipo Usuario</mat-label>
+                        <mat-select formControlName="idUserType" required (selectionChange)="changeSelected($event.value)">
+                            <mat-option value="" disabled>SELECCIONAR TIPO USUARIO</mat-option>
+                            <mat-option *ngFor="let userType of listUserType;" [value]="userType" >{{userType.name | uppercase }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-error *ngFor="let validation of account_validation_messages.idUserType" class="error-message-form">
+                        <mat-error class="error-message" 
+                            *ngIf="angForm.get('idUserType')?.hasError(validation.type) && (angForm.get('idUserType')?.dirty || angForm.get('idUserType')?.touched)">
+                            {{validation.message}}
+                        </mat-error>
+                    </mat-error>
+
+                    <mat-form-field *ngIf="angForm.value.idUserType.idUserType === 1;"  class="imput-form-text" appearance="outline">
+                        <mat-label>Fondo Asociado</mat-label>
+                        <mat-select formControlName="associated" required>
+                            <mat-option value="" disabled>SELECCIONAR FONDO ASOCIADO</mat-option>
+                            <mat-option value="NN" >NINGUNO</mat-option>
+                            <mat-option *ngFor="let Corporation of listCorporative;" [value]="Corporation" >{{Corporation.name | uppercase}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>  
+
+                    <mat-form-field class="imput-form-text" appearance="outline">
+                        <mat-label>Tipo Documento</mat-label>
+                        <mat-select formControlName="idDocType" required >
+                            <mat-option value="" disabled>SELECCIONAR TIPO DOCUMENTO</mat-option>
+                            <mat-option *ngFor="let document of listDocType;" [value]="document" >{{document.name | uppercase}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-error *ngFor="let validation of account_validation_messages.idDocType" class="error-message-form">
+                        <mat-error class="error-message" 
+                            *ngIf="angForm.get('idDocType')?.hasError(validation.type) && (angForm.get('idDocType')?.dirty || angForm.get('idDocType')?.touched)">
+                            {{validation.message}}
+                        </mat-error>
+                    </mat-error> 
+
+                    <mat-form-field class="imput-form-text" appearance="outline" aria-disabled="true">
+                        <mat-label>Documento</mat-label>
+                        <input
+                        matInput  
+                        type="text"
+                        required  
+                        placeholder="Documento"
+                        formControlName="userDoc"/> 
+                    </mat-form-field>
+                    <mat-error *ngFor="let validation of account_validation_messages.userDoc" class="error-message-form">
+                        <mat-error class="error-message" 
+                            *ngIf="angForm.get('userDoc')?.hasError(validation.type) && (angForm.get('userDoc')?.dirty || angForm.get('userDoc')?.touched)">
+                            {{validation.message}}
+                        </mat-error>
+                    </mat-error>
+            
+                    <mat-form-field class="imput-form-text" appearance="outline">
+                        <mat-label>Nombre</mat-label>
+                        <input
+                        matInput
+                        type="text"
+                        required 
+                        placeholder="Nombre"
+                        formControlName="name" /> 
+                    </mat-form-field>
+                    <mat-error *ngFor="let validation of account_validation_messages.name" class="error-message-form">
+                        <mat-error class="error-message" 
+                        *ngIf="angForm.get('name')?.hasError(validation.type) && (angForm.get('name')?.dirty || angForm.get('name')?.touched)">
+                            {{validation.message}}
+                        </mat-error>
+                    </mat-error>
+
+                    <mat-form-field *ngIf="angForm.value.idUserType.idUserType !== 2;" class="imput-form-text" appearance="outline">
+                        <mat-label>Apellidos</mat-label>
+                        <input
+                        matInput
+                        type="text" 
+                        required
+                        placeholder="Apellidos"
+                        formControlName="lastName" /> 
+                    </mat-form-field>
+                    <ng-container *ngIf="angForm.value.idUserType.idUserType !== 2;">
+                        <mat-error *ngFor="let validation of account_validation_messages.lastName" class="error-message-form">
+                            <mat-error class="error-message" 
+                            *ngIf="angForm.get('lastName')?.hasError(validation.type) && (angForm.get('lastName')?.dirty || angForm.get('lastName')?.touched)" >
+                            {{validation.message}}
+                            </mat-error>
+                        </mat-error>
+                    </ng-container>
+
+                    <mat-form-field *ngIf="angForm.value.idUserType.idUserType === 3;" class="imput-form-text" appearance="outline">
+                        <mat-label>Contraseña</mat-label>
+                        <input
+                        matInput
+                        required
+                        type="text" 
+                        type="password"
+                        placeholder="Contraseña"
+                        formControlName="userPass" /> 
+                    </mat-form-field>
+                    <ng-container *ngIf="angForm.value.idUserType.idUserType === 3;">
+                        <mat-error *ngFor="let validation of account_validation_messages.userPass" class="error-message-form">
+                            <mat-error class="error-message" 
+                            *ngIf="angForm.get('userPass')?.hasError(validation.type) && (angForm.get('userPass')?.dirty || angForm.get('userPass')?.touched)">
+                            {{validation.message}}
+                            </mat-error>
+                        </mat-error>
+                    </ng-container>
+
+                    <mat-form-field class="imput-form-text" appearance="outline">
+                        <mat-label>Correo</mat-label>
+                        <input
+                        matInput
+                        type="email"
+                        required 
+                        placeholder="Correo"
+                        formControlName="userMail" /> 
+                    </mat-form-field> 
+                    <mat-error *ngFor="let validation of account_validation_messages.userMail" class="error-message-form">
+                        <mat-error class="error-message" 
+                        *ngIf="angForm.get('userMail')?.hasError(validation.type) && (angForm.get('userMail')?.dirty || angForm.get('userMail')?.touched)">
+                        {{validation.message}}
+                        </mat-error>
+                    </mat-error>
+
+                    <mat-form-field class="imput-form-text" appearance="outline">
+                        <mat-label>Dirección</mat-label>
+                        <input
+                        matInput
+                        type="text"
+                        required 
+                        placeholder="Dirección"
+                        formControlName="userAddress" /> 
+                    </mat-form-field> 
+                    <mat-error *ngFor="let validation of account_validation_messages.userAddress" class="error-message-form">
+                        <mat-error class="error-message" 
+                        *ngIf="angForm.get('userAddress')?.hasError(validation.type) && (angForm.get('userAddress')?.dirty || angForm.get('userAddress')?.touched)">
+                        {{validation.message}}
+                        </mat-error>
+                    </mat-error>
+
+                    <mat-form-field class="imput-form-text" appearance="outline">
+                        <mat-label>Teléfono</mat-label>
+                        <input
+                        matInput
+                        type="text"
+                        required 
+                        placeholder="Teléfono"
+                        formControlName="userPhone" /> 
+                    </mat-form-field> 
+                    <mat-error *ngFor="let validation of account_validation_messages.userPhone" class="error-message-form">
+                        <mat-error class="error-message" 
+                        *ngIf="angForm.get('userPhone')?.hasError(validation.type) && (angForm.get('userPhone')?.dirty || angForm.get('userPhone')?.touched)">
+                        {{validation.message}}
+                        </mat-error>
+                    </mat-error>
+                </mat-card-content>
+
+                <div fxLayout="row" fxLayoutAlign="end stretch" fxLayoutGap="16px"> 
+                    <button
+                    mat-raised-button
+                    type="button"
+                    color="warn" 
+                    class="btn-block"
+                    routerLink="/clients">
+                    Cancelar
+                    </button>
+                    <button
+                    mat-raised-button
+                    color="primary"
+                    type="submit"
+                    class="btn-block"
+                    [disabled]="angForm.invalid">
+                    Crear
+                    </button>
+                </div>
+            </form> 
+
+        </mat-card>
+        <div class="space"></div>
+    </div>
+     
+
+    <div 
+        class="container-spinner" 
+        *ngIf="!loadingData" 
+        fxLayout="row" 
+        fxLayoutAlign="center center"> 
+        <mat-spinner color='accent' diameter="150" strokeWidth="14"></mat-spinner>
+    </div>   
+</div>
+
+    

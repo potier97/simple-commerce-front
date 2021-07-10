@@ -5,14 +5,18 @@ import { UserData } from '@app/models/user';
 import { environment } from '@environments/environment'; 
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsersService {
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient,
+          private authService: AuthService
+    ) { }
 
+  //Obtener todos los clientes en el sistema
   getAllClients(): Observable<CustomResponse>{
     return this.httpClient.get<CustomResponse>(`${environment.API_PATH}/user/`)
     .pipe(
@@ -24,8 +28,25 @@ export class UsersService {
     );
   }
 
+  //Obtener datos del Admin 
+  getAdminProfile(): Observable<CustomResponse>{ 
+    const token = this.authService.getToken();
+    const tokenData = {
+      token: token
+    }  
+    return this.httpClient.post<CustomResponse>(`${environment.API_PATH}/user/profile`, tokenData)
+    .pipe(
+      map((res: CustomResponse) => {
+        //console.log('Listando el perfil del usuario', res) 
+        return res;
+      }),
+      catchError( err => this.handleError(err))
+    );
+  }
+
+  //Obtener todos los tipos de documentos
   getAllDocTypes(): Observable<CustomResponse>{
-    return this.httpClient.get<CustomResponse>(`${environment.API_PATH}/user/doc`)
+    return this.httpClient.get<CustomResponse>(`${environment.API_PATH}/user/doctypes`)
     .pipe(
       map((res: CustomResponse) => {
         //console.log('Listando los tipos de documentos del cliente', res) 
@@ -35,8 +56,21 @@ export class UsersService {
     );
   }
 
+  //Obtener todos los tipos de Usuarios
   getAllUserTypes(): Observable<CustomResponse>{
-    return this.httpClient.get<CustomResponse>(`${environment.API_PATH}/user/types`)
+    return this.httpClient.get<CustomResponse>(`${environment.API_PATH}/user/usertypes`)
+    .pipe(
+      map((res: CustomResponse) => {
+        //console.log('Listando los tipos de usuario del cliente', res) 
+        return res;
+      }),
+      catchError( err => this.handleError(err))
+    );
+  }
+
+  //Obtener todos los Usuarios Corporativos
+  getAllCorpUsers(): Observable<CustomResponse>{
+    return this.httpClient.get<CustomResponse>(`${environment.API_PATH}/user/corpUsers`)
     .pipe(
       map((res: CustomResponse) => {
         //console.log('Listando los tipos de usuario del cliente', res) 
@@ -66,7 +100,7 @@ export class UsersService {
     );
   }
  
-
+  // funcionalidad para eliminado logico de un usuario
   // deleteClient(id: number): Observable<CustomResponse>{
   //   return this.httpClient.delete<CustomResponse>(`${environment.API_PATH}/user/${id}`)
   //   .pipe(
@@ -78,7 +112,7 @@ export class UsersService {
   //   );
   // }
 
-  getClient(id: number): Observable<CustomResponse>{
+  getClientById(id: number): Observable<CustomResponse>{
     return this.httpClient.get<CustomResponse>(`${environment.API_PATH}/user/${id}`)
     .pipe(
       map((res: CustomResponse) => {

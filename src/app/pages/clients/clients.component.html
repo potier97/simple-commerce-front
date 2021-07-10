@@ -3,37 +3,50 @@
         <div class="space"></div>
         <mat-card> 
             <h2 class="title">Buscador</h2>
-            <div fxLayout="row" fxLayoutAlign="start stretch" fxLayoutGap="8px">
-                <mat-form-field fxFlex="70" class="full-width-field" appearance="outline" color="red">
-                    <mat-label>Documento</mat-label>
-                    <input 
-                        matInput  
-                        type="text" 
-                        placeholder="Documento Usuario"
-                        [(ngModel)]="searchUser"
-                        name="searchUser">
-                </mat-form-field>
-                <button 
-                    fxFlex
-                    mat-raised-button
-                    color="secundary"
-                    type="submit"   
-                    class="btn-block" 
-                    (click)="searchClient()"> 
-                        <mat-icon [style.margin-right]="'10px'" >search</mat-icon> 
-                        Buscar
-                </button> 
-                <button 
-                    fxFlex
-                    mat-raised-button
-                    color="secundary"
-                    type="submit"   
-                    class="btn-block" 
-                    (click)="clearSearch()"> 
-                        <mat-icon [style.margin-right]="'10px'" >restart_alt</mat-icon> 
-                        Limpiar
-                </button>
-            </div> 
+
+            <form [formGroup]="angForm" (submit)="searchClient()">
+
+                <div fxLayout="row" fxLayoutAlign="start stretch" fxLayoutGap="8px">
+                    <div fxFlex="70">
+                        <mat-form-field  class="full-width-field" appearance="outline" color="red">
+                            <mat-label>Documento</mat-label>
+                            <input 
+                                matInput  
+                                type="text" 
+                                placeholder="Documento Usuario"
+                                formControlName="searchUser"
+                                name="searchUser">
+                        </mat-form-field> 
+                        <mat-error *ngFor="let validation of account_validation_messages.searchUser" class="error-message-form">
+                            <mat-error 
+                            *ngIf="angForm.get('searchUser')?.hasError(validation.type) && (angForm.get('searchUser')?.dirty || angForm.get('searchUser')?.touched)" >
+                            {{validation.message}}
+                            </mat-error>
+                        </mat-error> 
+                    </div>
+                    <button 
+                        fxFlex
+                        mat-raised-button
+                        color="secundary"
+                        type="submit"   
+                        class="btn-block"
+                        [disabled]="angForm.invalid"> 
+                            <mat-icon [style.margin-right]="'10px'" >search</mat-icon> 
+                            Buscar
+                    </button>  
+                    <button 
+                        fxFlex
+                        type="reset"
+                        mat-raised-button
+                        color="secundary" 
+                        class="btn-block" 
+                        (click)="clearSearch()"> 
+                            <mat-icon [style.margin-right]="'10px'" >restart_alt</mat-icon> 
+                            Limpiar
+                    </button>
+                </div> 
+            </form>
+            
         </mat-card>
         <div class="space"></div>
         <mat-card> 
@@ -57,7 +70,8 @@
                                 {{ column.name ==='name' || column.name ==='lastName'  ?  [element['name'] + ' ' + element['lastName'] | uppercase]  :   
                                     column.name ==='userDoc' || column.name ==='idDocType'  ?  [element['idDocType'].name + ' ' + element['userDoc'] | uppercase] : 
                                     column.name ==='idUserType'  ?  [element[column.name].name | uppercase] : 
-                                    element[column.name]  || " --------- "
+                                    column.name ==='associated'  ?  element[column.name] === null  ? " --------- " : [element[column.name].name | uppercase]   : 
+                                    element[column.name]
                                 }}
                             </td>      
                         </ng-container> 
@@ -70,8 +84,8 @@
                                         Opciones
                                     </button>
                                     <mat-menu #menu="matMenu">
-                                        <button mat-menu-item [routerLink]="['/clients/editClient/', element.idUser]">Editar</button> 
                                         <button mat-menu-item [routerLink]="['/clients/viewClient/', element.idUser]">Ver Usuario</button> 
+                                        <button mat-menu-item [routerLink]="['/clients/editClient/', element.idUser]">Editar</button> 
                                         <button mat-menu-item (click)="deleteProduct(element)">Eliminar</button>
                                     </mat-menu>
                     

@@ -1,1 +1,120 @@
-<p>view-client works!</p>
+<div class="root">
+    <div class="container" *ngIf="client != undefined; else spinnerView">
+        <div class="space"></div>
+        <mat-card >  
+            <!-- product -->
+            <div class="title-text">
+                <h2 style="color: #226706"> Datos Personales del Cliente</h2>
+            </div>
+            <div class="container-user-info">
+                <div class="title-info-text">
+                    <h3 style="color: #226706"> Id Usuario: {{idClient}}</h3>
+                </div>
+
+                <div class="title-info-text">
+                    <h3 style="color: #226706"> Nombre: {{client.name}} {{client.lastName | uppercase }}</h3>
+                </div>
+
+                <div class="title-info-text">
+                    <h3 style="color: #226706"> Tipo Cliente:  {{client.idUserType.name | uppercase }}</h3>
+                </div>
+
+                <div class="title-info-text">
+                    <h3 style="color: #226706">Identificación: {{client.idDocType.name | uppercase }} {{client.userDoc }}</h3>
+                </div>
+
+                <div class="title-info-text">
+                    <h3 style="color: #226706"> Correo:  {{client.userMail | uppercase }}</h3>
+                </div>
+
+                <div class="title-info-text">
+                    <h3 style="color: #226706"> Dirección: {{client.userAddress | uppercase }} </h3>
+                </div>
+
+                <div class="title-info-text">
+                    <h3 style="color: #226706"> Teléfono: {{client.userPhone}} </h3>
+                </div>  
+                
+                <div class="title-info-text">
+                    <h3 style="color: #226706"> Fecha de Creación: {{client.userCreated | date }} </h3>
+                </div>
+            </div>
+             
+
+            <div fxLayout="row" fxLayoutAlign="end stretch" fxLayoutGap="16px"> 
+                <button
+                mat-raised-button
+                type="button"
+                color="primary" 
+                class="btn-block"
+                routerLink="/clients">
+                Volver
+                </button> 
+            </div> 
+        </mat-card>
+
+        <div class="space"></div> 
+
+        <mat-card >  
+            <!-- product -->
+            <div class="title-text">
+                <h2 style="color: #226706"> Datos Personales del Cliente</h2>
+            </div>
+            <div class="container-user-info">
+                <div class="title-info-text">
+                    <h3 style="color: #226706"> Id Usuario: {{idClient}}</h3>
+                </div>
+
+                <div class="title-info-text">
+                    <h3 style="color: #226706"> Nombre: {{client.name}} {{client.lastName | uppercase }}</h3>
+                </div>
+
+                <div class="title-info-text">
+                    <h3 style="color: #226706"> Tipo Cliente:  {{client.idUserType.name | uppercase }}</h3>
+                </div>
+
+                <div class="title-info-text">
+                    <h3 style="color: #226706">Identificación: {{client.idDocType.name | uppercase }} {{client.userDoc }}</h3>
+                </div>
+
+                <div class="title-info-text">
+                    <h3 style="color: #226706"> Correo:  {{client.userMail | uppercase }}</h3>
+                </div>
+
+                <div class="title-info-text">
+                    <h3 style="color: #226706"> Dirección: {{client.userAddress | uppercase }} </h3>
+                </div>
+
+                <div class="title-info-text">
+                    <h3 style="color: #226706"> Teléfono: {{client.userPhone}} </h3>
+                </div>
+
+                <div class="title-info-text">
+                    <h3 style="color: #226706"> Fecha de Creación: {{client.userCreated | date }} </h3>
+                </div>
+            </div>
+             
+
+            <div fxLayout="row" fxLayoutAlign="end stretch" fxLayoutGap="16px"> 
+                <button
+                mat-raised-button
+                type="button"
+                color="primary" 
+                class="btn-block"
+                routerLink="/clients">
+                Volver
+                </button> 
+            </div> 
+        </mat-card>
+
+        
+        <div class="space"></div> 
+    </div> 
+
+    <ng-template #spinnerView >
+        <div class="container-spinner" fxLayout="row" fxLayoutAlign="center center"  > 
+            <mat-spinner color='accent' diameter="150" strokeWidth="14"></mat-spinner>
+        </div>   
+    </ng-template>  
+</div>
+

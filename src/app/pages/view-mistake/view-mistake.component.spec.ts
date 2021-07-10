@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TableListComponent } from './table-list.component';
+import { ViewMistakeComponent } from './view-mistake.component';
 
-describe('TableListComponent', () => {
-  let component: TableListComponent;
-  let fixture: ComponentFixture<TableListComponent>;
+describe('ViewMistakeComponent', () => {
+  let component: ViewMistakeComponent;
+  let fixture: ComponentFixture<ViewMistakeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TableListComponent ]
+      declarations: [ ViewMistakeComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TableListComponent);
+    fixture = TestBed.createComponent(ViewMistakeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

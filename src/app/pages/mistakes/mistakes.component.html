@@ -1,6 +1,80 @@
 <div class="root">
-    <div class="container">
+    <div class="container" [hidden]="!loadingData">
         <div class="space"></div>
-        <mat-card>Errores Card</mat-card>
+        <mat-card> 
+            <h2 class="title">Buscador</h2>
+            <div fxLayout="row" fxLayoutAlign="start stretch" fxLayoutGap="12px">
+                <mat-form-field fxFlex="70" class="full-width-field" appearance="outline" color="red">
+                    <mat-label>Id Documento</mat-label>
+                    <input 
+                        matInput  
+                        type="text" 
+                        placeholder="Nombre Documento"
+                        [(ngModel)]="searchMistake"
+                        name="searchMistake"
+                        (keyup)="applyFilter()">
+                </mat-form-field> 
+                <button 
+                    fxFlex
+                    mat-raised-button
+                    color="secundary"
+                    type="submit"   
+                    class="btn-block" 
+                    (click)="clearSearch()"> 
+                        <mat-icon [style.margin-right]="'10px'" >restart_alt</mat-icon> 
+                        Limpiar
+                </button>
+            </div> 
+        </mat-card>
+        <div class="space"></div>
+        <mat-card> 
+            <table mat-table matSort [dataSource]="dataSource" >  
+                <!-- Id Column -->
+                <ng-container matColumnDef="idMistake">
+                    <th mat-header-cell width="20%" *matHeaderCellDef> No. </th>
+                    <td mat-cell *matCellDef="let element"> {{element.idMistake}} </td>
+                </ng-container>
+
+                <!-- Description Column -->
+                <ng-container matColumnDef="description">
+                    <th mat-header-cell width="20%"  mat-sort-header *matHeaderCellDef> Descripción </th>
+                    <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+                </ng-container>
+
+                <!-- Fecha del Error Column -->
+                <ng-container matColumnDef="errorDate">
+                    <th mat-header-cell width="20%"  mat-sort-header *matHeaderCellDef> Fecha </th>
+                    <td mat-cell *matCellDef="let element"> {{element.errorDate | date }} </td>
+                </ng-container>
+
+                <!-- Id Documento Column -->
+                <ng-container matColumnDef="idPayDoc">
+                    <th mat-header-cell width="20%"  mat-sort-header *matHeaderCellDef> Id Documento </th>
+                    <td mat-cell *matCellDef="let element"> {{element.idPayDoc.documentName}} </td>
+                </ng-container>
+
+                <!-- Convenio Column -->
+                <ng-container matColumnDef="idCovenant">
+                    <th mat-header-cell width="20%" mat-sort-header *matHeaderCellDef> Convenio </th>
+                    <td mat-cell *matCellDef="let element"> {{element.idPayDoc.idCovenant.name}} </td>
+                </ng-container> 
+ 
+                <tr mat-header-row  *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row class="mistake-element-row" (click)="viewMistake(row.idMistake)" *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table> 
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </mat-card>
+        <div class="space"></div>
     </div>
+     
+
+    <div 
+        class="container-spinner" 
+        *ngIf="!loadingData" 
+        fxLayout="row" 
+        fxLayoutAlign="center center"> 
+        <mat-spinner color='accent' diameter="150" strokeWidth="14"></mat-spinner>
+    </div>   
 </div>
+
+    

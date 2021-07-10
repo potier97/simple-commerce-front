@@ -19,8 +19,7 @@ import { LoginGuard } from "./guards/login/login.guard";
 
 //Components
 import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { PaymentComponent } from './pages/payment/payment.component';
@@ -32,8 +31,7 @@ import { PayComponent } from './pages/pay/pay.component';
 import { CovenantComponent } from './pages/covenant/covenant.component';
 import { MistakesComponent } from './pages/mistakes/mistakes.component';
 import { ProfileComponent } from './pages/profile/profile.component';
-import { LoginComponent } from './pages/login/login.component';
-import { TableListComponent } from './components/table-list/table-list.component';
+import { LoginComponent } from './pages/login/login.component'; 
 import { FilterDataPipe } from './pipes/filterData/filter-data.pipe';
 import { NewProductComponent } from './pages/new-product/new-product.component';
 import { CustomDialogComponent } from './components/custom-dialog/custom-dialog.component';
@@ -43,13 +41,13 @@ import { NewOfferComponent } from './pages/new-offer/new-offer.component';
 import { EditOfferComponent } from './pages/edit-offer/edit-offer.component';
 import { NewClientComponent } from './pages/new-client/new-client.component';
 import { EditClientComponent } from './pages/edit-client/edit-client.component';
-import { ViewClientComponent } from './pages/view-client/view-client.component'; 
+import { ViewClientComponent } from './pages/view-client/view-client.component';
+import { ViewMistakeComponent } from './pages/view-mistake/view-mistake.component'; 
 
 
 @NgModule({
   declarations: [
-    AppComponent,
-    DashboardComponent,
+    AppComponent, 
     PageNotFoundComponent,
     NavigationComponent,
     PaymentComponent,
@@ -61,8 +59,7 @@ import { ViewClientComponent } from './pages/view-client/view-client.component';
     CovenantComponent,
     MistakesComponent,
     ProfileComponent,
-    LoginComponent,
-    TableListComponent,
+    LoginComponent, 
     FilterDataPipe,
     NewProductComponent,
     CustomDialogComponent,
@@ -72,7 +69,8 @@ import { ViewClientComponent } from './pages/view-client/view-client.component';
     EditOfferComponent,
     NewClientComponent,
     EditClientComponent,
-    ViewClientComponent
+    ViewClientComponent,
+    ViewMistakeComponent
   ],
   imports: [
     BrowserModule,

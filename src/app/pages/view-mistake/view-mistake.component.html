@@ -1,0 +1,58 @@
+<div class="root">
+    <div class="container" *ngIf="mistake != undefined; else spinnerView">
+        <div class="space"></div>
+        <mat-card >  
+            <!-- product -->
+            <div class="title-text">
+                <h1 style="color: #226706"> Datos Especificos del Error</h1>
+            </div>
+            <div class="container-mistake-info">
+                <div class="container-info-mistake">
+                    <h2 style="color: #226706"> Id Error: {{idMistake}}</h2>
+                </div>
+
+                <div class="container-info-mistake">
+                    <h2 style="color: #226706"> Fecha del error: {{mistake.errorDate | date }}</h2>
+                </div>
+
+                <div class="container-info-mistake">
+                    <h2 style="color: #226706"> Descripción del error: {{mistake.description}}</h2>
+                </div>
+
+                <div class="container-info-mistake">
+                    <h2 style="color: #226706">Convenio: {{mistake.idPayDoc.idCovenant.name}}</h2>
+                </div>
+
+                <div class="container-info-mistake">
+                    <h2 style="color: #226706"> Ubicación del Documento:  {{mistake.idPayDoc.urlDoc | lowercase }}</h2>
+                </div>
+
+                <div class="container-info-mistake">
+                    <h2 style="color: #226706"> Nombre Documento: {{mistake.idPayDoc.documentName | lowercase }} </h2>
+                </div> 
+                
+            </div>
+             
+
+            <div fxLayout="row" fxLayoutAlign="end stretch" fxLayoutGap="16px"> 
+                <button
+                mat-raised-button
+                type="button"
+                color="primary" 
+                class="btn-block"
+                routerLink="/mistakes">
+                Volver
+                </button> 
+            </div> 
+        </mat-card>  
+
+        <div class="space"></div> 
+    </div> 
+
+    <ng-template #spinnerView >
+        <div class="container-spinner" fxLayout="row" fxLayoutAlign="center center"  > 
+            <mat-spinner color='accent' diameter="150" strokeWidth="14"></mat-spinner>
+        </div>   
+    </ng-template>  
+</div>
+

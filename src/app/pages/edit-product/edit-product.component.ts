@@ -5,7 +5,7 @@ import { ProductsService } from '@app/services/products/products.service';
 import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProductsData } from '@app/models/products'; 
-
+ 
 
 @Component({
   selector: 'app-edit-product',
@@ -72,8 +72,7 @@ export class EditProductComponent implements OnInit, OnDestroy  {
         this.route.params.subscribe(params => {
           this.idProduct = params['id'];
         }) 
-      )
-      
+      ) 
       this.subscription.push(
         this.productService.getProduct(this.idProduct).subscribe(
           res => {

@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserData } from '@app/models/user';
 import Swal from 'sweetalert2' 
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 
 @Component({
@@ -18,7 +19,11 @@ export class ClientsComponent implements OnInit, AfterViewInit, OnDestroy  {
 
   private subscription: Subscription[] = [];
  
-  searchUser: string = ""
+  
+  angForm: FormGroup = new FormGroup({ 
+    searchUser: new FormControl(''),
+  }); 
+
   //Flag to Spinner data 
   loadingData: boolean = false;
   displayedColumns: string[] = ['idUser', 'name', 'userDoc', 'idUserType', 'associated', 'accion']; 
@@ -34,13 +39,31 @@ export class ClientsComponent implements OnInit, AfterViewInit, OnDestroy  {
   @ViewChild(MatPaginator) paginator: MatPaginator; 
   @ViewChild(MatSort) sort: MatSort;
 
+  account_validation_messages = {
+    searchUser: [
+      { type: 'required', message: 'Ingrese el documento' },  
+      { type: 'pattern', message: 'Ingrese un documento válido' }, 
+    ], 
+  }; 
+
+
   constructor(  
       private snackbar: MatSnackBar,  
+      private fb: FormBuilder,  
       private usersService: UsersService,  
     ) { }
 
   ngOnInit(): void { 
     this.getProducts();
+    this.angForm = this.fb.group({  
+      searchUser: new FormControl(
+        '',
+        Validators.compose([ 
+          Validators.required,
+          Validators.pattern('^[0-9]*$'), 
+        ])
+      ) 
+    }); 
   }
 
   getProducts(): void {
@@ -73,28 +96,31 @@ export class ClientsComponent implements OnInit, AfterViewInit, OnDestroy  {
     } 
   } 
    
-  clearSearch(): void { 
-    this.searchUser = ''; 
+  clearSearch(): void {   
+    this.angForm.controls["searchUser"].reset(); 
     this.getProducts();
   }
 
   searchClient(): void { 
-    //Buscar los clientes por documento de id
-    //console.log('buscanco.....') 
-    this.subscription.push(
-      this.usersService.findByDoc(this.searchUser).subscribe(
-        res => { 
-          this.dataSource.data = res.content;
-          //console.log('Clientes ->', res.content)  
-          this.loadingData = true
-        },
-        err => {
-          console.log(err)  
-          this.showSnack(false, err.error.message || 'Imposible Obtener resultados');
-          this.clearSearch();
-        }
-      ) 
-    )
+    if(this.angForm.valid){ 
+      //Buscar los clientes por documento de id
+      //console.log('buscanco.....') 
+      const searchUser = this.angForm.value.searchUser;
+      this.subscription.push(
+        this.usersService.findByDoc(searchUser).subscribe(
+          res => { 
+            this.dataSource.data = res.content;
+            //console.log('Clientes ->', res.content)  
+            this.loadingData = true
+          },
+          err => {
+            console.log(err)  
+            this.showSnack(false, err.error.message || 'Imposible Obtener resultados');
+            this.clearSearch();
+          }
+        ) 
+      )
+    }
   }  
    
   deleteProduct(user: UserData): void {

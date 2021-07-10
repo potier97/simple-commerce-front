@@ -19,7 +19,7 @@ export class JwtInterceptorInterceptor implements HttpInterceptor {
     //console.log("Interceptor generated", request.url)
     if(request.url.includes("payment") || request.url.includes("product") || request.url.includes("clients") ||
     request.url.includes("offer") || request.url.includes("invoces") || request.url.includes("covenant") || 
-    request.url.includes("pay") || request.url.includes("mistakes") || request.url.includes("profile") 
+    request.url.includes("pay") || request.url.includes("mistake") || request.url.includes("profile") 
     || request.url.includes("agreementPay") || request.url.includes("user") ){  
       //console.log("Entró") 
       const authToken = this.authService.userTokenValue;

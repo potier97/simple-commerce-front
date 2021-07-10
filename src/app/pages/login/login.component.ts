@@ -41,9 +41,9 @@ export class LoginComponent implements OnInit, OnDestroy {
       { type: 'pattern', message: 'Ingrese una cédula valida' },
     ],
     password: [
-      { type: 'minlength', message: 'La contraseña debe ser de mínimo 5 carácterres', }, 
       { type: 'required', message: 'Contraseña requerida' },
-      { type: 'pattern', message: 'Su contraseña debe contener mínimo una letra mayuscula, una minuscula y un número',
+      { type: 'minlength', message: 'La contraseña debe ser de mínimo 3 carácterres', }, 
+      { type: 'pattern', message: 'Su contraseña debe contener letras y números',
       },
     ],
   };
@@ -57,18 +57,18 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnInit(): void { 
     this.angForm = this.fb.group({
       userDocument: new FormControl(
-        '10324945632',
+        '132565895',
         Validators.compose([
           Validators.required, 
           Validators.pattern('^[0-9]*$'),
         ])
       ),
       password: new FormControl(
-        'Telot3ngo',
+        'pass123',
         Validators.compose([
-          Validators.minLength(5),
+          Validators.minLength(3),
           Validators.required,
-          Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$'),
+          Validators.pattern('^(?=.*[a-z])(?=.*[0-9])[a-zA-Z0-9]+$'),
         ])
       ),
     }); 

@@ -10,12 +10,14 @@
 
 .container-form {
   margin-top: 32px;
+  /* background-color: green; */
+  /* margin: 24px, 64px !important; */
 }
 
 .title-form-text {
   margin-top: 24px !important;
   margin-left: 16px;
-} 
+}
 
 .imput-form-text {
   margin-left: 8px;
@@ -26,7 +28,7 @@
 .error-message-form {
   margin-left: 8px;
   margin-right: 8px;
-  padding-top: 4px; 
+  padding-top: 4px;
 }
 
 .container {

@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
 import { CustomerPdf, InvoicePdf } from '@app/models/invoice-pdf';
+import { UserData } from '@app/models/user';
 import * as pdfMake from 'pdfmake/build/pdfmake';
-import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts'; 
 (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
 
 @Injectable({
   providedIn: 'root',
 })
 export class InvoiceToPdfService {
+   
+  userAdmin: UserData;
+
   constructor() {} 
 
 
@@ -31,8 +35,21 @@ export class InvoiceToPdfService {
       img.src = url;
     });
   }
+ 
 
-  async generatePdf(customer: CustomerPdf, products: InvoicePdf[], facturaId: number, subtotal: number, tax: number, discount: number, total: number) { 
+
+  async generatePdf(
+      adminName: string, 
+      customer: CustomerPdf, 
+      products: InvoicePdf[], 
+      facturaId: number, 
+      subtotal: number, 
+      tax: number, 
+      discount: number, 
+      total: number
+    ): Promise<void> { 
+   
+    
     //Imagenes de la tienda y calidad
     const logo: string = await this.getBase64ImageFromURL("../../../assets/image/logo-Horizontal.svg", "svg") 
     const calidad: string = await this.getBase64ImageFromURL("../../../assets/image/calidad.png", "png") 
@@ -267,6 +284,21 @@ export class InvoiceToPdfService {
               ]  
           ]  
         },  
+        //Descripción del Administrador que registró
+        {  
+          text: 'Cajero',  
+          style: 'sectionHeader',   
+        },
+        {  
+          columns: [  
+              [  
+                { text: adminName,  
+                  style: 'sectionCustomer',
+                  bold: true, 
+                },   
+              ],   
+          ]  
+        },   
         //Tabla de detalle
         {  
           text: 'Detalle Compra',  
@@ -337,6 +369,6 @@ export class InvoiceToPdfService {
           margin: [15, 0, 0, 4]  
       } 
     }  
-    }).open();
+    }).open(); 
   }
 }

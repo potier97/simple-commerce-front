@@ -1,29 +1,28 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'; 
 import { ActivatedRoute, Router } from '@angular/router';
-import { UsersService } from '@app/services/users/users.service';
+import { MistakeService } from '@app/services/mistake/mistake.service';
 import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { UserData } from '@app/models/user'; 
- 
+import { MistakeData } from '@app/models/mistake'; 
 
 @Component({
-  selector: 'app-view-client',
-  templateUrl: './view-client.component.html',
-  styleUrls: ['./view-client.component.css']
+  selector: 'app-view-mistake',
+  templateUrl: './view-mistake.component.html',
+  styleUrls: ['./view-mistake.component.css']
 })
-export class ViewClientComponent implements OnInit, OnDestroy  {
+export class ViewMistakeComponent implements OnInit, OnDestroy  {
  
 
   private subscription: Subscription[] = [];
   
-  client: UserData;
-  idClient: number;
+  mistake: MistakeData;
+  idMistake: string;
 
   constructor( 
     private route: ActivatedRoute, 
     private snackbar: MatSnackBar,  
     private router: Router,
-    private usersService: UsersService) { }
+    private mistakeService: MistakeService) { }
  
 
   ngOnDestroy(): void {
@@ -36,20 +35,20 @@ export class ViewClientComponent implements OnInit, OnDestroy  {
   ngOnInit(): void {  
       this.subscription.push(
         this.route.params.subscribe(params => {
-          this.idClient = params['id'];
+          this.idMistake = params['id'];
         }) 
       ) 
       this.subscription.push(
-        this.usersService.getClientById(this.idClient).subscribe(
+        this.mistakeService.getErrorById(this.idMistake).subscribe(
           res => {
             //console.log('Response ->', res)
-            this.client = res.content;
+            this.mistake = res.content;
             this.showSnack(true, res.message);   
           },
           err => {
             //console.log(err)
-            this.showSnack(false, err.error.message || "No se encontró el cliente");   
-            this.router.navigate(['/products'])
+            this.showSnack(false, err.error.message || "No se encontró el error");   
+            this.router.navigate(['/mistakes'])
           }
         )
       )   

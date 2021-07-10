@@ -39,6 +39,12 @@ table {
   font-weight: bold;
 }
 
+.error-message-form {
+  margin-left: 8px;
+  margin-right: 8px;
+  padding-top: 4px;
+}
+
 .btn-block {
   background-color: #226706;
   color: #fff;
