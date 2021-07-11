@@ -145,6 +145,7 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
       title: 'Desactivar producto',
       text: `¿Desea desactivar el producto ${product.idCode}?`,
       icon: 'warning',
+      iconColor:'#c1c164',
       heightAuto: false,
       showCancelButton: true,
       confirmButtonColor: '#c1c164',
@@ -165,6 +166,7 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
                 title: 'Desactivar',
                 text: `Producto ${product.idCode} desactivado`,
                 icon: 'success',
+                iconColor:'#c1c164',
                 heightAuto: false, 
                 confirmButtonColor: '#c1c164', 
                 confirmButtonText: 'Cerrar'
@@ -177,6 +179,7 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
                 title: 'Error',
                 text: `Producto ${product.idCode} no ha podido ser desactivado`,
                 icon: 'error',
+                iconColor:'#c1c164',
                 heightAuto: false, 
                 confirmButtonColor: '#c1c164', 
                 confirmButtonText: 'Cerrar'

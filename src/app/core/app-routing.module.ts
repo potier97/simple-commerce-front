@@ -25,6 +25,7 @@ import { NewClientComponent } from '@app/pages/new-client/new-client.component';
 import { EditClientComponent } from '@app/pages/edit-client/edit-client.component';
 import { ViewClientComponent } from '@app/pages/view-client/view-client.component';
 import { ViewMistakeComponent } from '@app/pages/view-mistake/view-mistake.component';
+import { ViewInvoiceComponent } from '@app/pages/view-invoice/view-invoice.component';
 
 const routes: Routes = [
   { 
@@ -50,6 +51,7 @@ const routes: Routes = [
       { path: 'offers/newOffer', component: NewOfferComponent, data: {title: 'Nueva Oferta'} }, 
       { path: 'offers/editOffer/:id', component: EditOfferComponent, data: {title: 'Editar Oferta'} },  
       { path: 'invoces', component: InvocesComponent, data: {title: 'Ventas'} },
+      { path: 'invoces/datailsInvoice/:id', component: ViewInvoiceComponent, data: {title: 'Detalle Factura'} },
       { path: 'covenants', component: CovenantComponent, data: {title: 'Convenios'} }, 
       { path: 'covenants/newCovenant', component: NewCovenantComponent, data: {title: 'Nuevo Convenio'} }, 
       { path: 'pay', component: PayComponent, data: {title: 'Pagos'} },

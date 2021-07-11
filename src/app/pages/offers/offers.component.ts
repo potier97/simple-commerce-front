@@ -91,6 +91,7 @@ export class OffersComponent implements OnInit, AfterViewInit, OnDestroy  {
       title: 'Desactivar Oferta',
       text: `¿Desea desactivar la oferta ${offer.idOffer}?`,
       icon: 'warning',
+      iconColor:'#c1c164',
       heightAuto: false,
       showCancelButton: true,
       confirmButtonColor: '#c1c164',
@@ -123,6 +124,7 @@ export class OffersComponent implements OnInit, AfterViewInit, OnDestroy  {
             title: 'Desactivado',
             text: `Convenio ${offer.idOffer} desactivado`,
             icon: 'success',
+            iconColor:'#c1c164',
             heightAuto: false, 
             confirmButtonColor: '#c1c164', 
             confirmButtonText: 'Cerrar'
@@ -132,6 +134,7 @@ export class OffersComponent implements OnInit, AfterViewInit, OnDestroy  {
             title: 'Cancelado',
             text: `Convenio ${offer.idOffer} no ha sido desactivado`,
             icon: 'info',
+            iconColor:'#c1c164',
             heightAuto: false, 
             confirmButtonColor: '#c1c164', 
             confirmButtonText: 'Cerrar'

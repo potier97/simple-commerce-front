@@ -6,6 +6,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { JwtModule } from "@auth0/angular-jwt";
 import { AppRoutingModule } from './core/app-routing.module';
 import { AngularMaterialModule } from './core/angular-material.module';  
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 
 //Interceptors
 import { JwtInterceptorInterceptor } from './interceptor/jwtInterceptor/jwt-interceptor.interceptor'
@@ -19,7 +20,6 @@ import { LoginGuard } from "./guards/login/login.guard";
 
 //Components
 import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { PaymentComponent } from './pages/payment/payment.component';
@@ -31,8 +31,7 @@ import { PayComponent } from './pages/pay/pay.component';
 import { CovenantComponent } from './pages/covenant/covenant.component';
 import { MistakesComponent } from './pages/mistakes/mistakes.component';
 import { ProfileComponent } from './pages/profile/profile.component';
-import { LoginComponent } from './pages/login/login.component'; 
-import { FilterDataPipe } from './pipes/filterData/filter-data.pipe';
+import { LoginComponent } from './pages/login/login.component';  
 import { NewProductComponent } from './pages/new-product/new-product.component';
 import { CustomDialogComponent } from './components/custom-dialog/custom-dialog.component';
 import { EditProductComponent } from './pages/edit-product/edit-product.component';
@@ -42,7 +41,8 @@ import { EditOfferComponent } from './pages/edit-offer/edit-offer.component';
 import { NewClientComponent } from './pages/new-client/new-client.component';
 import { EditClientComponent } from './pages/edit-client/edit-client.component';
 import { ViewClientComponent } from './pages/view-client/view-client.component';
-import { ViewMistakeComponent } from './pages/view-mistake/view-mistake.component'; 
+import { ViewMistakeComponent } from './pages/view-mistake/view-mistake.component';
+import { ViewInvoiceComponent } from './pages/view-invoice/view-invoice.component';
 
 
 @NgModule({
@@ -59,8 +59,7 @@ import { ViewMistakeComponent } from './pages/view-mistake/view-mistake.componen
     CovenantComponent,
     MistakesComponent,
     ProfileComponent,
-    LoginComponent, 
-    FilterDataPipe,
+    LoginComponent,  
     NewProductComponent,
     CustomDialogComponent,
     EditProductComponent,
@@ -70,7 +69,8 @@ import { ViewMistakeComponent } from './pages/view-mistake/view-mistake.componen
     NewClientComponent,
     EditClientComponent,
     ViewClientComponent,
-    ViewMistakeComponent
+    ViewMistakeComponent,
+    ViewInvoiceComponent, 
   ],
   imports: [
     BrowserModule,

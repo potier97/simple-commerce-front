@@ -130,6 +130,7 @@ export class ClientsComponent implements OnInit, AfterViewInit, OnDestroy  {
       title: 'Desactivar usuario',
       text: `¿Desea desactivar el usuario ${user.idUser}?`,
       icon: 'warning',
+      iconColor:'#c1c164',
       heightAuto: false,
       showCancelButton: true,
       confirmButtonColor: '#c1c164',
@@ -160,6 +161,7 @@ export class ClientsComponent implements OnInit, AfterViewInit, OnDestroy  {
           title: 'Desactivado',
           text: `Usuario ${user.idUser} desactivado`,
           icon: 'success',
+          iconColor:'#c1c164',
           heightAuto: false, 
           confirmButtonColor: '#c1c164', 
           confirmButtonText: 'Cerrar'
@@ -169,6 +171,7 @@ export class ClientsComponent implements OnInit, AfterViewInit, OnDestroy  {
           title: 'Cancelado',
           text: `Usuario ${user.idUser} no ha sido desactivado`,
           icon: 'info',
+          iconColor:'#c1c164',
           heightAuto: false, 
           confirmButtonColor: '#c1c164', 
           confirmButtonText: 'Cerrar'

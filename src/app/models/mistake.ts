@@ -1,4 +1,4 @@
-import { PayDocumentData } from "./PayDocument";
+import { PayDocumentData } from "./payment-document";
 
 export interface MistakeData {
     idMistake: number | null,

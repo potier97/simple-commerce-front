@@ -17,8 +17,8 @@ export class JwtInterceptorInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     //console.log("Interceptor generated", request.url)
-    if(request.url.includes("payment") || request.url.includes("product") || request.url.includes("clients") ||
-    request.url.includes("offer") || request.url.includes("invoces") || request.url.includes("covenant") || 
+    if(request.url.includes("pay") || request.url.includes("product") || request.url.includes("clients") ||
+    request.url.includes("offer") || request.url.includes("invoice") || request.url.includes("covenant") || 
     request.url.includes("pay") || request.url.includes("mistake") || request.url.includes("profile") 
     || request.url.includes("agreementPay") || request.url.includes("user") ){  
       //console.log("Entró") 

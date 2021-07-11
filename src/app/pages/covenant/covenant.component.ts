@@ -142,6 +142,7 @@ export class CovenantComponent implements OnInit, AfterViewInit, OnDestroy  {
       title: 'Desactivar Convenio',
       text: `¿Desea desactivar el Convenio ${covenant.name}?`,
       icon: 'warning',
+      iconColor:'#c1c164',
       heightAuto: false,
       showCancelButton: true,
       confirmButtonColor: '#c1c164',
@@ -174,6 +175,7 @@ export class CovenantComponent implements OnInit, AfterViewInit, OnDestroy  {
             title: 'Desactivado',
             text: `Convenio ${covenant.name} desactivado`,
             icon: 'success',
+            iconColor:'#c1c164',
             heightAuto: false, 
             confirmButtonColor: '#c1c164', 
             confirmButtonText: 'Cerrar'
@@ -183,6 +185,7 @@ export class CovenantComponent implements OnInit, AfterViewInit, OnDestroy  {
             title: 'Cancelado',
             text: `Convenio ${covenant.name} no ha sido desactivado`,
             icon: 'info',
+            iconColor:'#c1c164',
             heightAuto: false, 
             confirmButtonColor: '#c1c164', 
             confirmButtonText: 'Cerrar'
