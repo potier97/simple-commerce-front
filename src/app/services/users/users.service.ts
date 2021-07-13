@@ -80,6 +80,7 @@ export class UsersService {
     );
   }
 
+  //Crear un cliente
   createClient(newProduct: UserData): Observable<CustomResponse>{
     return this.httpClient.post<CustomResponse>(`${environment.API_PATH}/user/`, newProduct)
     .pipe(
@@ -90,6 +91,7 @@ export class UsersService {
     );
   }
 
+  //Obtener por el documento
   findByDoc(document: string): Observable<CustomResponse>{
     return this.httpClient.post<CustomResponse>(`${environment.API_PATH}/user/doc`, document)
     .pipe(

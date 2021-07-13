@@ -45,7 +45,23 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
 
   ngOnInit(): void { 
     this.getProducts();
+  } 
+  
+  ngAfterViewInit() { 
+    //Configuración de datos iniciales
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator; 
+    this.dataSource.filterPredicate = (data: ProductsData, filter: string): boolean => { 
+      return data.idCode.toString().includes(filter) &&  data.active === 1 ;
+     };
   }
+
+  ngOnDestroy(): void { 
+    //Desubs de todos los observadores cuando se destruye el componente
+    for(const sub of this.subscription) {
+      sub.unsubscribe();
+    } 
+  } 
 
   getProducts(): void {
     this.subscription.push(
@@ -63,22 +79,6 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
       ) 
     )
   }
- 
-  ngAfterViewInit() { 
-    //Configuración de datos iniciales
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator; 
-    this.dataSource.filterPredicate = (data: ProductsData, filter: string): boolean => { 
-      return data.idCode.toString().includes(filter) &&  data.active === 1 ;
-     };
-  }
-
-  ngOnDestroy(): void { 
-    //Desubs de todos los observadores cuando se destruye el componente
-    for(const sub of this.subscription) {
-      sub.unsubscribe();
-    } 
-  } 
  
   updateStock(product: ProductsData): void {
     const dialogRef = this.dialog.open(CustomDialogComponent, {
@@ -152,9 +152,9 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
       cancelButtonColor: '#226706',
       cancelButtonText: 'Cancelar',
       confirmButtonText: 'Desactivar',
-      customClass: {
-        popup: 'animated swing', 
-      }, 
+      showClass: {
+        popup: 'animate__animated animate__swing'
+      },
     }).then((result) => {
       if (result.isConfirmed) {
         const idProduct: number = product.idProduct as number
@@ -169,7 +169,10 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
                 iconColor:'#c1c164',
                 heightAuto: false, 
                 confirmButtonColor: '#c1c164', 
-                confirmButtonText: 'Cerrar'
+                confirmButtonText: 'Cerrar',
+                showClass: {
+                  popup: 'animate__animated animate__swing'
+                }  
               })
               this.showSnack(true, res.message);
             },
@@ -182,7 +185,10 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
                 iconColor:'#c1c164',
                 heightAuto: false, 
                 confirmButtonColor: '#c1c164', 
-                confirmButtonText: 'Cerrar'
+                confirmButtonText: 'Cerrar',
+                showClass: {
+                  popup: 'animate__animated animate__swing'
+                }  
               })
               this.showSnack(false, err.error.message || 'Imposible Borrar Producto');
             }

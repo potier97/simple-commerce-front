@@ -2,7 +2,25 @@
     <div class="container" [hidden]="!loadingData">
         <div class="space"></div>
         <mat-card> 
-            <h2 class="title">Buscador</h2>
+            <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="12px"> 
+                <h2 class="title">Buscador</h2>
+                <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="12px"> 
+                    <button  
+                        mat-raised-button
+                        color="primary" 
+                        class="btn-alone" 
+                        (click)="openPaymentCovenantModal()">  
+                        Procesar Pagos Convenio
+                    </button>
+                    <button  
+                        mat-raised-button
+                        color="primary" 
+                        class="btn-alone" 
+                        (click)="openPaymentInvoiceModal()">  
+                        Pagar Factura
+                    </button>
+                </div>  
+            </div>  
             <div fxLayout="row" fxLayoutAlign="start stretch" fxLayoutGap="12px">
                 <mat-form-field fxFlex="70" class="full-width-field" appearance="outline" color="red">
                     <mat-label>Id</mat-label>

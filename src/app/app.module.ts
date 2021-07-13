@@ -43,6 +43,8 @@ import { EditClientComponent } from './pages/edit-client/edit-client.component';
 import { ViewClientComponent } from './pages/view-client/view-client.component';
 import { ViewMistakeComponent } from './pages/view-mistake/view-mistake.component';
 import { ViewInvoiceComponent } from './pages/view-invoice/view-invoice.component';
+import { PayInvoiceDialogComponent } from './components/pay-invoice-dialog/pay-invoice-dialog.component';
+import { CovenantInvoicesDialogComponent } from './components/covenant-invoices-dialog/covenant-invoices-dialog.component';
 
 
 @NgModule({
@@ -70,7 +72,9 @@ import { ViewInvoiceComponent } from './pages/view-invoice/view-invoice.componen
     EditClientComponent,
     ViewClientComponent,
     ViewMistakeComponent,
-    ViewInvoiceComponent, 
+    ViewInvoiceComponent,
+    PayInvoiceDialogComponent,
+    CovenantInvoicesDialogComponent, 
   ],
   imports: [
     BrowserModule,

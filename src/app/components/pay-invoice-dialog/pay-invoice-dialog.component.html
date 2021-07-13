@@ -1,0 +1,76 @@
+<h1 mat-dialog-title class="tittle">{{data.tittle}}</h1>
+ 
+<form
+mat-dialog-content
+class="container" 
+fxLayout="column" 
+fxLayoutAlign="space-around stretch"
+[formGroup]="angForm">  
+
+<div class="itemForm">
+    <mat-form-field fxLayout="column" fxLayoutAlign="space-between stretch"  class="imput-form-text" appearance="outline">
+        <mat-label>{{data.labelOne}}</mat-label>
+        <input
+        matInput
+        type="text"
+        required  
+        placeholder={{data.labelOne}} 
+        formControlName="inputDataOne"/> 
+    </mat-form-field>  
+    <mat-error *ngFor="let validation of account_validation_messages.inputDataOne">
+        <mat-error class="error-message" 
+            *ngIf="angForm.get('inputDataOne')?.hasError(validation.type) && (angForm.get('inputDataOne')?.dirty || angForm.get('inputDataOne')?.touched)">
+            {{validation.message}}
+        </mat-error>
+    </mat-error>
+</div>
+<div class="itemForm">
+    <mat-form-field fxLayout="column" fxLayoutAlign="space-between stretch"  class="imput-form-text" appearance="outline">
+        <mat-label>{{data.labelTwo}}</mat-label>
+        <input
+        matInput
+        type="text"
+        required  
+        placeholder={{data.labelTwo}}
+        formControlName="inputDataTwo"/> 
+    </mat-form-field>  
+    <mat-error *ngFor="let validation of account_validation_messages.inputDataTwo">
+        <mat-error class="error-message" 
+            *ngIf="angForm.get('inputDataTwo')?.hasError(validation.type) && (angForm.get('inputDataTwo')?.dirty || angForm.get('inputDataTwo')?.touched)">
+            {{validation.message}}
+        </mat-error>
+    </mat-error>
+</div>
+
+<div class="itemForm"> 
+    <mat-label  class="label-tittle">Tipo Documento</mat-label>
+    <mat-radio-group formControlName="inputDataThree" fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="16px"> 
+        <mat-radio-button class="radio-button" fxLayoutGap="16px" *ngFor="let method of methodsPayments" [value]="method">
+            {{method.name}}
+        </mat-radio-button> 
+    </mat-radio-group>  
+    <mat-error *ngFor="let validation of account_validation_messages.inputDataThree">
+        <mat-error class="error-message" 
+            *ngIf="angForm.get('inputDataThree')?.hasError(validation.type) && (angForm.get('inputDataThree')?.dirty || angForm.get('inputDataThree')?.touched)">
+            {{validation.message}}
+        </mat-error>
+    </mat-error>
+</div>
+
+</form>  
+
+
+<div mat-dialog-actions align="end"> 
+  <button 
+    mat-flat-button 
+    color="warn" 
+    style="color: #fff;"  
+    [mat-dialog-close]="closeDialog(false)">Cancelar</button>
+  <button 
+    mat-flat-button 
+    color="primary" 
+    [disabled]="angForm.invalid" 
+    style="color: #fff;"  
+    type="submit" 
+    [mat-dialog-close]="closeDialog(true)">{{data.buttonLabel}}</button>
+</div>

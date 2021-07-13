@@ -8,6 +8,7 @@ import { InvoiceData } from '@app/models/invoice';
 import { MatSnackBar } from '@angular/material/snack-bar'; 
 import Swal from 'sweetalert2' ;
 import * as moment from 'moment';
+import { MonthData } from '@app/models/month';
 
 
 @Component({
@@ -45,12 +46,12 @@ export class InvocesComponent implements OnInit, AfterViewInit, OnDestroy  {
     ) { }
 
   ngOnInit(): void { 
-    this.getProducts();
+    this.getInvoices();
     moment.locale('es-es');
     this.currentMonth = moment().format('MMMM YYYY')
   }
 
-  getProducts(): void {
+  getInvoices(): void {
     this.subscription.push(
       this.invoiceService.getAllInvoices().subscribe(
         res => {
@@ -96,7 +97,7 @@ export class InvocesComponent implements OnInit, AfterViewInit, OnDestroy  {
   
   
   generateMonthInvoice(): void {
-    console.log("Generando facturas")
+    //console.log("Generando facturas")
     //Modal para generar facturas del mes
     Swal.fire({
       title: 'Generar Facturas',
@@ -109,12 +110,11 @@ export class InvocesComponent implements OnInit, AfterViewInit, OnDestroy  {
       cancelButtonColor: '#226706',
       cancelButtonText: 'Cancelar',
       confirmButtonText: 'Generar', 
-      customClass: {
-        popup: 'animated swing', 
-      }, 
+      showClass: {
+        popup: 'animate__animated animate__swing'
+      }  
     }).then((result) => {
       if (result.isConfirmed) {
-
         Swal.fire({
           title: 'Generando',
           text: `Las facturas mensuales se estan generando`,
@@ -122,31 +122,27 @@ export class InvocesComponent implements OnInit, AfterViewInit, OnDestroy  {
           iconColor:'#c1c164',
           heightAuto: false,  
           confirmButtonColor: '#c1c164', 
-          confirmButtonText: 'Cerrar'
-        })
-        // const idProduct: number = product.idProduct as number
-        // this.subscription.push(
-        //   this.productService.deleteProduct(idProduct).subscribe(
-        //     res => {  
-        //       this.getProducts();
-        //       Swal.fire({
-        //         title: 'Desactivar',
-        //         text: `Producto ${product.idCode} desactivado`,
-        //         icon: 'success',
-        //         heightAuto: false, 
-        //         confirmButtonColor: '#c1c164', 
-        //         confirmButtonText: 'Cerrar'
-        //       })
-        //       this.showSnack(true, res.message);
-        //     },
-        //     err => {
-        //       console.log(err.error)  
-     
-        //       this.showSnack(false, err.error.message || 'Imposible Borrar Producto');
-        //     }
-        //   ) 
-        // )
-        
+          confirmButtonText: 'Cerrar',
+          showClass: {
+            popup: 'animate__animated animate__swing'
+          },
+        }) 
+        moment.locale('es-es');
+        const month = moment().format('L')
+        //console.log(month)
+        const data: MonthData = {
+          currentMont: month
+        } 
+        this.invoiceService.generateMonthInvoices(data).subscribe(
+          res => {  
+            this.getInvoices(); 
+            this.showSnack(true, res.message);
+          },
+          err => {
+            console.log(err.error)  
+            this.showSnack(false, err.error.message || 'Imposible Generar Facturas');
+          }
+        )  
       }else{
         Swal.fire({
           title: 'Cancelado',
@@ -155,7 +151,10 @@ export class InvocesComponent implements OnInit, AfterViewInit, OnDestroy  {
           iconColor:'#c1c164',
           heightAuto: false,  
           confirmButtonColor: '#c1c164', 
-          confirmButtonText: 'Cerrar'
+          confirmButtonText: 'Cerrar',
+          showClass: {
+            popup: 'animate__animated animate__swing'
+          },
         })
       }
     })

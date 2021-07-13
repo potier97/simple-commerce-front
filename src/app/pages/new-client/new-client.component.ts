@@ -240,7 +240,7 @@ export class NewClientComponent implements OnInit, OnDestroy {
 
   createClient(): void {
     if (this.angForm.valid) {
-      const userCreated = moment().format("YYYY-MM-DD");  //"2016-04-10"
+      const userCreated = moment().format("YYYY-MM-dd");  //"2016-04-10"
       const userReq = this.angForm.value;
       const userData = {
         idUser: null,

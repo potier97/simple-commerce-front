@@ -25,6 +25,18 @@ export class PayService {
     );
   } 
 
+  //OBTENER TODOS LOS TIPOS DE PAGOS
+  getAllTypesPayments(): Observable<CustomResponse>{
+    return this.httpClient.get<CustomResponse>(`${environment.API_PATH}/pay/methods/`)
+    .pipe(
+      map((res: CustomResponse) => {
+        //console.log('Listando todos los tipos pagos', res) 
+        return res;
+      }),
+      catchError( err => this.handleError(err))
+    );
+  } 
+
   //OBTENER UN PAGO POR EL ID
   getPayment(id: number): Observable<CustomResponse>{
     return this.httpClient.get<CustomResponse>(`${environment.API_PATH}/pay/${id}`)
@@ -49,7 +61,7 @@ export class PayService {
     );
   } 
  
-  //ACTUALIZAR EL PAGO -- REALIZAR UN PAGO
+  //ACTUALIZAR EL PAGO que FALTA POR SER PAGADO - PENDIENTE - A CREDITO -- ACTUALIZAR UN PAGO - CUOTA
   updatePayment(payment: PaymentData): Observable<CustomResponse>{
     return this.httpClient.put<CustomResponse>(`${environment.API_PATH}/pay/`, payment)
     .pipe(

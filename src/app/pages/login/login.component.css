@@ -9,8 +9,9 @@
     -webkit-background-size: cover;
     -moz-background-size: center cover;
     background-size: cover;
-    background-position: center;
-    height: 100%;
+    background-position: center; 
+    height: -webkit-fill-available;
+    min-height: -webkit-fill-available;
   }
   
   /* margen del titulo */

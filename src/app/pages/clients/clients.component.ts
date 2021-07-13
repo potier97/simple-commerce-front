@@ -137,8 +137,8 @@ export class ClientsComponent implements OnInit, AfterViewInit, OnDestroy  {
       cancelButtonColor: '#226706',
       cancelButtonText: 'Cancelar',
       confirmButtonText: 'Desactivar',
-      customClass: {
-        popup: 'animated swing', 
+      showClass: {
+        popup: 'animate__animated animate__swing'
       }, 
     }).then((result) => {
       if (result.isConfirmed) {
@@ -164,7 +164,10 @@ export class ClientsComponent implements OnInit, AfterViewInit, OnDestroy  {
           iconColor:'#c1c164',
           heightAuto: false, 
           confirmButtonColor: '#c1c164', 
-          confirmButtonText: 'Cerrar'
+          confirmButtonText: 'Cerrar',
+          showClass: {
+            popup: 'animate__animated animate__swing'
+          }  
         }) 
       }else {
         Swal.fire({
@@ -174,7 +177,10 @@ export class ClientsComponent implements OnInit, AfterViewInit, OnDestroy  {
           iconColor:'#c1c164',
           heightAuto: false, 
           confirmButtonColor: '#c1c164', 
-          confirmButtonText: 'Cerrar'
+          confirmButtonText: 'Cerrar',
+          showClass: {
+            popup: 'animate__animated animate__swing'
+          }  
         }) 
       }  
     })

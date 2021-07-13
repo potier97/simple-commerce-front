@@ -98,9 +98,9 @@ export class OffersComponent implements OnInit, AfterViewInit, OnDestroy  {
       cancelButtonColor: '#226706',
       cancelButtonText: 'Cancelar',
       confirmButtonText: 'Eliminar',
-      customClass: {
-        popup: 'animated swing', 
-      }, 
+      showClass: {
+        popup: 'animate__animated animate__swing'
+      },
     }).then((result) => {
         //Si el resultado es verdad se envia una peticion para desactivar (borrado logico)
         //la oferta del sistema
@@ -127,7 +127,10 @@ export class OffersComponent implements OnInit, AfterViewInit, OnDestroy  {
             iconColor:'#c1c164',
             heightAuto: false, 
             confirmButtonColor: '#c1c164', 
-            confirmButtonText: 'Cerrar'
+            confirmButtonText: 'Cerrar',
+            showClass: {
+              popup: 'animate__animated animate__swing'
+            }  
           }) 
         }else {
           Swal.fire({
@@ -137,7 +140,10 @@ export class OffersComponent implements OnInit, AfterViewInit, OnDestroy  {
             iconColor:'#c1c164',
             heightAuto: false, 
             confirmButtonColor: '#c1c164', 
-            confirmButtonText: 'Cerrar'
+            confirmButtonText: 'Cerrar',
+            showClass: {
+              popup: 'animate__animated animate__swing'
+            }  
           }) 
         }
       }) 

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CustomResponse } from '@app/models/custom-response';
 import { InvoiceData } from '@app/models/invoice'; 
+import { MonthData } from '@app/models/month';
 import { environment } from '@environments/environment'; 
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -53,6 +54,18 @@ export class InvoiceService {
     return this.httpClient.put<CustomResponse>(`${environment.API_PATH}/invoice/`, invoice)
     .pipe(
       map((res: CustomResponse) => {
+        return res;
+      }),
+      //catchError( err => this.handleError(err))
+    );
+  }
+
+  //Generar las facturas del mes para compras que tengan cuotas pendientes
+  generateMonthInvoices(data: MonthData): Observable<CustomResponse>{
+    return this.httpClient.post<CustomResponse>(`${environment.API_PATH}/invoicesMonth/`, data)
+    .pipe(
+      map((res: CustomResponse) => {
+        //console.log('Generando facturas del mes actual', res) 
         return res;
       }),
       //catchError( err => this.handleError(err))

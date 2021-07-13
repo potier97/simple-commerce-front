@@ -44,6 +44,12 @@ table {
   color: #fff;
 }
 
+.btn-alone {
+  margin-bottom: 16px; 
+  color: #fff;
+  padding: 12px 16px;
+}
+
 .fav-add-product {
   position: fixed;
   right: 24px;

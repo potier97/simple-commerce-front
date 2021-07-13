@@ -1,11 +1,19 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core'; 
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { AfterViewInit, Component, ViewChild, OnInit, OnDestroy} from '@angular/core';
+import { MatPaginator} from '@angular/material/paginator';
+import { MatTableDataSource} from '@angular/material/table'; 
+import { MatSort} from '@angular/material/sort';
 import { CustomerPdf, InvoicePdf } from '@app/models/invoice-pdf';
 import { UserData } from '@app/models/user';
 import { InvoiceToPdfService } from '@app/services/invoiceToPdf/invoice-to-pdf.service';
-import { UploadFileService } from '@app/services/uploadFile/upload-file.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ProductsService } from '@app/services/products/products.service';
 import { UsersService } from '@app/services/users/users.service';
-import { Subscription } from 'rxjs'; 
+import { IncrementeProduct, ProductsData } from '@app/models/products';
+import { CustomDialogComponent } from '@app/components/custom-dialog/custom-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subscription } from 'rxjs';
+import { FormControl, Validators } from '@angular/forms';
+import Swal from 'sweetalert2' 
  
 
 @Component({
@@ -13,23 +21,48 @@ import { Subscription } from 'rxjs';
   templateUrl: './payment.component.html',
   styleUrls: ['./payment.component.css']
 })
-export class PaymentComponent implements OnInit, OnDestroy {
+export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private subscription: Subscription[] = [];
-
-  file: File | null = null; 
+  //Datos del administrador
   userAdmin: UserData;
-
-  @ViewChild('txtInput') inputFile: ElementRef;
-
+  //Lista de prodctos que va a comprar
+  productsToBuy: ProductsData[] = []
+  //Buscador de cliente por documento 
+  searchClientDoc = new FormControl('1035442546', 
+    [
+      Validators.required,
+      Validators.pattern('^[0-9]*$'),
+      Validators.minLength(3),
+    ]
+  );
+  //Buscador de productos por el dni
+  searchDni: string = ""
+  //DATO DEL CLIENTE QUE REALIZA LA COMPRA
+  client: UserData | null = null;
+  //Flag to Spinner data 
+  loadingData: boolean = false;
+  displayedColumns: string[] = ['name', 'amount', 'price', 'accion']; 
+  dataSource = new MatTableDataSource<ProductsData>();
+  columns = [ 
+    { title: 'Nombre', name: 'name',  size: "55%"}, 
+    { title: 'Stock', name: 'amount',  size: "15%"}, 
+    { title: 'Precio', name: 'price',  size: "15%"},
+    { title: 'Agregar', name: 'accion', size: "15%"},
+  ] 
+  @ViewChild(MatPaginator) paginator: MatPaginator; 
+  @ViewChild(MatSort) sort: MatSort;
+ 
   constructor(
     private userService: UsersService,
     private pdfGenerator: InvoiceToPdfService,
-    private snackbar: MatSnackBar,
-    private uploadFileService: UploadFileService,  
+    private dialog: MatDialog,  
+    private snackbar: MatSnackBar, 
+    private productService: ProductsService,  
   ) { }
 
   ngOnInit(): void {
+    this.getProducts();
     this.subscription.push(
       this.userService.getAdminProfile().subscribe(
         async res => { 
@@ -37,8 +70,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
           this.userAdmin = res.content; 
         },
         err => {
-          console.log(err)  
-          return null 
+          console.log(err)   
         }
       )
     )
@@ -51,51 +83,100 @@ export class PaymentComponent implements OnInit, OnDestroy {
     } 
   } 
 
-  loadCovenantFile(event: any) {
-    if(event.target.files && event.target.files[0]){ 
-      const currentFile = event.target.files[0];
-      const fileTypeList = currentFile.name.split(".")
-      const fileType = fileTypeList[fileTypeList.length - 1]
-      if(fileType === "txt" && currentFile.type === "text/plain"){ 
-        this.file = <File> currentFile; 
-        console.log("File -> ", currentFile)
-      }  
-    } 
-  }
-
-  deleteFile(): void {
-    this.inputFile.nativeElement.value = ""; 
-    console.log("Borrando Documento")
-    this.file = null;
-  }
-  
-
-  sendFile(): void {
-    //Envio de los pagos de los convenios
-    //console.log("Enviando documento") 
-    this.uploadFileService.uploadPayment(this.file).subscribe(
-      res => {
-        console.log('documento enviado -> ', res);
-        this.showSnack(true, 'Documento Procesado');    
-      },
-      err => {
-        console.log(err) 
-        this.showSnack(false, err.error.message || "Error al enviar documento");  
-      }, 
-    )   
-    this.showSnack(true, 'Documento Enviado');   
-    this.deleteFile();  
+  ngAfterViewInit() { 
+    //Configuración de datos iniciales
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator; 
+    this.dataSource.filterPredicate = (data: ProductsData, filter: string): boolean => { 
+      return data.idCode.toString().includes(filter) &&  data.active === 1 ;
+     };
   }
  
+  
+  //Buscar cliente por su documento
+  searchClient(): void { 
+    //Buscar los productos por el documento
+    if(this.searchClientDoc.valid){
+      this.subscription.push(
+        this.userService.findByDoc(this.searchClientDoc.value).subscribe(
+          res => {
+            //console.log('Dato del cliente ->', res.content);  
+            if(res.content[0] !== undefined){
+              this.client = res.content[0];
+              this.showSnack(true,  res.message || 'Cliente Obtenido'); 
+              this.searchClientDoc.reset();
+              this.searchClientDoc.disable();
+            }else{
+              this.showSnack(false, 'Cliente No Encontrado'); 
+            }
+          },
+          err => {
+            console.log(err) 
+            this.showSnack(false,  err.error.message || 'Cliente No Encontrado'); 
+          }
+        )
+      )
+    }
+  } 
 
-  showSnack(status: boolean, message: string, timer: number = 6500): void {
-    this.snackbar.open(message, undefined , {
-      horizontalPosition: 'right',
-      verticalPosition: 'top',
-      duration: timer,
-      panelClass: [status ? "succes-snack" : "error-snack"],
-    })
+  //Limpiar entrada de busqueda de usuario
+  clearClientSearch(): void {   
+      this.client = null;
+      this.searchClientDoc.enable();
   }
+
+  
+  //Buscar producto por el dni
+  searchProduct(): void { 
+    //Filtra los porductos por el DNI
+    this.dataSource.filter = this.searchDni.trim().toLowerCase();
+  }
+
+  //Limpiar busqueda de producto
+  clearProductSearch(): void { 
+    this.searchDni = '';
+    this.dataSource.filter = "";
+  }
+
+  getProducts(): void {
+    this.subscription.push(
+      this.productService.getAllProducts().subscribe(
+        res => {
+          this.dataSource.data = res.content;
+          //console.log('Productos ->', res.content) 
+          this.loadingData = true
+        },
+        err => {
+          //console.log(err) 
+          this.showSnack(false, 'Imposible Obtener Productos'); 
+          this.loadingData = true
+        }
+      ) 
+    )
+  }
+
+
+  addProduct(product: ProductsData): void {
+    //console.log("Añadiendo Producto -> ", product)
+    this.productsToBuy.push(product)
+  }
+
+  removeProduct(product: ProductsData): void {
+    console.log("Removiendo Producto -> ", product)
+    this.productsToBuy = this.productsToBuy.filter(p => p.idCode !== product.idCode)
+  }
+
+  buyCancel(): void {
+    this.clearProductSearch();
+    this.clearClientSearch();
+    this.productsToBuy = [];
+    console.log("Cancelando compra");
+  }
+
+  buy(): void {
+    console.log("Realizando  compra");
+  }
+  
 
 
   generatePdf() {
@@ -153,6 +234,17 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
     const AdminData = `${this.userAdmin.name} ${this.userAdmin.lastName}`
     this.pdfGenerator.generatePdf( AdminData, customerData, productsData, invoiceId, subtotal, totalTax, discount, total);
+  }
+
+
+
+  showSnack(status: boolean, message: string, timer: number = 6500): void {
+    this.snackbar.open(message, undefined , {
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+      duration: timer,
+      panelClass: [status ? "succes-snack" : "error-snack"],
+    })
   }
 
 }
