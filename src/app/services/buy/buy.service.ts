@@ -15,7 +15,7 @@ export class BuyService {
  
 
   // GENERAR UNA NUEVA COMPRA
-  createProduct(newBuy: PaymentData): Observable<CustomResponse>{
+  createProduct(newBuy: any): Observable<CustomResponse>{
     return this.httpClient.post<CustomResponse>(`${environment.API_PATH}/buy/`, newBuy)
     .pipe(
       map((res: CustomResponse) => {

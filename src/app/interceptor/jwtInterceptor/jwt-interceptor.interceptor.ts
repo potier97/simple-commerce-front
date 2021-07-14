@@ -20,7 +20,7 @@ export class JwtInterceptorInterceptor implements HttpInterceptor {
     if(request.url.includes("pay") || request.url.includes("product") || request.url.includes("clients") ||
     request.url.includes("offer") || request.url.includes("invoice") || request.url.includes("covenant") || 
     request.url.includes("pay") || request.url.includes("mistake") || request.url.includes("profile") 
-    || request.url.includes("agreementPay") || request.url.includes("user") ){  
+    || request.url.includes("agreementPay") || request.url.includes("user") || request.url.includes("buy") ){  
       //console.log("Entró") 
       const authToken = this.authService.userTokenValue;
       const authReq = request.clone({

@@ -2,7 +2,7 @@ export interface UserData {
     idUser: number | null,
     idDocType: DocTypeData,
     idUserType: UserTypeData,
-    associated: UserData,
+    associated: UserData | null,
     userDoc: number,
     name: string,
     lastName: string,

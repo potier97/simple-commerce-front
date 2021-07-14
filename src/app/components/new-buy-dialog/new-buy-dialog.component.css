@@ -1,0 +1,73 @@
+.tittle {
+  color: #226706;
+  font-weight: bold;
+}
+
+.container {
+  box-sizing: unset !important;
+  /* height: calc(100% - 92px); */
+}
+
+.radio-button {
+  color: #226706;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.label-tittle {
+  color: #226706;
+  margin-bottom: 0px;
+  margin-left: 16px; 
+  font-weight: 500;
+}
+
+.imput-form-text {
+  margin-left: 8px;
+  margin-right: 8px;
+  margin-top: 12px;
+}
+
+
+.itemForm {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.mat-dialog-actions {
+  justify-content: flex-end;
+}
+ 
+.btn-block {  
+  color: #fff;
+  font-size: large;
+  padding: 8px 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; 
+}
+
+.product-text{
+  margin: 16px 8px;
+  color: #226706;
+  font-weight: normal;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; 
+}
+
+.bold-text {
+  font-weight: 500 !important;
+}
+
+.container-score {
+  border-color: #c1c16466;
+  border-style: solid;
+  border-width: 5px;
+  border-radius: 16px;
+}
+
+.actions-dialog-container {
+  margin-bottom: 0px;
+  margin-top: 8px;
+  margin-right: 0px;
+}

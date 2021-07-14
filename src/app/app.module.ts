@@ -45,6 +45,7 @@ import { ViewMistakeComponent } from './pages/view-mistake/view-mistake.componen
 import { ViewInvoiceComponent } from './pages/view-invoice/view-invoice.component';
 import { PayInvoiceDialogComponent } from './components/pay-invoice-dialog/pay-invoice-dialog.component';
 import { CovenantInvoicesDialogComponent } from './components/covenant-invoices-dialog/covenant-invoices-dialog.component';
+import { NewBuyDialogComponent } from './components/new-buy-dialog/new-buy-dialog.component';
 
 
 @NgModule({
@@ -74,7 +75,8 @@ import { CovenantInvoicesDialogComponent } from './components/covenant-invoices-
     ViewMistakeComponent,
     ViewInvoiceComponent,
     PayInvoiceDialogComponent,
-    CovenantInvoicesDialogComponent, 
+    CovenantInvoicesDialogComponent,
+    NewBuyDialogComponent, 
   ],
   imports: [
     BrowserModule,

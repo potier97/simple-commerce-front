@@ -6,7 +6,7 @@
 
 .container { 
     box-sizing: unset !important;
-    height: calc(100% - 92px);
+    height: calc(100% - 140px);
 }
 
 
@@ -28,6 +28,13 @@
     margin-bottom: 8px;
 }
 
+
+.btn-block {
+    color: #fff;
+    font-size: large;
+    padding: 8px 24px;
+    margin: 16px 0;
+  }
 
 .mat-dialog-actions {
     justify-content: flex-end;

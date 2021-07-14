@@ -1,7 +1,7 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { PaymentTypeData } from '@app/models/payment-type';
+import { PaymentMethodData } from '@app/models/payment-method';
 import { PayService } from '@app/services/pay/pay.service';
 import { Subscription } from 'rxjs';
 
@@ -13,8 +13,8 @@ import { Subscription } from 'rxjs';
 export class PayInvoiceDialogComponent implements OnInit, OnDestroy {
 
   private subscription: Subscription[] = [];
- //Lista de todos los tipos de  pago
-  methodsPayments: PaymentTypeData[] = [];
+  //Lista de todos los tipos de  pago
+  methodsPayments: PaymentMethodData[] = [];
  
   angForm: FormGroup = new FormGroup({ 
     inputDataOne: new FormControl(''), 
@@ -57,10 +57,10 @@ export class PayInvoiceDialogComponent implements OnInit, OnDestroy {
     if(this.data.methods) this.methodsPayments = this.data.methods
     else{
       this.subscription.push(
-        this.payService.getAllTypesPayments().subscribe(
+        this.payService.getAllMethodsPayments().subscribe(
           res => {
             this.methodsPayments = res.content;
-            //console.log('Pagos ->', res.content)  
+            //console.log('LISTA DE METODOS DE PAGO ->', res.content)  
           },
           err => {
             console.log("Error al obtener los metodos de pago -> ", err)  
@@ -68,6 +68,7 @@ export class PayInvoiceDialogComponent implements OnInit, OnDestroy {
         )  
       )
     }
+    //console.log(this.methodsPayments)
     if(this.data.account_validation_messages) this.account_validation_messages = this.data.account_validation_messages; 
     this.angForm = this.fb.group({ 
       inputDataOne: new FormControl(

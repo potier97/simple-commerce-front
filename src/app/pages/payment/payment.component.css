@@ -49,18 +49,60 @@ table {
 }
 
 .product-text{
-  margin: 0;
+  margin: 16px 8px;
   color: #226706;
   font-weight: normal;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; 
+}
+
+.bold-text {
+  font-weight: 500 !important;
+}
+
+.product-text-tittle {
+  margin: 16px 8px 16px 20px;
+  color: #226706;
+  font-weight: normal;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; 
+}
+
+.show-dots {   
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; 
+}
+
+.pay-purchase-actions {
+  margin-top: 36px;
+  margin-bottom: 24px !important;
+  margin-right: 8px;
+}
+
+
+.products-buy-header {
+  background-color: #22670622;
+  border-radius: 24px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  margin-bottom: 16px;  
+}
+
+.product-button {
+  margin-right: 16px;
 }
  
-
 .title {
+  margin: 0px;
   color: #226706;
   font-weight: bold;
 }
 
 .client-container {
+  margin-top: 16px;
   margin-bottom: 16px;
 }
 
@@ -68,6 +110,9 @@ table {
   color: #fff;
   font-size: large;
   padding: 8px 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; 
 }
 
 .container-spinner {

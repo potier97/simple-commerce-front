@@ -64,13 +64,13 @@ fxLayoutAlign="space-around stretch"
   <button 
     mat-flat-button 
     color="warn" 
-    style="color: #fff;"  
+    class="btn-block" 
     [mat-dialog-close]="closeDialog(false)">Cancelar</button>
   <button 
     mat-flat-button 
     color="primary" 
     [disabled]="angForm.invalid" 
-    style="color: #fff;"  
+    class="btn-block" 
     type="submit" 
     [mat-dialog-close]="closeDialog(true)">{{data.buttonLabel}}</button>
 </div>

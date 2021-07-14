@@ -53,7 +53,7 @@ export class PayComponent  implements OnInit, AfterViewInit, OnDestroy  {
 
   ngOnInit(): void { 
     this.subscription.push(
-      this.payService.getAllTypesPayments().subscribe(
+      this.payService.getAllMethodsPayments().subscribe(
         res => {
           this.methodsPayments = res.content;
           //console.log('Pagos ->', res.content)  

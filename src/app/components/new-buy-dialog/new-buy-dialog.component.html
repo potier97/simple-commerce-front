@@ -1,0 +1,96 @@
+<h1 mat-dialog-title class="tittle" align="center">{{data.tittle}}</h1>
+ 
+<form
+mat-dialog-content
+class="container" 
+fxLayout="column" 
+fxLayoutAlign="space-around stretch"
+[formGroup]="angForm">  
+
+    <!-- MODOS DE PAGO -->
+    <!-- MODOS DE PAGO -->
+    <div class="itemForm" fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="24px"> 
+        <h2 class="label-tittle">Modo de Pago</h2>
+        <mat-radio-group formControlName="inputDataOne" fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="16px"> 
+            <mat-radio-button class="radio-button" fxLayoutGap="16px" *ngFor="let types of paymentsTypes" [value]="types">
+                {{types.name}}
+            </mat-radio-button> 
+        </mat-radio-group>   
+    </div> 
+    <!-- NÚMERO DE CUOTAS -->
+    <!-- NÚMERO DE CUOTAS -->
+    <!-- NÚMERO DE CUOTAS -->
+    <div class="itemForm" fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="24px">  
+        <h2 class="label-tittle">Cuotas</h2>
+        <mat-form-field class="imput-form-text" appearance="outline">
+            <mat-label>Número de Cuotas</mat-label>
+            <mat-select formControlName="inputDataTwo" required >
+                <mat-option value="" disabled>SELECCIONE CUOTAS</mat-option>
+                <mat-option *ngFor="let cuota of paymentsTypes;" [value]="cuota" >{{cuota.name | uppercase}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+    </div>
+    <!-- MEDIO DE PAGO -->
+    <!-- MEDIO DE PAGO -->
+    <!-- MEDIO DE PAGO -->
+    <div class="itemForm" fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="24px">  
+        <h2 class="label-tittle">Medio de Pago</h2>
+        <mat-radio-group formControlName="inputDataThree" fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="16px"> 
+            <mat-radio-button class="radio-button" fxLayoutGap="16px" *ngFor="let method of paymentsMethods" [value]="method">
+                {{method.name}}
+            </mat-radio-button> 
+        </mat-radio-group>   
+    </div>
+    <!-- CUOTA INICIAL DEL PAGO -->
+    <!-- CUOTA INICIAL DEL PAGO -->
+    <!-- CUOTA INICIAL DEL PAGO -->
+    <div class="itemForm" fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="24px"> 
+        <h2 class="label-tittle">Cuota Inicial</h2>
+        <mat-form-field fxLayout="column" fxLayoutAlign="space-between stretch"  class="imput-form-text" appearance="outline">
+            <mat-label>Cuota Inicial</mat-label>
+            <input
+            matInput
+            type="text"
+            required  
+            placeholder="Cuota Inicial"
+            formControlName="inputDataFour"/> 
+        </mat-form-field>  
+    </div>
+
+    <div class="itemForm"
+        fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="12px">
+        <div fxFlex="50"> </div>
+        <div fxFlex="50" class="container-score">
+            <div fxFlex="50" fxLayout="column" fxLayoutAlign="space-between stretch" >
+                <h3 class="product-text bold-text" fxFlex="45" align="right"> Subtotal </h3> 
+                <h3 class="product-text bold-text" fxFlex="15" align="right"> Iva </h3>
+                <h3 class="product-text bold-text" fxFlex="15" align="right"> Descuento </h3>
+                <h3 class="product-text bold-text" fxFlex="15" align="right"> Total </h3>
+            </div>
+            <div fxFlex="50" fxLayout="column" fxLayoutAlign="space-between stretch" >
+                <h3 class="product-text bold-text" fxFlex="45" align="left"> {{ "  $ " + subtotal }} </h3> 
+                <h3 class="product-text bold-text" fxFlex="15" align="left"> {{ "  $ " + tax }} </h3>
+                <h3 class="product-text bold-text" fxFlex="15" align="left"> {{ discount > 0 ?  "- $ " + discount : "  $ " + discount }} </h3>
+                <h3 class="product-text bold-text" fxFlex="15" align="left"> {{ "  $ " + total }} </h3>
+            </div>
+        </div>
+    </div> 
+
+</form>  
+
+
+<div mat-dialog-actions fxLayout="row" fxLayoutAlign="end none" class="actions-dialog-container"> 
+  <button 
+    mat-flat-button 
+    color="warn" 
+    class="btn-block"
+    [mat-dialog-close]="closeDialog(false)">Cancelar</button>
+  <button 
+    mat-flat-button 
+    color="primary" 
+    [disabled]="angForm.invalid" 
+    class="btn-block"
+    type="submit" 
+    [mat-dialog-close]="closeDialog(true)">{{data.buttonLabel}}</button>
+</div>

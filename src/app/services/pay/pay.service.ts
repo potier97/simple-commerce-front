@@ -25,12 +25,36 @@ export class PayService {
     );
   } 
 
-  //OBTENER TODOS LOS TIPOS DE PAGOS
-  getAllTypesPayments(): Observable<CustomResponse>{
+  //OBTENER TODOS LOS METODOS DE PAGOS
+  getAllMethodsPayments(): Observable<CustomResponse>{
     return this.httpClient.get<CustomResponse>(`${environment.API_PATH}/pay/methods/`)
     .pipe(
       map((res: CustomResponse) => {
-        //console.log('Listando todos los tipos pagos', res) 
+        //console.log('Listando todos los MÉTODOS pagos', res) 
+        return res;
+      }),
+      catchError( err => this.handleError(err))
+    );
+  } 
+
+  //OBTENER TODOS LOS TPOS DE PAGOS
+  getAllTypesPayments(): Observable<CustomResponse>{
+    return this.httpClient.get<CustomResponse>(`${environment.API_PATH}/pay/types/`)
+    .pipe(
+      map((res: CustomResponse) => {
+        //console.log('Listando todos los TIPOS pagos', res) 
+        return res;
+      }),
+      catchError( err => this.handleError(err))
+    );
+  } 
+
+  //OBTENER LOS TIPOS DE FINANCIACION POR TIPO DE USUARIO
+  getAllFinancingTypes(): Observable<CustomResponse>{
+    return this.httpClient.get<CustomResponse>(`${environment.API_PATH}/pay/financing/`)
+    .pipe(
+      map((res: CustomResponse) => {
+        //console.log('Listando todos los TIPOS de FINANCIACIÓN', res) 
         return res;
       }),
       catchError( err => this.handleError(err))

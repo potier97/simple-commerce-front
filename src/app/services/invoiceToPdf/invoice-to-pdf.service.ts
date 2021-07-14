@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { CustomerPdf, InvoicePdf } from '@app/models/invoice-pdf';
+import { Injectable } from '@angular/core'; 
+import { ProductDetailsData } from '@app/models/product-details';
 import { UserData } from '@app/models/user';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts'; 
@@ -39,14 +39,14 @@ export class InvoiceToPdfService {
 
 
   async generatePdf(
-      adminName: string, 
-      customer: CustomerPdf, 
-      products: InvoicePdf[], 
-      facturaId: number, 
-      subtotal: number, 
-      tax: number, 
-      discount: number, 
-      total: number
+      adminName: string,       // Nombre del admin
+      customer: UserData,   // datos del cliente
+      products: ProductDetailsData[],  // Lista de Productos
+      facturaId: number,       //Id de la factura
+      subtotal: number,        // Sub total de la factura
+      tax: number,             // Iva cobrado
+      discount: number,        // descuento
+      total: number            // total de la factura
     ): Promise<void> { 
    
     
@@ -96,7 +96,7 @@ export class InvoiceToPdfService {
     //Margen superior e inferior de cada celda en la tabla
     const spaceTable: number = 7; 
     //Añadiendo los datos a la tabla
-    products.map((p: any) => bodyTable.push( [
+    products.map((p: ProductDetailsData) => bodyTable.push( [
       {
         text: p.name,
         color: "#226706", 
@@ -104,19 +104,19 @@ export class InvoiceToPdfService {
         margin: [ 15, spaceTable, 0, spaceTable ],
       },
       {
-        text: `$ ${p.price}`,
+        text: `$ ${p.precio}`,
         color: "#226706", 
         alignment: 'center',
         margin: [ 0, spaceTable, 0, spaceTable ],
       },
       {
-        text: p.qty,
+        text: p.cantidad,
         color: "#226706", 
         alignment: 'center',
         margin: [ 0, spaceTable, 0, spaceTable ],
       },
       {
-        text: `${p.tax} %`,
+        text: `${p.iva} %`,
         color: "#226706", 
         alignment: 'center',
         margin: [ 0, spaceTable, 0, spaceTable ],
@@ -218,7 +218,7 @@ export class InvoiceToPdfService {
           width: 450, 
           opacity: 0.15,
           absolutePosition: {
-            x: 100,
+            x: 90,
             y: 350 
           } 
         }
@@ -255,17 +255,17 @@ export class InvoiceToPdfService {
         {  
           columns: [  
               [  
-                { text: customer.customerName,  
+                { text: `${customer.name}  ${customer.lastName}`,  
                   style: 'sectionCustomer',
                   bold: true, 
                 },  
-                { text: customer.address,
+                { text: customer.userAddress,
                   style: 'sectionCustomer',
                 },  
-                { text: customer.email,
+                { text: customer.userMail,
                   style: 'sectionCustomer',
                 },  
-                { text: customer.contactNo,
+                { text: customer.userPhone,
                   style: 'sectionCustomer',
                 }  
               ],  
@@ -344,15 +344,15 @@ export class InvoiceToPdfService {
         //Footer 
         { 
           image: calidad,  
-          width: 50, 
+          width: 40, 
           alignment: 'left', 
-          margin: [15, 30, 0, 10 ], 
+          margin: [15, 0, 0, 5 ], 
         },
         {
           text: 'Te lo Tengo ® - 2021 - Marca Registrada desde 1950', 
           bold: false, 
           color: "#226706",   
-          fontSize: 12,    
+          fontSize: 8,    
         },  
       ],
       styles: {  
