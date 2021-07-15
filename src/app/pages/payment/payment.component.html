@@ -37,7 +37,7 @@
                 </div> 
             </mat-card>
             <!-- Buscador de los productos por el dni -->
-            <mat-card fxFlex  *ngIf="client !== null;"> 
+            <mat-card fxFlex *ngIf="client !== null;"> 
                 <h2 class="title">Buscar Producto</h2>
                 <div fxLayout="row" fxLayoutAlign="start stretch" fxLayoutGap="12px">
                     <mat-form-field fxFlex="70" class="full-width-field" appearance="outline" color="red">
@@ -68,15 +68,15 @@
 
         <!-- detalle de la compra  - pridcutos que va a comprar y quien lo va a comprar -->
         <div fxLayout="row" fxLayoutGap="16px"> 
-            <mat-card fxFlex="60" class="container-buy-data" *ngIf="client !== null;"> 
+            <mat-card fxFlex="60" *ngIf="client !== null;"> 
                 <!-- titulo del detalle -->
                 <h2 class="title show-dots">Detalle Compra</h2>
                 <!-- Nombre del cliente que va arealizar la compra -->
                 <div fxLayout="row" fxLayoutAlign="space-evenly center" class="client-container" fxLayoutGap="12px">
                     <h3 class="title show-dots"> {{"Cliente Compra: " | uppercase}}</h3>
                     <h3 class="title show-dots">{{client.name + " " + client.lastName | uppercase}}</h3>
-                    <button mat-icon-button color="warn" (click)="buyCancel()">
-                        <mat-icon>close</mat-icon>
+                    <button mat-mini-fab color="warn" (click)="buyCancel()">
+                        <mat-icon style="color: #fff;">close</mat-icon>
                     </button>
                 </div>
 
@@ -121,8 +121,7 @@
                         <button lass="product-button"  mat-icon-button fxFlex="10"  color="warn" (click)="removeProduct(product)">
                             <mat-icon>delete</mat-icon>
                         </button>
-                    </div>
-
+                    </div> 
                     <!-- Totales de la compra -->
                     <div *ngIf="productsToBuy.length > 0" 
                         fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="12px">
@@ -137,14 +136,11 @@
                             <h3 class="product-text bold-text" fxFlex="15" align="left"> {{ "$ " + preTax }} </h3>
                             <h3 class="product-text bold-text" fxFlex="15" align="left"> {{ "$ " + preTotal }} </h3>
                         </div>
-                    </div> 
-
-                </mat-card-content>
-
+                    </div>  
+                </mat-card-content> 
                 <!-- IMAGEN DE PRUEBA -->
                 <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">  -->
-
-                 
+ 
                 <mat-card-actions fxLayout="row" fxLayoutAlign="end stretch" class="pay-purchase-actions" fxLayoutGap="16px">
                     <button
                     mat-raised-button
@@ -163,14 +159,15 @@
                     class="btn-block">
                     Pagar
                     </button>
-                </mat-card-actions>
-                 
-
+                </mat-card-actions>  
             </mat-card>
             <!-- tabla con la descripción de los productos para realizar la compra -->
             <!-- *ngIf="client !== null;" -->
-            <mat-card fxFlex class="container-table" > 
-                <table mat-table matSort [dataSource]="dataSource" > 
+            <mat-card 
+                fxFlex 
+                [style.visibility]="client !== null ? 'visible': 'hidden'" 
+                class="container-table"> 
+                <table mat-table matSort [dataSource]="dataSource"> 
                     <!-- Column Data -->
                     <ng-container *ngFor="let column of columns" matColumnDef="{{column.name}}">
                         <!-- Columns -- HEADER --> 

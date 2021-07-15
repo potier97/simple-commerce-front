@@ -134,6 +134,17 @@ export class UsersService {
       //catchError( err => this.handleError(err))
     );
   }
+
+  //Obtener los tipos de financiacion para el suario
+  getAllFinancings(userId: number): Observable<CustomResponse>{
+    return this.httpClient.post<CustomResponse>(`${environment.API_PATH}/user/financing/${userId}`, {})
+    .pipe(
+      map((res: CustomResponse) => {
+        return res;
+      }),
+      //catchError( err => this.handleError(err))
+    );
+  }
   
   
   private handleError(err: any): Observable<never>{

@@ -19,6 +19,9 @@ import { PaymentTypeData } from '@app/models/payment-type';
 import { FinancingTypesData } from '@app/models/financing-type';
 import { PayService } from '@app/services/pay/pay.service';
 import { OfferData } from '@app/models/offer';
+import { PreOrderData } from '@app/models/pre-order';
+import * as moment from 'moment';
+import { OrderData } from '@app/models/order';
  
 
 @Component({
@@ -35,8 +38,8 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
   paymentsMethods: PaymentMethodData[] = [];
   //Listado de todos las cuotas por tipo de usuario
   financingTypes: FinancingTypesData[] = [];
-  //LISTA DE TODAS LAS OFERTAS
-  offers: OfferData[] = [];
+  //OFERTA APLICADA A LA COMPRA
+  offer: OfferData | null = null;
   //Datos del administrador
   userAdmin: UserData;
   //Lista de prodctos que va a comprar
@@ -104,7 +107,7 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
       this.payService.getAllMethodsPayments().subscribe(
         res => {
           this.paymentsMethods = res.content;
-          console.log('METODOS ->', res.content)  
+          //console.log('METODOS ->', res.content)  
         },
         err => {
           console.log("Error al obtener los MÉTODOS de pago -> ", err)  
@@ -116,34 +119,10 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
       this.payService.getAllTypesPayments().subscribe(
         res => {
           this.paymentsTypes = res.content;
-          console.log('TIPOS ->', res.content)  
+          //console.log('TIPOS ->', res.content)  
         },
         err => {
           console.log("Error al obtener los TIPOS de pago -> ", err)  
-        }
-      )  
-    )
-    //OBTENER LA INFO DE TODOS LOS TIPOS DE FINANCICIÓN - 12 - 24 - 36 MESES
-    this.subscription.push(
-      this.payService.getAllFinancingTypes().subscribe(
-        res => {
-          this.financingTypes = res.content;
-          console.log('FINANCIACIÓN ->', res.content)  
-        },
-        err => {
-          console.log("Error al obtener los TIPOS de FINANCIACIÓN -> ", err)  
-        }
-      )  
-    ) 
-    //OBTENER LA LISTA DE TODAS LAS OFERTAS DE LA COMPRA
-    this.subscription.push(
-      this.offerService.getAllOffers().subscribe(
-        res => {
-          this.offers = res.content;
-          console.log('OFERTAS ->', res.content)  
-        },
-        err => {
-          console.log("Error al obtener las OFERTAS -> ", err)  
         }
       )  
     )  
@@ -165,7 +144,6 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
      };
   }
  
-  
   //Buscar cliente por su documento
   searchClient(): void { 
     //Buscar los productos por el documento
@@ -173,10 +151,25 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
       this.subscription.push(
         this.userService.findByDoc(this.searchClientDoc.value).subscribe(
           res => {
-            console.log('Dato del cliente ->', res.content);  
+            //console.log('Dato del cliente ->', res.content);  
             if(res.content[0] !== undefined){
               this.client = res.content[0];
               this.showSnack(true,  res.message || 'Cliente Obtenido'); 
+              //OBTENER LA INFO DE TODOS LOS TIPOS DE FINANCICIÓN - 12 - 24 - 36 MESES
+              //this.financingTypes = this.client?.idUserType.financiateTypes!;
+              this.subscription.push(
+                this.userService.getAllFinancings(this.client?.idUser!).subscribe(
+                  res => {
+                    //console.log('Dato del Financiacion ->', res.content);  
+                    //OBTENER LA INFO DE TODOS LOS TIPOS DE FINANCICIÓN - 12 - 24 - 36 MESES
+                    this.financingTypes = res.content;
+                  },
+                  err => {
+                    console.log(err) 
+                    this.showSnack(false,  err.error.message || 'Cliente No Encontrado'); 
+                  }
+                )
+              )
               this.searchClientDoc.reset();
               this.searchClientDoc.disable();
             }else{
@@ -197,7 +190,6 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
     this.searchClientDoc.reset(); 
   }
 
-  
   //Buscar producto por el dni
   searchProduct(): void { 
     //Filtra los porductos por el DNI
@@ -214,13 +206,11 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subscription.push(
       this.productService.getAllProducts().subscribe(
         res => {
-          this.dataSource.data = res.content;
-          //console.log('Productos ->', res.content) 
+          this.dataSource.data = res.content; 
           this.loadingData = true
         },
-        err => {
-          //console.log(err) 
-          this.showSnack(false, 'Imposible Obtener Productos'); 
+        err => { 
+          this.showSnack(false, err.error.message || 'Imposible Obtener Productos'); 
           this.loadingData = true
         }
       ) 
@@ -248,6 +238,7 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
     //console.log("Actualizando el valor del producto -> ", product);
   }
 
+  //Obtener el total de la venta - el iva y el subtotal
   async onGetTotalVaue(): Promise<void> {
     //Calcular el total de la compra
     const total: number = await this.productsToBuy.reduce((totalValue: number, currentValue: ProductDetailsData ) => totalValue+=currentValue.total , 0);
@@ -264,7 +255,7 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
     this.preTax = tax;
   }
 
-
+  // Agregar productos a la canasta
   async addProduct(product: ProductsData): Promise<void> {
     const idProduct = product.idProduct;
     const existOnList: boolean = await this.productsToBuy.some((p: ProductDetailsData) => p.idNumProducto === idProduct);
@@ -303,21 +294,48 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
     await this.onGetTotalVaue();
   }
 
-  removeProduct(product: ProductDetailsData): void {
-    console.log("Removiendo Producto -> ", product)
-    this.productsToBuy = this.productsToBuy.filter(p => p.idNumProducto !== product.idNumProducto)
+  //Remover un producto del carro
+  async removeProduct(product: ProductDetailsData): Promise<void> {
+    //console.log("Removiendo Producto -> ", product)
+    this.productsToBuy = await this.productsToBuy.filter(p => p.idNumProducto !== product.idNumProducto)
+    await this.onGetTotalVaue();
   }
 
+  //Cancelar compra
   buyCancel(): void {
+    //console.log("Cancelando compra");
     this.clearProductSearch();
     this.productsToBuy = [];
-    console.log("Cancelando compra");
+    this.financingTypes = [];
+    this.offer = null;
     this.client = null;
     this.searchClientDoc.enable();
   }
 
-  buy(): void {
-    //console.log("Realizando  compra");
+  //Realizar compra - abrir dialodo y obtener la oferta qe aplica a la compra
+  buy(): void { 
+    //OBTENER EL DESCUENTO QUE APLICA PARA LA COMPRA
+    const preOrder: PreOrderData = {
+      products: this.productsToBuy,
+      client: this.client!,
+    } 
+    this.offerService.calculateOffer(preOrder).subscribe(
+      res => { 
+        console.log('RESULTADO OFERTA ->', res); 
+        this.offer = res.content;
+        this.showSnack(true,  res.message); 
+        this.showBuyDialog(res.content.percentage);
+      },
+      err => {
+        //console.log("Error al obtener las OFERTAS de pago -> ", err)
+        this.showSnack(false, err.error.message || `No se pudo Obtener Oferta`); 
+        this.showBuyDialog(0);
+      }
+    )   
+  }
+
+  //Al abrir el dialogo se le pasa el valor o porcentaje de la oferta - cuando se cierra se llama al callback para realizar la compra
+  showBuyDialog(discount: number): void {
     const dialogRef = this.dialog.open(NewBuyDialogComponent, {
       panelClass: ['animate__animated','animate__swing'],
       width: '70%',  
@@ -328,41 +346,54 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
         buttonLabel: "Confirmar Compra",  
         paymentsMethods: this.paymentsMethods,  // Lista de los metodos de pago  
         paymentsTypes: this.paymentsTypes,       //Lista de los tipos de pago  
-        financingTypes: this.financingTypes,   // Lista de los tipos de financiacion
-        offers: this.offers,                   //Lista de los tipos de  ofertas
-        client: this.client,                   //cliente
-        //constrainInputOne: '^[0-9]*$', 
+        financingTypes: this.financingTypes,   // Lista de los tipos de financiacion 
         subtotal: this.preSubtotal, 
         tax: this.preTax, 
         total: this.preTotal,
+        discountPercentage: discount,
         }
     });
-    this.subscription.push(
+
+    //Respuesta despues de que se cierra el modal - se envia la factura y se ejecuta la compra
+    this.subscription.push( 
       dialogRef.afterClosed().subscribe((result: any) => {
         if(result.status){  
-          console.log(result.data)
-           
-          const paymentData: any = {
-            idPay: 50,
-          }   
-
+          //console.log("Información de dialog ->", result.data)  
+          moment.locale('es-es');
+          const invoiceDate = moment().format('L')
+          const paymentData: OrderData = {
+            invoiceId: null,                            // ID DE LA FACTURA
+            idCli: this.client!.idUser!,                // ID DEL CLIENTE
+            paymentsType: result.data.inputDataOne,     // TIPOS DE PAGO
+            paymentMethod: result.data.inputDataThree,  // METODO DE PAGO
+            dues: result.data.inputDataTwo,             // NUMERO DE CUOTAS
+            initialFee: result.data.inputDataFour,      // CUOTA INICIAL DE PAGO
+            offer: this.offer!,                         // OFERTA APLICADA 
+            invoiceDate: invoiceDate,                   // FECHA DE
+            subtotal: result.data.subtotal,             // SUBTOTAL DE LA COMPRA
+            tax: result.data.tax,                       // IMPUESTO DE LA COMPRA
+            discount: result.data.discount,             // DESCUENTO APLICADO
+            total: result.data.total,                   // VALOR TOTAL DE LA COMPRA
+            details: this.productsToBuy                 // PRODUCTOS QUE SE VAN A COMPRAR
+          }    
+          console.log("Nueva Orden de Compra ->", paymentData)  
           //Al enviar el formulario se realiza el registro de la compra.
           //La RESPUESTA PERMITIRÁ CREAR EL RECIBO DE PAGO.
           this.subscription.push(
-            this.buyService.createProduct(paymentData).subscribe(
-              res => { 
+            this.buyService.newBuy(paymentData).subscribe(
+              async (res) => { 
                 console.log('Compra Realizada -> ', res) 
                 //NOMBRE COMPLETO DEL ADMINISTRADOR
                 const AdminData = `${this.userAdmin.name} ${this.userAdmin.lastName}`
-                this.pdfGenerator.generatePdf( 
+                await this.pdfGenerator.generatePdf( 
                     AdminData, 
                     this.client!, 
                     this.productsToBuy,
                     10, 
-                    this.preSubtotal, 
-                    this.preTax, 
-                    0, 
-                    this.preTotal);
+                    result.data.subtotal,  
+                    result.data.tax, 
+                    result.data.discount, 
+                    result.data.total);
                 this.showSnack(true, res.message);  
                 this.getProducts();
                 this.buyCancel(); 
@@ -375,7 +406,7 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
           )
         }
       })
-    )  
+    )   
   }
   
 
@@ -456,7 +487,7 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
   //   const AdminData = `${this.userAdmin.name} ${this.userAdmin.lastName}`
   //   this.pdfGenerator.generatePdf( AdminData, customerData, productsData, invoiceId, subtotal, totalTax, discount, total);
   // }
-
+ 
 
 
   showSnack(status: boolean, message: string, timer: number = 6500): void {

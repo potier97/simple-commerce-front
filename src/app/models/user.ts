@@ -1,3 +1,4 @@
+
 export interface UserData {
     idUser: number | null,
     idDocType: DocTypeData,
@@ -20,5 +21,5 @@ export interface DocTypeData {
 
 export interface UserTypeData { 
     idUserType: number | null,
-    name: string, 
+    name: string,  
 } 

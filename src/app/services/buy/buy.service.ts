@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { CustomResponse } from '@app/models/custom-response';
-import { PaymentData } from '@app/models/payment'; 
+import { CustomResponse } from '@app/models/custom-response'; 
+import { OrderData } from '@app/models/order';
 import { environment } from '@environments/environment'; 
-import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import {  map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -15,24 +15,14 @@ export class BuyService {
  
 
   // GENERAR UNA NUEVA COMPRA
-  createProduct(newBuy: any): Observable<CustomResponse>{
+  newBuy(newBuy: OrderData): Observable<CustomResponse>{
     return this.httpClient.post<CustomResponse>(`${environment.API_PATH}/buy/`, newBuy)
     .pipe(
       map((res: CustomResponse) => {
         return res;
       }),
-      catchError( err => this.handleError(err))
+      //catchError( err => this.handleError(err))
     );
   } 
- 
   
-  private handleError(err: any): Observable<never>{
-    let errorMessage = "Ocurrió un error"; 
-    if(err){
-      errorMessage = `Error code Buy: ${err.code}`;
-      console.log("Error generado Al comprar -> ", err)
-      //window.alert(errorMessage); 
-    }
-    return throwError(errorMessage);
-  }
 }

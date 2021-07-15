@@ -47,19 +47,7 @@ export class PayService {
       }),
       catchError( err => this.handleError(err))
     );
-  } 
-
-  //OBTENER LOS TIPOS DE FINANCIACION POR TIPO DE USUARIO
-  getAllFinancingTypes(): Observable<CustomResponse>{
-    return this.httpClient.get<CustomResponse>(`${environment.API_PATH}/pay/financing/`)
-    .pipe(
-      map((res: CustomResponse) => {
-        //console.log('Listando todos los TIPOS de FINANCIACIÓN', res) 
-        return res;
-      }),
-      catchError( err => this.handleError(err))
-    );
-  } 
+  }  
 
   //OBTENER UN PAGO POR EL ID
   getPayment(id: number): Observable<CustomResponse>{
