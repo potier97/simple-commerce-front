@@ -14,10 +14,10 @@ import { TypeOfferData } from '@app/models/offer';
 export class NewOfferComponent implements OnInit, OnDestroy {
 
   private subscription: Subscription[] = [];
-
+  //Lista de las categorias de las ofertas
   public listCategory: TypeOfferData[]= [];
   
-  
+  //formulario de la creacion del proyecto
   angForm: FormGroup = new FormGroup({
     description: new FormControl(''),
     typeOffer: new FormControl(''), 
@@ -54,7 +54,7 @@ export class NewOfferComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy(): void {
-    //console.log("Desubs all observers") 
+    //Desubs de todos los observadores
     for(const sub of this.subscription) {
       sub.unsubscribe();
     } 
@@ -67,8 +67,7 @@ export class NewOfferComponent implements OnInit, OnDestroy {
         res => { 
           this.listCategory = res.content;  
         },
-        err => {
-          //console.log(err)
+        err => { 
           this.showSnack(false, err.error.message || "No se pudo obtener los tipos de Ofertas");   
         }
       )  
@@ -117,7 +116,7 @@ export class NewOfferComponent implements OnInit, OnDestroy {
         percentage: userReq.percentage,
         value: userReq.value,
       }     
-      console.log("Oferta creada -> ", offerData)
+      //console.log("Oferta creada -> ", offerData)
       this.subscription.push(
         this.offerService.createOffer(offerData).subscribe(
           res => {

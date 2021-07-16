@@ -9,6 +9,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2' ;
 import * as moment from 'moment';
 import { MonthData } from '@app/models/month';
+import { FormControl, Validators } from '@angular/forms';
 
 
 @Component({
@@ -19,8 +20,7 @@ import { MonthData } from '@app/models/month';
 export class InvocesComponent implements OnInit, AfterViewInit, OnDestroy  {
 
   private subscription: Subscription[] = [];
-
-  searchInvoice: string = ""
+ 
   currentMonth: string = ""
   //Flag to Spinner data 
   loadingData: boolean = false;
@@ -34,12 +34,19 @@ export class InvocesComponent implements OnInit, AfterViewInit, OnDestroy  {
     { title: 'Tipo Pago', name: 'idPayType', size: "10%"},
     { title: 'Acción', name: 'accion', size: "10%"}, 
   ] 
- 
-
 
   @ViewChild(MatPaginator) paginator: MatPaginator; 
   @ViewChild(MatSort) sort: MatSort;
+
   
+  //Buscador de Facturas
+  searchInvoice = new FormControl('', 
+    [
+      Validators.required,
+      Validators.pattern('^[0-9]*$'), 
+    ]
+  );
+
   constructor(  
       private snackbar: MatSnackBar,  
       private invoiceService: InvoiceService,  
@@ -52,6 +59,7 @@ export class InvocesComponent implements OnInit, AfterViewInit, OnDestroy  {
   }
 
   getInvoices(): void {
+    this.loadingData = false;
     this.subscription.push(
       this.invoiceService.getAllInvoices().subscribe(
         res => {
@@ -61,7 +69,7 @@ export class InvocesComponent implements OnInit, AfterViewInit, OnDestroy  {
         },
         err => {
           //console.log(err) 
-          this.showSnack(false, 'Imposible Obtener Facturas'); 
+          this.showSnack(false, err.error.message || 'Imposible Obtener Facturas'); 
           this.loadingData = true
         }
       ) 
@@ -73,9 +81,6 @@ export class InvocesComponent implements OnInit, AfterViewInit, OnDestroy  {
     //Configuración de datos iniciales
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator; 
-    this.dataSource.filterPredicate = (data: InvoiceData, filter: string): boolean => { 
-      return data.idBuy!.toString().includes(filter);
-     };
   }
   
   ngOnDestroy(): void { 
@@ -85,15 +90,32 @@ export class InvocesComponent implements OnInit, AfterViewInit, OnDestroy  {
     } 
   } 
   
-  clearSearch(): void { 
-    this.searchInvoice = '';
-    this.dataSource.filter = "";
+  clearClientSearch(): void { 
+    this.searchInvoice.reset() 
+    this.getInvoices();
   }
-  
-  applyFilter(): void { 
-    //Filtra los porductos por la fecha y el id
-    this.dataSource.filter = this.searchInvoice.trim().toLowerCase();
-  } 
+
+  searchIdInvoice(): void {
+      // Buscar FACTURAS que se parezcan al id que el usuario introdujo
+      this.loadingData = false;
+      if(this.searchInvoice.valid){
+        this.subscription.push(
+          this.invoiceService.findInvoiceById(this.searchInvoice.value).subscribe(
+            res => { 
+              this.dataSource.data = res.content;
+              //console.log('Facturas ->', res.content) 
+              this.loadingData = true;
+            },
+            err => {
+              //console.log(err) 
+              this.showSnack(false,  err.error.message || 'Factura No Encontrada'); 
+              this.loadingData = true;
+            }
+          )
+        )
+      }
+  }
+   
   
   
   generateMonthInvoice(): void {
@@ -139,7 +161,7 @@ export class InvocesComponent implements OnInit, AfterViewInit, OnDestroy  {
             this.showSnack(true, res.message);
           },
           err => {
-            console.log(err.error)  
+            //console.log(err.error)  
             this.showSnack(false, err.error.message || 'Imposible Generar Facturas');
           }
         )  

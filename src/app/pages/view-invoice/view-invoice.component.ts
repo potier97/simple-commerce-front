@@ -14,8 +14,6 @@ import { MatSort } from '@angular/material/sort';
   styleUrls: ['./view-invoice.component.css']
 })
 export class ViewInvoiceComponent implements OnInit, AfterViewInit, OnDestroy  {
- 
-
 
   private subscription: Subscription[] = [];
   
@@ -38,7 +36,7 @@ export class ViewInvoiceComponent implements OnInit, AfterViewInit, OnDestroy  {
  
 
   ngOnDestroy(): void {
-    //console.log("Desubs all observers") 
+    //UNSUB ALL OBSERVERS.
     for(const sub of this.subscription) {
       sub.unsubscribe();
     }
@@ -59,7 +57,7 @@ export class ViewInvoiceComponent implements OnInit, AfterViewInit, OnDestroy  {
               //this.showSnack(true, res.message);   
             },
             err => {
-              console.log("Error -> ", err);
+              //console.log("Error -> ", err);
               this.showSnack(false, err.error.message || "No se encontró la factura");   
             }
           )
@@ -68,12 +66,12 @@ export class ViewInvoiceComponent implements OnInit, AfterViewInit, OnDestroy  {
           this.subscription.push(
             this.invoiceService.getInvoiceById(this.idInvoice).subscribe(
               res => {
-                console.log('Detalles de la Factura ->', res);
+                //console.log('Detalles de la Factura ->', res);
                 this.invoice = res.content;
                 this.showSnack(true, res.message);   
               },
               err => {
-                console.log("Error -> ", err);
+                //console.log("Error -> ", err);
                 this.showSnack(false, err.error.message || "No se encontró la factura");   
                 this.router.navigate(['/invoces'])
               }

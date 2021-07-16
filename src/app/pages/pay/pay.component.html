@@ -21,73 +21,124 @@
                     </button>
                 </div>  
             </div>  
-            <div fxLayout="row" fxLayoutAlign="start stretch" fxLayoutGap="12px">
-                <mat-form-field fxFlex="70" class="full-width-field" appearance="outline" color="red">
-                    <mat-label>Id</mat-label>
+            <div fxLayout="row" fxLayoutGap="12px">
+                <mat-form-field  
+                    *ngIf="modeSearch.value === 'id'" 
+                    fxFlex="50" 
+                    class="full-width-field" 
+                    appearance="outline">
+                    <mat-label>Id</mat-label> 
                     <input 
-                        matInput  
-                        type="text" 
-                        placeholder="Fecha Pago"
-                        [(ngModel)]="searchDate"
-                        name="searchDate"
-                        (keyup)="applyFilter()">
+                    matInput     
+                    type="text" 
+                    [formControl]="searchPayment"
+                    placeholder="Id Pago" 
+                    (keyup.enter)="searchPayment.valid ? searchPayments() : null">
+                </mat-form-field> 
+                <mat-form-field 
+                    appearance="outline"
+                    fxFlex
+                    *ngIf="modeSearch.value === 'date'">
+                    <mat-label>Ingrese el rango de fechas</mat-label>
+                    <mat-date-range-input [formGroup]="range" [rangePicker]="picker" [disabled]="true">
+                      <input matStartDate formControlName="start" placeholder="Fecha Inicial" >
+                      <input matEndDate formControlName="end" placeholder="Fecha Final" >
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker [disabled]="false"></mat-date-range-picker>
+                  </mat-form-field>
+                <mat-form-field fxFlex class="imput-form-text" appearance="outline">
+                    <mat-label>Modo Búsqueda</mat-label>
+                    <mat-select [formControl]="modeSearch" (valueChange)="changeFindMethod($event)" >
+                        <mat-option value="id" >Id Pago</mat-option>
+                        <mat-option value="date" >Fecha Pago</mat-option>
+                    </mat-select>
                 </mat-form-field> 
                 <button 
                     fxFlex
-                    mat-raised-button
-                    color="secundary"
+                    mat-raised-button 
+                    *ngIf="modeSearch.value === 'date'"
+                    [disabled]="!range.valid"
                     type="submit"   
                     class="btn-block" 
-                    (click)="clearSearch()"> 
-                        <mat-icon [style.margin-right]="'10px'" >restart_alt</mat-icon> 
-                        Limpiar
+                    (click)="searchPayments()">  
+                    Buscar
+                </button>
+                <button 
+                    fxFlex
+                    mat-raised-button 
+                    *ngIf="modeSearch.value === 'id'"
+                    [disabled]="!searchPayment.valid"
+                    type="submit"   
+                    class="btn-block" 
+                    (click)="searchPayments()">  
+                    Buscar
+                </button>
+                <button 
+                    fxFlex
+                    mat-raised-button 
+                    type="submit"   
+                    class="btn-block" 
+                    (click)="clearSearch()">  
+                    Limpiar
                 </button>
             </div> 
         </mat-card>
         <div class="space"></div>
         <mat-card> 
             <table mat-table matSort [dataSource]="dataSource" > 
-                <!-- Column Data -->
-                <ng-container *ngFor="let column of columns" matColumnDef="{{column.name}}">
-                    <!-- Columns -- HEADER --> 
-                    <th 
-                        mat-header-cell 
-                        *matHeaderCellDef 
-                        mat-sort-header 
-                        width="{{column.size}}" 
-                        [disabled]="column.name=='accion' || column.name=='idPay' ? true : false ">
-                        {{column.title}}</th>
-                    <!-- Columns -- DATA -->
-                        <!-- VALIDATION - DATA  -->
-                        <ng-container *ngIf="column.name!=='accion'; else doActions">
-                             <!-- dato de la columna --> 
-                            <td mat-cell *matCellDef="let element; let i = index;">   
-                                {{column.name ==='idPayMethod' ? element[column.name].name : 
-                                    column.name ==='payDate' ? [element[column.name].name  | date: "longDate" ] :
-                                    element[column.name] }}
-                            </td>      
-                        </ng-container> 
-                        <!-- COLUMN -- ACTIONS -->
-                        <ng-template #doActions>
-                            <td mat-cell *matCellDef="let element"> 
-                                <div class="example-button-container"> 
-                                    <button mat-flat-button [matMenuTriggerFor]="menu" style="color: #fff;" color="primary">
-                                        <mat-icon style="color: #fff;">settings</mat-icon>
-                                        Opciones
-                                    </button>
-                                    <mat-menu #menu="matMenu"> 
-                                        <button mat-menu-item [routerLink]="['/invoces/datailsInvoice/', element.idProduct]">Ver Factura</button> 
-                                    </mat-menu>
-                    
-                                  </div>    
-                            </td>       
-                        </ng-template>
-                </ng-container> 
+                <!-- Id Column -->
+                <ng-container matColumnDef="idPay">
+                    <th mat-header-cell width="10%" *matHeaderCellDef> No. </th>
+                    <td mat-cell *matCellDef="let element"> {{element.idPay}} </td>
+                </ng-container>
+
+                <!-- Fecha - Column -->
+                <ng-container matColumnDef="paimentDate">
+                    <th mat-header-cell width="20%"  mat-sort-header *matHeaderCellDef> Fecha </th>
+                    <td mat-cell *matCellDef="let element"> {{element.payDate | date: 'longDate'}} </td>
+                </ng-container>
+
+                <!-- Cliente - Name -  Column -->
+                <ng-container matColumnDef="paidOut">
+                    <th mat-header-cell width="15%"  mat-sort-header *matHeaderCellDef> Monto </th>
+                    <td mat-cell *matCellDef="let element"> $ {{element.paidOut }} </td>
+                </ng-container>
+
+                <!-- Total Pago - Column -->
+                <ng-container matColumnDef="payMethod">
+                    <th mat-header-cell width="15%"  mat-sort-header *matHeaderCellDef> Método Pago </th>
+                    <td mat-cell *matCellDef="let element"> {{element.idPayMethod.name}} </td>
+                </ng-container>
+
+                <!-- Tipo Pago - Column -->
+                <ng-container matColumnDef="paydoc">
+                    <th mat-header-cell width="20%"  mat-sort-header *matHeaderCellDef> Convenio </th>
+                    <td mat-cell *matCellDef="let element"> {{element.idPayDoc === null ? "No Aplica" : element.idPayDoc.idCovenant.name}} </td>
+                </ng-container>
+
+                <!-- Accion - Column -->
+                <ng-container matColumnDef="accion">
+                    <th mat-header-cell *matHeaderCellDef  width="20%">Acción</th>
+                    <td mat-cell *matCellDef="let element"> 
+                        <div class="example-button-container"> 
+                            <button mat-flat-button [matMenuTriggerFor]="menu" style="color: #fff;" color="primary">
+                                <mat-icon style="color: #fff;">settings</mat-icon>
+                                Opciones
+                            </button>
+                            <mat-menu #menu="matMenu"> 
+                                <button mat-menu-item (click)="searchInvoice(element.idPay)">Ver Factura Asociada</button> 
+                            </mat-menu>
+            
+                          </div>    
+                    </td>       
+                </ng-container>
+
  
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table> 
-            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator> 
         </mat-card>
         <div class="space"></div>
     </div> 

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CustomResponse } from '@app/models/custom-response';
+import { DateData } from '@app/models/dates';
 import { PaymentData } from '@app/models/payment'; 
 import { environment } from '@environments/environment'; 
 import { Observable, throwError } from 'rxjs';
@@ -60,6 +61,42 @@ export class PayService {
       //catchError( err => this.handleError(err))
     );
   }   
+
+  //BUSCAR LOS PAGOS QUE COINCIDAN CON LA BÚSQUEDA DE SU ID
+  findById(id: number): Observable<CustomResponse>{
+    return this.httpClient.get<CustomResponse>(`${environment.API_PATH}/pay/find/${id}`)
+    .pipe(
+      map((res: CustomResponse) => {
+        //console.log('Pago Obtenido', res) 
+        return res;
+      }),
+      //catchError( err => this.handleError(err))
+    );
+  } 
+
+  //BUSCAR LOS PAGOS QUE COINCIDAN CON LA BÚSQUEDA DE SU ID
+  findInvoiceByPayment(id: number): Observable<CustomResponse>{
+    return this.httpClient.get<CustomResponse>(`${environment.API_PATH}/pay/invoiceFind/${id}`)
+    .pipe(
+      map((res: CustomResponse) => {
+        //console.log('Pago Obtenido', res) 
+        return res;
+      }),
+      //catchError( err => this.handleError(err))
+    );
+  } 
+
+  //BUSCAR LOS PAGOS QUE SE ENCUENTREN ENTRE DOS FECHAS
+  findByDate(dates: DateData ): Observable<CustomResponse>{
+    return this.httpClient.post<CustomResponse>(`${environment.API_PATH}/pay/date`, dates)
+    .pipe(
+      map((res: CustomResponse) => {
+        //console.log('Pago Obtenido', res) 
+        return res;
+      }),
+      //catchError( err => this.handleError(err))
+    );
+  } 
 
   //OBTENER UN PAGO POR LA FECHA
   getPaymentByDate(date: string): Observable<CustomResponse>{

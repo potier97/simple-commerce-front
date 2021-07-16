@@ -38,10 +38,10 @@ export class OffersComponent implements OnInit, AfterViewInit, OnDestroy  {
     ) { }
 
   ngOnInit(): void { 
-    this.getProducts();
+    this.getOffers();
   }
 
-  getProducts(): void {
+  getOffers(): void {
     this.subscription.push(
       this.offerService.getAllOffers().subscribe(
         res => {
@@ -51,7 +51,7 @@ export class OffersComponent implements OnInit, AfterViewInit, OnDestroy  {
         },
         err => {
           //console.log(err) 
-          this.showSnack(false, 'Imposible Obtener Productos'); 
+          this.showSnack(false, err.error.message || 'Imposible Obtener Ofertas'); 
           this.loadingData = true
         }
       ) 
@@ -112,7 +112,7 @@ export class OffersComponent implements OnInit, AfterViewInit, OnDestroy  {
           //     res => { 
           //       console.log('Se desactivo la oferta', res.content) 
           //       this.showSnack(true, res.message);  
-          //       this.getProducts();
+          //       this.getOffers();
           //     },
           //     err => {
           //       console.log(err.error) 

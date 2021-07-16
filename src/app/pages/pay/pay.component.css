@@ -42,6 +42,9 @@ table {
 .btn-block {
   background-color: #226706;
   color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; 
 }
 
 .btn-alone {

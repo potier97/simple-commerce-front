@@ -10,8 +10,8 @@
                     type="button"
                     color="primary" 
                     class="btn-block"
-                    routerLink="/clients">
-                    Volver
+                    routerLink="/invoces">
+                    Regresar
                 </button> 
             </div>
 
@@ -21,21 +21,25 @@
             <!-- DATOS DEL CLIENTE -->
             <div class="container-user-info" fxLayout="column" fxLayoutAlign="space-evenly stretch">  
                 <div class="title-info-text" fxLayout="row wrap" fxFlex="100">
-                    <h3 class="text-data" fxFlex="33" align="left" >{{"Nombre: " + invoice.idClient.name  | uppercase }}</h3> 
-                    <h3 class="text-data" fxFlex="33" align="left">{{"Documento: " + invoice.idClient.userDoc | uppercase }}</h3> 
-                    <h3 class="text-data" fxFlex="33" align="left">{{"Correo: " +invoice.idClient.userMail  | uppercase }}</h3>
+                    <h3 class="text-data" fxFlex="33" align="left" >Nombre: {{invoice.idClient.name  | uppercase }}</h3> 
+                    <h3 class="text-data" fxFlex="33" align="left">Documento: {{invoice.idClient.userDoc }}</h3> 
+                    <h3 class="text-data" fxFlex="33" align="left">Correo: {{invoice.idClient.userMail  | uppercase }}</h3>
                 </div> 
                 <div class="title-info-text" fxLayout="row wrap" fxFlex="100">
-                    <h3 class="text-data" fxFlex="33" align="left" >{{"Apellido: " + invoice.idClient.lastName  | uppercase }} </h3> 
-                    <h3 class="text-data" fxFlex="33" align="left" >{{"Tipo Documento: " + invoice.idClient.idDocType.name  | uppercase }}</h3> 
-                    <h3 class="text-data" fxFlex="33" align="left" >{{"Teléfono: " + invoice.idClient.userPhone  | uppercase }} </h3>
+                    <h3 class="text-data" fxFlex="33" align="left" >Apellido: {{invoice.idClient.lastName  | uppercase }} </h3> 
+                    <h3 class="text-data" fxFlex="33" align="left" >Tipo Documento: {{invoice.idClient.idDocType.name  | uppercase }}</h3> 
+                    <h3 class="text-data" fxFlex="33" align="left" >Teléfono: {{invoice.idClient.userPhone  | uppercase }} </h3>
+                </div> 
+                <div class="title-info-text" fxLayout="row wrap" fxFlex="100">
+                    <h3 class="text-data" fxFlex="33" align="left" >Inscrito: {{invoice.idClient.userCreated  | date: 'longDate' }} </h3> 
+                    <h3 class="text-data" fxFlex="66" align="left" >Dirección: {{invoice.idClient.userAddress  | uppercase }} </h3> 
                 </div> 
             </div> 
         </mat-card> 
         <div class="space"></div>  
         <mat-card *ngIf="dataSource.data.length > 0;">   
             <div class="title-text" fxLayout="row" fxLayoutAlign="start center"  >
-                <h2 style="color: #226706">Detalle Factura</h2> 
+                <h2 style="color: #226706">Detalle Compra</h2> 
             </div> 
             <!-- DETALLE DE LA FACTURA -->
             <!-- DETALLE DE LA FACTURA -->
@@ -85,29 +89,78 @@
         <div class="space"></div> 
         <mat-card >   
             <div class="title-text" fxLayout="row" fxLayoutAlign="start center"  >
-                <h2 style="color: #226706">Detalle Pago</h2> 
+                <h2 style="color: #226706">Detalle Factura {{ invoice.idBuy }} - 
+                    {{ invoice.idPayType.idPayType === 1 ? "La Factura ha sido Pagada" : 
+                    invoice.idPay.paidOut === invoice.shareValue ?  "La Factura ha sido Pagada" : 
+                    "La Factura no ha sido Pagada"}}
+                </h2> 
             </div>  
 
-            <!-- DETALLE PAGO -->
-            <!-- DETALLE PAGO -->
-            <!-- DETALLE PAGO -->
-            <!-- DETALLE PAGO -->
-            <!-- DETALLE PAGO -->
-            <!-- DETALLE PAGO -->
-            <div class="container-user-info" fxLayout="column" fxLayoutAlign="space-evenly stretch">  
+            <!-- DETALLE PAGO -- PAGOS DE CONTADO -->
+            <!-- DETALLE PAGO -- PAGOS DE CONTADO -->
+            <!-- DETALLE PAGO -- PAGOS DE CONTADO -->
+            <!-- DETALLE PAGO -- PAGOS DE CONTADO -->
+            <div 
+                *ngIf="invoice.idPayType.idPayType === 1;"
+                class="container-user-info" 
+                fxLayout="column" 
+                fxLayoutAlign="space-evenly stretch">  
                 <div class="title-info-text" fxLayout="row wrap" fxFlex="100">
-                    <h3 class="text-data" fxFlex="33" align="left" >{{"Fecha: " + invoice.idClient.name  }}</h3> 
-                    <h3 class="text-data" fxFlex="33" align="left">{{"# Cuotas: " + invoice.idClient.userDoc }}</h3> 
-                    <h3 class="text-data" fxFlex="33" align="left">{{"Total: " +invoice.idClient.userMail  }}</h3>
+                    <h3 class="text-data" fxFlex="33" align="left" >Fecha: {{invoice.purchaseDate | date: "longDate" }}</h3> 
+                    <h3 class="text-data" fxFlex="33" align="left">Tipo Pago: {{invoice.idPayType.name }}</h3> 
+                    <h3 class="text-data" fxFlex="33" align="left" >Método Compra: {{invoice.idPay.idPayMethod.name }}</h3>
+                </div>  
+                <div class="title-info-text" fxLayout="row wrap" fxFlex="100">
+                    <h3  
+                        class="text-data" 
+                        fxFlex="33" 
+                        align="left" >Descuento: $ {{invoice.discount }} </h3> 
+                    <h3 class="text-data" fxFlex="33" align="left" >SubTotal: $ {{ invoice.subtotal }}</h3> 
+                    <h3 class="text-data" fxFlex="33" align="left" >Iva: $ {{invoice.tax }} </h3> 
                 </div> 
                 <div class="title-info-text" fxLayout="row wrap" fxFlex="100">
-                    <h3 class="text-data" fxFlex="33" align="left" >{{"Abonado: " + invoice.idClient.lastName  }} </h3> 
-                    <h3 class="text-data" fxFlex="33" align="left" >{{"Cuota Actual: " + invoice.idClient.idDocType.name  }}</h3> 
-                    <h3 class="text-data" fxFlex="33" align="left" >{{"Tipo Pago: " + invoice.idClient.userPhone  }} </h3>
+                    <h3 class="text-data" fxFlex="33" align="left" >Total: $ {{invoice.total }}</h3> 
+                    <h3 class="text-data" fxFlex="33" align="left" >Saldo Pagado: $ {{invoice.idPay.paidOut }}</h3> 
                 </div> 
                 <div class="title-info-text" fxLayout="row wrap" fxFlex="100">
-                    <h3 class="text-data" fxFlex="33" align="left" >{{"Deuda: " + invoice.idClient.lastName  }} </h3> 
-                    <h3 class="text-data" fxFlex="33" align="left" >{{"Valor Actal Facturado: " + invoice.idClient.idDocType.name }}</h3> 
+                    <h3 
+                        *ngIf="invoice.idDiscount !== null"
+                        class="text-data" 
+                        fxFlex="100" 
+                        align="left" >{{invoice.idDiscount.description}}</h3> 
+                </div> 
+            </div> 
+            <!-- DETALLE PAGO -- PAGOS DE CRÉDITO -->
+            <!-- DETALLE PAGO -- PAGOS DE CRÉDITO -->
+            <!-- DETALLE PAGO -- PAGOS DE CRÉDITO -->
+            <!-- DETALLE PAGO -- PAGOS DE CRÉDITO -->
+            <div 
+                *ngIf="invoice.idPayType.idPayType === 2;"
+                class="container-user-info" 
+                fxLayout="column" 
+                fxLayoutAlign="space-evenly stretch">  
+                <div class="title-info-text" fxLayout="row wrap" fxFlex="100">
+                    <h3 class="text-data" fxFlex="33" align="left" >Fecha: {{invoice.purchaseDate | date: "longDate" }}</h3> 
+                    <h3 class="text-data" fxFlex="33" align="left">Tipo Pago: {{invoice.idPayType.name }}</h3> 
+                    <h3 
+                        *ngIf="invoice.idPay.paidOut === invoice.shareValue  && invoice.shareValue > 0"
+                        class="text-data" 
+                        fxFlex="33" 
+                        align="left">Método Compra: {{invoice.idPay.idPayMethod.name }}</h3>
+                </div> 
+                <div class="title-info-text" fxLayout="row wrap" fxFlex="100">
+                    <h3 class="text-data" fxFlex="33" align="left" >Cuota Factura: {{invoice.feePayment }}</h3> 
+                    <h3 class="text-data" fxFlex="33" align="left" >No. Cuotas: {{invoice.idCreditDebt.numInstallments }} </h3>
+                    <h3 class="text-data" fxFlex="33" align="left" >Cuotas Pendientes: {{invoice.idCreditDebt.pendingFees }}</h3> 
+                </div> 
+                <div class="title-info-text" fxLayout="row wrap" fxFlex="100">
+                    <h3 class="text-data" fxFlex="33" align="left" >SubTotal: $ {{ invoice.subtotal }}</h3> 
+                    <h3 class="text-data" fxFlex="33" align="left" >Iva: $ {{invoice.tax }} </h3> 
+                    <h3 class="text-data" fxFlex="33" align="left" >Total: $ {{invoice.total }}</h3> 
+                </div> 
+                <div class="title-info-text" fxLayout="row wrap" fxFlex="100">
+                    <h3 class="text-data" fxFlex="33" align="left" >Saldo Pagado: $ {{invoice.idPay.paidOut }}</h3> 
+                    <h3 class="text-data" fxFlex="33" align="left" >Deuda: $ {{invoice.idCreditDebt.totalDebt - invoice.idCreditDebt.balancePaid}}</h3> 
                 </div> 
             </div> 
              

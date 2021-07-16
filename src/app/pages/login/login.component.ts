@@ -11,6 +11,7 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar'; 
 import { Subscription } from 'rxjs';
 
 
@@ -30,6 +31,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(
       private fb: FormBuilder, 
+      private snackbar: MatSnackBar,  
       private authService: AuthService, 
       private router: Router) 
       {}
@@ -73,11 +75,10 @@ export class LoginComponent implements OnInit, OnDestroy {
       ),
     }); 
   }
+ 
 
-  resetForm(): void {
-    this.angForm.reset();
-  }
 
+  //Inciar sesión por el usario
   loginUser(): void {
     if (this.angForm.valid) {
       const userReq = this.angForm.value;
@@ -93,12 +94,25 @@ export class LoginComponent implements OnInit, OnDestroy {
           },
           err => {
             console.log(err)
-            this.resetForm();
+            this.showSnack(false, err.error.message || "No se pudo Iniciar sesión");   
+            //Reiniciar formlario
+            this.angForm.reset();
           }
         ) 
       )
       
     }
   }
+
+  showSnack(status: boolean, message: string, timer: number = 6500): void {
+    this.snackbar.open(message, undefined , {
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+      duration: timer,
+      panelClass: [status ? "succes-snack" : "error-snack"],
+    })
+  }
+
+
 }
 

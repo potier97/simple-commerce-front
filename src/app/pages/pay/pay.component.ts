@@ -13,6 +13,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { PaymentTypeData } from '@app/models/payment-type';
 import { UploadFileService } from '@app/services/uploadFile/upload-file.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { DateData } from '@app/models/dates';
+import * as moment from 'moment';
+import { Router } from '@angular/router';
+
+
 
 @Component({
   selector: 'app-pay',
@@ -26,27 +32,42 @@ export class PayComponent  implements OnInit, AfterViewInit, OnDestroy  {
   //Referencia del documento
   file: File | null = null;  
 
-  searchDate: string = ""
+  
   //Flag to Spinner data 
+  loadingData: boolean = false;
   //Metodos de pagos
   methodsPayments: PaymentTypeData[] = [];
-  loadingData: boolean = false;
-  displayedColumns: string[] = ['idPay', 'paidOut', 'payDate', 'idPayMethod', 'accion']; 
+  displayedColumns: string[] = ['idPay', 'paimentDate', 'paidOut', 'payMethod', 'paydoc', 'accion']; 
   dataSource = new MatTableDataSource<PaymentData>();
-  columns = [
-    { title: 'No.', name: 'idPay',  size: "8%"},
-    { title: 'Monto Pagado', name: 'paidOut',  size: "25%"},
-    { title: 'Fecha', name: 'payDate',  size: "20%"}, 
-    { title: 'Método Pago', name: 'idPayMethod',  size:"15%"},
-    { title: 'Acción', name: 'accion', size: "10%"},
-  ] 
+
   @ViewChild(MatPaginator) paginator: MatPaginator; 
   @ViewChild(MatSort) sort: MatSort;
+
+  //SELECTOR DE  BUSCADOR POR TIPO - ID - FECHA
+  modeSearch = new FormControl('id');
+  //Buscar por el id del pago
+  searchPayment = new FormControl('',
+  [
+    Validators.required,
+    Validators.pattern('^[0-9]*$'),  
+  ]);
+  //FORMLARIO DE BÚSQUEDA POR LOS DATOS - INICIO - FIN
+  range = new FormGroup({
+    start: new FormControl('',
+    [
+      Validators.required, 
+    ]),
+    end: new FormControl('',
+    [
+      Validators.required, 
+    ])
+  });
   
   constructor(  
       private snackbar: MatSnackBar, 
       private dialog: MatDialog,   
       private payService: PayService,  
+      private route: Router,  
       private payInvoiceService: PayInvoiceService,   
       private uploadFileService: UploadFileService,  
     ) { }
@@ -59,11 +80,12 @@ export class PayComponent  implements OnInit, AfterViewInit, OnDestroy  {
           //console.log('Pagos ->', res.content)  
         },
         err => {
-          console.log("Error al obtener los metodos de pago -> " , err)  
+          //console.log("Error al obtener los metodos de pago -> " , err)   
+          this.showSnack(false, err.error.message || 'Imposible Obtener Pagos');
         }
       )  
     )
-    this.getProducts();
+    this.getPayments();
   }
  
   ngAfterViewInit() { 
@@ -71,7 +93,7 @@ export class PayComponent  implements OnInit, AfterViewInit, OnDestroy  {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator; 
     this.dataSource.filterPredicate = (data: PaymentData, filter: string): boolean => { 
-      return data.payDate.toString().includes(filter);
+      return data.idPay!.toString().includes(filter);
      };
   }
 
@@ -82,7 +104,9 @@ export class PayComponent  implements OnInit, AfterViewInit, OnDestroy  {
     } 
   } 
 
-  getProducts(): void {
+  //Obtener todas los pagos de la base de datos
+  getPayments(): void {
+    this.loadingData = false;
     this.subscription.push(
       this.payService.getAllPayments().subscribe(
         res => {
@@ -97,6 +121,82 @@ export class PayComponent  implements OnInit, AfterViewInit, OnDestroy  {
         }
       ) 
     )
+  }
+
+  //Reiniciar el formulario del input que se ha dejado de ver
+  //Con el fin de desactivar el validador del boton de búsqueda
+  changeFindMethod(value: string): void {
+    //console.log("Cambio a -> ", value)
+    //console.log("Rango -> ", this.range.valid)
+    if(value === 'id'){
+      this.range.reset();
+      this.range.controls["start"].setValue("");  
+      this.range.controls["end"].setValue("");
+    }else{
+      this.searchPayment.reset();
+      this.searchPayment.setValue('');
+    }
+  }
+
+
+  //Buscar el id de la factura asociado al pago
+  searchInvoice(paymentId: number): void { 
+    //console.log("Pago -> ", paymentId)
+     this.subscription.push(
+        this.payService.findInvoiceByPayment(paymentId).subscribe(
+          res => {
+            //console.log('Pagos ->', res.content)  
+            this.route.navigate(['/invoces/datailsInvoice/', res.content]);
+          },
+          err => { 
+            this.showSnack(false, err.error.message || 'No se encontró la factura');      
+          }
+        ) 
+      ) 
+  }
+
+  searchPayments(): void {
+    if(this.modeSearch.value === 'id'){
+      //console.log("Buscando por id",  this.searchPayment.value)
+      this.loadingData = false;
+      this.subscription.push(
+        this.payService.findById(this.searchPayment.value).subscribe(
+          res => {
+            this.dataSource.data = res.content;
+            //console.log('Pagos ->', res.content) 
+            this.loadingData = true
+          },
+          err => { 
+            this.showSnack(false, err.error.message || 'Imposible Obtener Pagos');             
+            this.loadingData = true
+          }
+        ) 
+      )
+    }else{
+      //console.log("Buscando por fecha",  this.range.value)
+      this.loadingData = false;
+      moment.locale('es-es');
+      const dates: DateData = {
+        start: moment(this.range.value.start).format("YYYY-MM-DD"),
+        end: moment(this.range.value.end).format("YYYY-MM-DD")
+      }
+      //console.log("Dates -> ", dates)
+      this.subscription.push(
+        this.payService.findByDate(dates).subscribe(
+          res => {
+            this.dataSource.data = res.content;
+            //console.log('Pagos ->', res.content) 
+            this.showSnack(true, res.message || "Pagos Obtenidos"); 
+            this.loadingData = true
+          },
+          err => {
+            console.log(err) 
+            this.showSnack(false, 'Imposible Obtener Pagos'); 
+            this.loadingData = true
+          }
+        ) 
+      )
+    }
   }
 
   //Abrir modal para enviar el documento de pagos de convenio
@@ -120,6 +220,7 @@ export class PayComponent  implements OnInit, AfterViewInit, OnDestroy  {
       })
     ) 
   }
+
 
   sendFile(): void {
     //Envio de los pagos de los convenios
@@ -187,7 +288,7 @@ export class PayComponent  implements OnInit, AfterViewInit, OnDestroy  {
               res => { 
                 //console.log('de actualiza el pago -> ', res) 
                 this.showSnack(true, res.message);  
-                this.getProducts();
+                this.getPayments();
               },
               err => {
                 console.log(err.error) 
@@ -202,14 +303,11 @@ export class PayComponent  implements OnInit, AfterViewInit, OnDestroy  {
  
    
   clearSearch(): void { 
-    this.searchDate = '';
-    this.dataSource.filter = "";
+    this.searchPayment.reset(); 
+    this.range.reset();
+    this.getPayments();
   }
-
-  applyFilter(): void { 
-    //Filtra los porductos por fecha
-    this.dataSource.filter = this.searchDate.trim().toLowerCase();
-  }  
+ 
     
   showSnack(status: boolean, message: string, timer: number = 6500): void {
     this.snackbar.open(message, undefined , {

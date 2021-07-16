@@ -44,7 +44,7 @@ export class AuthService {
         this.saveToken(res.jwt);
         return res;
       }),
-      catchError( err => this.handleError(err))
+      //catchError( err => this.handleError(err))
     );
   }
 
@@ -93,9 +93,9 @@ export class AuthService {
 
 
   private handleError(err: any): Observable<never>{
-    let errorMessage = "Ocurrió un error"; 
-    if(err) errorMessage = `Error code: ${errorMessage}`;
-    window.alert(errorMessage); 
+    let errorMessage = "Ocurrió un error en login"; 
+    if(err) errorMessage = `Error code Login: ${errorMessage}`;
+    //window.alert(errorMessage); 
     return throwError(errorMessage);
   }
 

@@ -165,7 +165,7 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
                     this.financingTypes = res.content;
                   },
                   err => {
-                    console.log(err) 
+                    //console.log(err) 
                     this.showSnack(false,  err.error.message || 'Cliente No Encontrado'); 
                   }
                 )
@@ -177,7 +177,7 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
             }
           },
           err => {
-            console.log(err) 
+            //console.log(err) 
             this.showSnack(false,  err.error.message || 'Cliente No Encontrado'); 
           }
         )
@@ -185,7 +185,7 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   } 
 
-  //Limpiar entrada de busqueda de usuario
+  //Limpiar entrada de búsqueda de usuario
   clearClientSearch(): void {   
     this.searchClientDoc.reset(); 
   }
@@ -196,7 +196,7 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dataSource.filter = this.searchDni.trim().toLowerCase();
   }
 
-  //Limpiar busqueda de producto
+  //Limpiar búsqueda de producto
   clearProductSearch(): void { 
     this.searchDni = '';
     this.dataSource.filter = "";
@@ -321,7 +321,7 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
     } 
     this.offerService.calculateOffer(preOrder).subscribe(
       res => { 
-        console.log('RESULTADO OFERTA ->', res); 
+        //console.log('RESULTADO OFERTA ->', res); 
         this.offer = res.content;
         this.showSnack(true,  res.message); 
         this.showBuyDialog(res.content.percentage);
@@ -376,13 +376,13 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
             total: result.data.total,                   // VALOR TOTAL DE LA COMPRA
             details: this.productsToBuy                 // PRODUCTOS QUE SE VAN A COMPRAR
           }    
-          console.log("Nueva Orden de Compra ->", paymentData)  
+          //console.log("Nueva Orden de Compra ->", paymentData)  
           //Al enviar el formulario se realiza el registro de la compra.
           //La RESPUESTA PERMITIRÁ CREAR EL RECIBO DE PAGO.
           this.subscription.push(
             this.buyService.newBuy(paymentData).subscribe(
               async (res) => { 
-                console.log('Compra Realizada -> ', res) 
+                //console.log('Compra Realizada -> ', res) 
                 //NOMBRE COMPLETO DEL ADMINISTRADOR 
                 await this.pdfGenerator.generatePdf( 
                     `${this.userAdmin.name} ${this.userAdmin.lastName}`, 

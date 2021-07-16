@@ -12,8 +12,34 @@
                     Generación Facturas Mes
                 </button>
             </div> 
-            <div fxLayout="row" fxLayoutAlign="start stretch" fxLayoutGap="12px">
+            <div fxLayout="row" fxLayoutAlign="start stretch" fxLayoutGap="12px">  
                 <mat-form-field fxFlex="70" class="full-width-field" appearance="outline" color="red">
+                    <mat-label>Id Factura</mat-label>
+                    <input 
+                        matInput     
+                        type="text" 
+                        [formControl]="searchInvoice"
+                        placeholder="Documento Cliente"  
+                        (keyup.enter)="searchInvoice.valid ? searchIdInvoice() : null">
+                </mat-form-field> 
+                <button 
+                    fxFlex
+                    mat-raised-button
+                    color="accent"
+                    [disabled]="!searchInvoice.valid"
+                    type="submit"   
+                    class="btn-block" 
+                    (click)="searchIdInvoice()">Buscar</button>
+                <button 
+                    fxFlex
+                    mat-raised-button
+                    color="accent"
+                    type="submit"   
+                    class="btn-block" 
+                    (click)="clearClientSearch()">
+                    Limpiar
+                </button> 
+                <!-- <mat-form-field fxFlex="70" class="full-width-field" appearance="outline" color="red">
                     <mat-label>Id</mat-label>
                     <input 
                         matInput  
@@ -32,7 +58,7 @@
                     (click)="clearSearch()"> 
                         <mat-icon [style.margin-right]="'10px'" >restart_alt</mat-icon> 
                         Limpiar
-                </button>
+                </button> -->
             </div> 
         </mat-card>
         <div class="space"></div>
