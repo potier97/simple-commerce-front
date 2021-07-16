@@ -34,13 +34,28 @@
       </mat-nav-list> 
       <ng-template #sideVarList >
         <mat-nav-list>
+          <!-- Lista de bototnes cuando el menu -- DRAWER ES PEQUEÑO -->
           <div class="container-button" *ngFor="let buttonItem of navigationList"> 
-            <button mat-fab color="accent" routerLinkActive="active-link" class="navigation-button" [routerLink]="[buttonItem.link]" >
+            <button 
+              mat-fab 
+              color="accent" 
+              routerLinkActive="active-link" 
+              class="navigation-button" 
+              [routerLink]="[buttonItem.link]" 
+              [matTooltip]="buttonItem.pagaName.toString()"
+              matTooltipPosition="right"
+              >
               <mat-icon>{{buttonItem.fabIcon}}</mat-icon>
             </button>
           </div>   
           <div class="container-button"> 
-            <button mat-fab color="accent" (click)="onLogout()" class="navigation-button" >
+            <button 
+              mat-fab 
+              color="accent" 
+              (click)="onLogout()" 
+              class="navigation-button" 
+              matTooltip="Salir" 
+              matTooltipPosition="right">
               <mat-icon>logout</mat-icon>
             </button>
           </div>   

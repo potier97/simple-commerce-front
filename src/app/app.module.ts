@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
 import { HttpClientModule, HTTP_INTERCEPTORS } from  '@angular/common/http';
@@ -47,6 +47,10 @@ import { PayInvoiceDialogComponent } from './components/pay-invoice-dialog/pay-i
 import { CovenantInvoicesDialogComponent } from './components/covenant-invoices-dialog/covenant-invoices-dialog.component';
 import { NewBuyDialogComponent } from './components/new-buy-dialog/new-buy-dialog.component';
 
+// Registro del tipo de datos y region a Colombia
+import localeCo from '@angular/common/locales/es-CO'
+import { registerLocaleData } from '@angular/common';
+registerLocaleData(localeCo);
 
 @NgModule({
   declarations: [
@@ -95,6 +99,9 @@ import { NewBuyDialogComponent } from './components/new-buy-dialog/new-buy-dialo
     LoginGuard,
     {
       provide: HTTP_INTERCEPTORS, useClass: JwtInterceptorInterceptor, multi: true
+    },
+    {
+      provide: LOCALE_ID, useValue: "es-CO"
     }
   ],
   bootstrap: [AppComponent]

@@ -125,14 +125,14 @@ export class EditOfferComponent implements OnInit, OnDestroy {
           this.subscription.push(
             this.offerService.getOffer(this.idOffert).subscribe(
               res => {
-                //console.log('Response ->', res)
+                //console.log('Response -> ', res)
                 this.offer = res.content;
                 this.showSnack(true, res.message);  
                 this.loadData();
                 this.loadingData = true
               },
               err => {
-                //console.log(err)
+                //console.log("Error -> ", err)
                 this.showSnack(false, err.error.message || `No se pudo obtener la oferta ${this.idOffert}`);   
                 this.router.navigate(['/offers'])
                 this.loadingData = true
@@ -141,7 +141,7 @@ export class EditOfferComponent implements OnInit, OnDestroy {
           )   
         },
         err => {
-          console.log(err)
+          console.log("Error -> ", err)
           this.showSnack(false, err.error.message || "No se pudo obtener los tipos de Ofertas");   
         }
       )  
@@ -160,17 +160,17 @@ export class EditOfferComponent implements OnInit, OnDestroy {
         percentage: userReq.percentage,
         value: userReq.value,
       }     
-      console.log("Oferta actualizada -> ", offerData)
+      //console.log("Oferta actualizada -> ", offerData)
       this.subscription.push(
         this.offerService.updateOffer(offerData).subscribe(
           res => {
-            console.log('Response ->', res)
+            //console.log('Response ->', res)
             this.resetForm();
             this.showSnack(true, res.message); 
             this.router.navigate(['/offers']);
           },
           err => {
-            //console.log(err)
+            //console.log(" Error ", err)
             this.showSnack(false, err.error.message || "No se pudo registrar la oferta");  
             this.resetForm();
           }

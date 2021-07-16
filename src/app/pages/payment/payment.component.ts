@@ -383,19 +383,18 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
             this.buyService.newBuy(paymentData).subscribe(
               async (res) => { 
                 console.log('Compra Realizada -> ', res) 
-                //NOMBRE COMPLETO DEL ADMINISTRADOR
-                const AdminData = `${this.userAdmin.name} ${this.userAdmin.lastName}`
+                //NOMBRE COMPLETO DEL ADMINISTRADOR 
                 await this.pdfGenerator.generatePdf( 
-                    AdminData, 
+                    `${this.userAdmin.name} ${this.userAdmin.lastName}`, 
                     this.client!, 
-                    this.productsToBuy,
-                    10, 
-                    result.data.subtotal,  
-                    result.data.tax, 
-                    result.data.discount, 
-                    result.data.total);
+                    res.content.details,
+                    res.content.invoiceId, 
+                    res.content.subtotal,  
+                    res.content.tax, 
+                    res.content.discount, 
+                    res.content.total);
                 this.showSnack(true, res.message);  
-                this.getProducts();
+                await this.getProducts();
                 this.buyCancel(); 
               },
               err => {

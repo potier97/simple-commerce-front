@@ -63,7 +63,7 @@
                              <!-- dato de la columna --> 
                             <td mat-cell *matCellDef="let element; let i = index;">   
                                 {{column.name ==='idPayMethod' ? element[column.name].name : 
-                                    column.name ==='payDate' ? [element[column.name].name  | date ] :
+                                    column.name ==='payDate' ? [element[column.name].name  | date: "longDate" ] :
                                     element[column.name] }}
                             </td>      
                         </ng-container> 
@@ -76,7 +76,7 @@
                                         Opciones
                                     </button>
                                     <mat-menu #menu="matMenu"> 
-                                        <button mat-menu-item [routerLink]="['/invoces/datailsInvoice/:id', element.idProduct]">Ver Factura</button> 
+                                        <button mat-menu-item [routerLink]="['/invoces/datailsInvoice/', element.idProduct]">Ver Factura</button> 
                                     </mat-menu>
                     
                                   </div>    

@@ -1,1 +1,124 @@
-<p>view-invoice works!</p>
+<div class="root">
+    <div class="container" *ngIf="invoice != undefined; else spinnerView">
+        <div class="space"></div>
+        <mat-card >  
+            <!-- CLIENTE -->
+            <div class="title-text" fxLayout="row" fxLayoutAlign="space-between center" >
+                <h2 style="color: #226706">Cliente</h2>
+                 <button
+                    mat-raised-button
+                    type="button"
+                    color="primary" 
+                    class="btn-block"
+                    routerLink="/clients">
+                    Volver
+                </button> 
+            </div>
+
+            <!-- DATOS DEL CLIENTE -->
+            <!-- DATOS DEL CLIENTE -->
+            <!-- DATOS DEL CLIENTE -->
+            <!-- DATOS DEL CLIENTE -->
+            <div class="container-user-info" fxLayout="column" fxLayoutAlign="space-evenly stretch">  
+                <div class="title-info-text" fxLayout="row wrap" fxFlex="100">
+                    <h3 class="text-data" fxFlex="33" align="left" >{{"Nombre: " + invoice.idClient.name  | uppercase }}</h3> 
+                    <h3 class="text-data" fxFlex="33" align="left">{{"Documento: " + invoice.idClient.userDoc | uppercase }}</h3> 
+                    <h3 class="text-data" fxFlex="33" align="left">{{"Correo: " +invoice.idClient.userMail  | uppercase }}</h3>
+                </div> 
+                <div class="title-info-text" fxLayout="row wrap" fxFlex="100">
+                    <h3 class="text-data" fxFlex="33" align="left" >{{"Apellido: " + invoice.idClient.lastName  | uppercase }} </h3> 
+                    <h3 class="text-data" fxFlex="33" align="left" >{{"Tipo Documento: " + invoice.idClient.idDocType.name  | uppercase }}</h3> 
+                    <h3 class="text-data" fxFlex="33" align="left" >{{"Teléfono: " + invoice.idClient.userPhone  | uppercase }} </h3>
+                </div> 
+            </div> 
+        </mat-card> 
+        <div class="space"></div>  
+        <mat-card *ngIf="dataSource.data.length > 0;">   
+            <div class="title-text" fxLayout="row" fxLayoutAlign="start center"  >
+                <h2 style="color: #226706">Detalle Factura</h2> 
+            </div> 
+            <!-- DETALLE DE LA FACTURA -->
+            <!-- DETALLE DE LA FACTURA -->
+            <!-- DETALLE DE LA FACTURA -->
+            <!-- DETALLE DE LA FACTURA -->
+            <table mat-table matSort [dataSource]="dataSource" >  
+                <!-- Id Column -->
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell  width="10%" *matHeaderCellDef> No. </th>
+                    <td mat-cell *matCellDef="let element; let i = index"> {{i + 1 }} </td>
+                </ng-container> 
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell width="30%" mat-sort-header *matHeaderCellDef> Nombre </th>
+                    <td mat-cell *matCellDef="let element" class="details-element-row"> {{element.idProduct.name | uppercase}} </td>
+                </ng-container>
+
+                <!-- Tax Column -->
+                <ng-container matColumnDef="tax">
+                    <th mat-header-cell  width="10%" mat-sort-header *matHeaderCellDef> Iva </th>
+                    <td mat-cell *matCellDef="let element" class="details-element-row"> {{element.tax  + "%"}} </td>
+                </ng-container>
+
+                <!-- Precio Column -->
+                <ng-container matColumnDef="price">
+                    <th mat-header-cell  width="20%" mat-sort-header *matHeaderCellDef> Precio </th>
+                    <td mat-cell *matCellDef="let element" class="details-element-row"> {{"$ " + element.price }} </td>
+                </ng-container>
+
+                <!-- Cantidad Column -->
+                <ng-container matColumnDef="amount">
+                    <th mat-header-cell width="10%" mat-sort-header *matHeaderCellDef> Cantidad </th>
+                    <td mat-cell *matCellDef="let element" class="details-element-row"> {{element.amount}} </td>
+                </ng-container> 
+
+                <!-- TOTAL Column -->
+                <ng-container matColumnDef="totalPrice">
+                    <th mat-header-cell  width="20%" mat-sort-header *matHeaderCellDef> Monto </th>
+                    <td mat-cell *matCellDef="let element" class="details-element-row"> {{ "$ " + (element.amount*element.price)}} </td>
+                </ng-container> 
+                <tr mat-header-row  *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table> 
+            <div class="space"></div> 
+        </mat-card> 
+        <div class="space"></div> 
+        <mat-card >   
+            <div class="title-text" fxLayout="row" fxLayoutAlign="start center"  >
+                <h2 style="color: #226706">Detalle Pago</h2> 
+            </div>  
+
+            <!-- DETALLE PAGO -->
+            <!-- DETALLE PAGO -->
+            <!-- DETALLE PAGO -->
+            <!-- DETALLE PAGO -->
+            <!-- DETALLE PAGO -->
+            <!-- DETALLE PAGO -->
+            <div class="container-user-info" fxLayout="column" fxLayoutAlign="space-evenly stretch">  
+                <div class="title-info-text" fxLayout="row wrap" fxFlex="100">
+                    <h3 class="text-data" fxFlex="33" align="left" >{{"Fecha: " + invoice.idClient.name  }}</h3> 
+                    <h3 class="text-data" fxFlex="33" align="left">{{"# Cuotas: " + invoice.idClient.userDoc }}</h3> 
+                    <h3 class="text-data" fxFlex="33" align="left">{{"Total: " +invoice.idClient.userMail  }}</h3>
+                </div> 
+                <div class="title-info-text" fxLayout="row wrap" fxFlex="100">
+                    <h3 class="text-data" fxFlex="33" align="left" >{{"Abonado: " + invoice.idClient.lastName  }} </h3> 
+                    <h3 class="text-data" fxFlex="33" align="left" >{{"Cuota Actual: " + invoice.idClient.idDocType.name  }}</h3> 
+                    <h3 class="text-data" fxFlex="33" align="left" >{{"Tipo Pago: " + invoice.idClient.userPhone  }} </h3>
+                </div> 
+                <div class="title-info-text" fxLayout="row wrap" fxFlex="100">
+                    <h3 class="text-data" fxFlex="33" align="left" >{{"Deuda: " + invoice.idClient.lastName  }} </h3> 
+                    <h3 class="text-data" fxFlex="33" align="left" >{{"Valor Actal Facturado: " + invoice.idClient.idDocType.name }}</h3> 
+                </div> 
+            </div> 
+             
+        </mat-card> 
+        <div class="space"></div> 
+    </div> 
+
+    <ng-template #spinnerView >
+        <div class="container-spinner" fxLayout="row" fxLayoutAlign="center center"  > 
+            <mat-spinner color='accent' diameter="150" strokeWidth="14"></mat-spinner>
+        </div>   
+    </ng-template>  
+</div>
+

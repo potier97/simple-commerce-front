@@ -48,6 +48,18 @@ export class InvoiceService {
       //catchError( err => this.handleError(err))
     );
   }   
+
+  //OBTENER EL DETALLE DE UNA FACTURA POR EL ID
+  getDetailsInvoiceById(id: number): Observable<CustomResponse>{
+    return this.httpClient.get<CustomResponse>(`${environment.API_PATH}/invoice/details/${id}`)
+    .pipe(
+      map((res: CustomResponse) => {
+        //console.log('Factura Obtenida', res) 
+        return res;
+      }),
+      //catchError( err => this.handleError(err))
+    );
+  }  
  
   //ACTUALIZAR UNA FACTURA
   updateInvoice(invoice: InvoiceData): Observable<CustomResponse>{
