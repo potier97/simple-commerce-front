@@ -1,10 +1,10 @@
-import { PaymentTypeData } from "./payment-type";
+import { PaymentMethodData } from "./payment-method";
 
 export interface PaymentInvoiceData {
     idPay: number | null, 
     payRecord: number,  
     idInvoice: number,  
-    payType: PaymentTypeData
+    payMethod: PaymentMethodData
 
 }
 

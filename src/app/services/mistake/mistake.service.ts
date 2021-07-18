@@ -40,7 +40,7 @@ export class MistakeService {
     let errorMessage = "Ocurrió un error"; 
     if(err){
       errorMessage = `Error code Mistake: ${err.code}`;
-      console.log("Error generado en Mistake-> ", err) ;
+      //g("Error generado en Mistake-> ", err) ;
     }
     return throwError(errorMessage);
   }

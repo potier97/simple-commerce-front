@@ -23,11 +23,11 @@ export class OffersComponent implements OnInit, AfterViewInit, OnDestroy  {
   displayedColumns: string[] = ['idOffer', 'description', 'idOfferType', 'percentage', 'accion']; 
   dataSource = new MatTableDataSource<OfferData>();
   columns = [
-    { title: 'Id', name: 'idOffer',  size: "8%"},
-    { title: 'Descripción', name: 'description',  size: "25%"},
+    { title: 'Id', name: 'idOffer',  size: "5%"},
+    { title: 'Descripción', name: 'description',  size: "50%"},
     { title: 'Tipo', name: 'idOfferType',  size: "15%"},
     { title: 'Porcentaje', name: 'percentage',  size: "15%"}, 
-    { title: 'Acción', name: 'accion', size: "10%"},
+    { title: 'Acción', name: 'accion', size: "15%"},
   ] 
   @ViewChild(MatPaginator) paginator: MatPaginator; 
   @ViewChild(MatSort) sort: MatSort;

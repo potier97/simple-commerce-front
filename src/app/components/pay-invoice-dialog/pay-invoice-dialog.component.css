@@ -1,41 +1,39 @@
 .tittle {
-    color: #226706;
-    font-weight: bold;
+  color: #226706;
+  font-weight: bold;
 }
 
-
-.container { 
-    box-sizing: unset !important;
-    height: calc(100% - 140px);
+.container {
+  box-sizing: unset !important;
+  height: calc(100% - 140px);
 }
-
 
 .radio-button {
-    color: #226706;
-    margin-top: 8px;
-    margin-bottom: 8px;
+  color: #226706;
+  margin-top: 8px;
+  margin-bottom: 8px;
 }
 
-
-.label-tittle { 
-    color: #226706;
-    margin-bottom: 8px; 
+.label-tittle {
+  color: #226706;
+  margin-bottom: 8px;
 }
 
-
-.itemForm{
-    margin-top: 8px;
-    margin-bottom: 8px;
+.itemForm {
+  margin-top: 8px;
+  margin-bottom: 8px;
 }
-
 
 .btn-block {
-    color: #fff;
-    font-size: large;
-    padding: 8px 24px;
-    margin: 16px 0;
-  }
+  color: #fff;
+  font-size: large;
+  padding: 8px 24px;
+  margin: 16px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 .mat-dialog-actions {
-    justify-content: flex-end;
+  justify-content: flex-end;
 }

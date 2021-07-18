@@ -126,7 +126,7 @@ export class PayService {
     let errorMessage = "Ocurrió un error"; 
     if(err){
       errorMessage = `Error code Payment: ${err.code}`;
-      console.log("Error generado Pago -> ", err)
+      //console.log("Error generado Pago -> ", err)
       //window.alert(errorMessage); 
     }
     return throwError(errorMessage);

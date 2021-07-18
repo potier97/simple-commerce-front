@@ -25,15 +25,7 @@ export class InvocesComponent implements OnInit, AfterViewInit, OnDestroy  {
   //Flag to Spinner data 
   loadingData: boolean = false;
   displayedColumns: string[] = ['idBuy', 'purchaseDate', 'idClient', 'total', 'idPayType', 'accion']; 
-  dataSource = new MatTableDataSource<InvoiceData>();
-  columns = [
-    { title: 'No.', name: 'idBuy',  size: "8%"},
-    { title: 'Fecha', name: 'purchaseDate',  size: "25%"},
-    { title: 'Cliente', name: 'idClient',  size: "20%"}, 
-    { title: 'Total Pago', name: 'total',  size:"15%"},
-    { title: 'Tipo Pago', name: 'idPayType', size: "10%"},
-    { title: 'Acción', name: 'accion', size: "10%"}, 
-  ] 
+  dataSource = new MatTableDataSource<InvoiceData>(); 
 
   @ViewChild(MatPaginator) paginator: MatPaginator; 
   @ViewChild(MatSort) sort: MatSort;
@@ -76,7 +68,7 @@ export class InvocesComponent implements OnInit, AfterViewInit, OnDestroy  {
     )
   }
 
-  
+  //CONFIGURACIONES DE LA TABLA PARA PODER FILTRAR Y PAGINAR
   ngAfterViewInit() { 
     //Configuración de datos iniciales
     this.dataSource.sort = this.sort;

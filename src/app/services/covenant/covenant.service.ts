@@ -74,7 +74,7 @@ export class CovenantService {
     let errorMessage = "Ocurrió un error en convenios"; 
     if(err){
       errorMessage = `Error code Covenant: ${err.code}`;
-      console.log("Error generado -> ", err) 
+      //console.log("Error generado -> ", err) 
     }
     return throwError(errorMessage);
   }

@@ -63,7 +63,7 @@ export class PayInvoiceDialogComponent implements OnInit, OnDestroy {
             //console.log('LISTA DE METODOS DE PAGO ->', res.content)  
           },
           err => {
-            console.log("Error al obtener los metodos de pago -> ", err)  
+            //console.log("Error al obtener los metodos de pago -> ", err)  
           }
         )  
       )

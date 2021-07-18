@@ -151,7 +151,7 @@ export class UsersService {
     let errorMessage = "Ocurrió un error en Cliente"; 
     if(err){
       errorMessage = `Error code User: ${err.code}`;
-      console.log("Error generado -> ", err) 
+      //console.log("Error generado -> ", err) 
     }
     return throwError(errorMessage);
   }

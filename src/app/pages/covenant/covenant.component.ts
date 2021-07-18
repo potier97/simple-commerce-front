@@ -25,9 +25,9 @@ export class CovenantComponent implements OnInit, AfterViewInit, OnDestroy  {
   displayedColumns: string[] = ['idCovenant', 'name', 'accion']; 
   dataSource = new MatTableDataSource<CovenantData>();
   columns = [
-    { title: 'No.', name: 'idCovenant',  size: "8%"},
-    { title: 'Nombre', name: 'name',  size: "25%"},
-    { title: 'Acción', name: 'accion', size: "10%"},
+    { title: 'No.', name: 'idCovenant',  size: "5%"},
+    { title: 'Nombre', name: 'name',  size: "75%"},
+    { title: 'Acción', name: 'accion', size: "20%"},
   ] 
   @ViewChild(MatPaginator) paginator: MatPaginator; 
   @ViewChild(MatSort, { static: false}) sort: MatSort;
@@ -52,7 +52,7 @@ export class CovenantComponent implements OnInit, AfterViewInit, OnDestroy  {
           this.loadingData = true
         },
         err => {
-          console.log(err) 
+          //console.log(err) 
           this.showSnack(false, 'Imposible Obtener Convenios'); 
           this.loadingData = true
         }
@@ -115,7 +115,7 @@ export class CovenantComponent implements OnInit, AfterViewInit, OnDestroy  {
                 this.getCovenants();
               },
               err => {
-                console.log(err.error) 
+                //console.log(err.error) 
                 this.showSnack(false, err.error.message || "Imposible Actualizar"); 
               }
             ) 

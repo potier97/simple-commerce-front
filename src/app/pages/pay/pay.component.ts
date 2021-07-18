@@ -190,7 +190,7 @@ export class PayComponent  implements OnInit, AfterViewInit, OnDestroy  {
             this.loadingData = true
           },
           err => {
-            console.log(err) 
+            //console.log(err) 
             this.showSnack(false, 'Imposible Obtener Pagos'); 
             this.loadingData = true
           }
@@ -232,7 +232,7 @@ export class PayComponent  implements OnInit, AfterViewInit, OnDestroy  {
         this.file = null;
       },
       err => {
-        console.log(err) 
+        //console.log(err) 
         this.showSnack(false, err.error.message || "Error al enviar documento");  
       }, 
     )   
@@ -275,10 +275,10 @@ export class PayComponent  implements OnInit, AfterViewInit, OnDestroy  {
       dialogRef.afterClosed().subscribe((result: any) => {
         if(result.status){    
           const paymentData: PaymentInvoiceData = {
-            idPay: null,
-            payRecord: result.data.inputDataOne,  
-            idInvoice: result.data.inputDataTwo,  
-            payType: result.data.inputDataThree,   
+            idPay: null, // ID DEL PAGO
+            payRecord: result.data.inputDataTwo,  // ID DE LA FACTURA
+            idInvoice: result.data.inputDataOne,  // MONTO A PAGAR
+            payMethod: result.data.inputDataThree,  // MÉTODO DE PAGO
           }  
           //console.log(paymentData);
           //Al enviar el formulario se envia al api la peticion de pagar una factura pendiente.
@@ -291,7 +291,7 @@ export class PayComponent  implements OnInit, AfterViewInit, OnDestroy  {
                 this.getPayments();
               },
               err => {
-                console.log(err.error) 
+                //console.log(err.error) 
                 this.showSnack(false, err.error.message || `No se pudo registrar el pago`); 
               }
             ) 

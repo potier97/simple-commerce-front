@@ -16,6 +16,13 @@
 
 table {
   width: 100%;
+  table-layout: fixed;
+}
+
+th, td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .full-width-field {
@@ -40,8 +47,12 @@ table {
 }
 
 .btn-block {
-  background-color: #226706;
   color: #fff;
+  font-size: large;
+  padding: 8px 24px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; 
 }
 
 .fav-add-product {

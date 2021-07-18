@@ -256,11 +256,11 @@ export class NewClientComponent implements OnInit, OnDestroy {
         userPhone: userReq.userPhone,   
         userCreated: userCreated, 
       }     
-      console.log("Usuario a crear -> ", userData)
+      //console.log("Usuario a crear -> ", userData)
       this.subscription.push(
         this.usersService.createClient(userData).subscribe(
           res => {
-            console.log('Response ->', res)
+            //console.log('Response ->', res)
             this.resetForm();
             this.showSnack(true, res.message); 
             this.router.navigate(['/clients']);

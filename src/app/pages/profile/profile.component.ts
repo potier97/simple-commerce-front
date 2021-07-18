@@ -21,6 +21,7 @@ export class ProfileComponent implements OnInit, OnDestroy  {
     private usersService: UsersService) { }
  
 
+  //Borrar todos los subs de esta vista
   ngOnDestroy(): void {
     //console.log("Desubs all observers") 
     for(const sub of this.subscription) {
@@ -28,6 +29,8 @@ export class ProfileComponent implements OnInit, OnDestroy  {
     }
   }
 
+  //Carga los datos del cliente que estan atendiendo 
+  //Se le envia el token para obtener la info de ese usuario
   ngOnInit(): void {   
       this.subscription.push(
         this.usersService.getAdminProfile().subscribe(

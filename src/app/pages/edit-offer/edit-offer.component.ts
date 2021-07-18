@@ -141,7 +141,7 @@ export class EditOfferComponent implements OnInit, OnDestroy {
           )   
         },
         err => {
-          console.log("Error -> ", err)
+          //console.log("Error -> ", err)
           this.showSnack(false, err.error.message || "No se pudo obtener los tipos de Ofertas");   
         }
       )  

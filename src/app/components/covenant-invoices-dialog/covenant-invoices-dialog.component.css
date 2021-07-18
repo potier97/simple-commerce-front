@@ -49,12 +49,15 @@
   margin: 16px 0;
 
 }
-
+ 
 .btn-block {
   color: #fff;
-  font-size: large;
+  font-size: large; 
   padding: 8px 24px;
   margin: 16px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; 
 }
 
 .cardDocument {

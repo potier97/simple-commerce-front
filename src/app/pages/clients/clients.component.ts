@@ -75,7 +75,7 @@ export class ClientsComponent implements OnInit, AfterViewInit, OnDestroy  {
           this.loadingData = true
         },
         err => {
-          console.log(err) 
+          //console.log(err) 
           this.showSnack(false, 'Imposible Obtener Clientes'); 
           this.loadingData = true
         }
@@ -114,7 +114,7 @@ export class ClientsComponent implements OnInit, AfterViewInit, OnDestroy  {
             this.loadingData = true
           },
           err => {
-            console.log(err)  
+            //console.log(err)  
             this.showSnack(false, err.error.message || 'Imposible Obtener resultados');
             this.clearSearch();
           }

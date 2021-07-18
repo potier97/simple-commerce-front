@@ -82,7 +82,7 @@ export class OfferService {
     let errorMessage = "Ocurrió un error en Oferta"; 
     if(err){
       errorMessage = `Error code Offer: ${err.code}`;
-      console.log("Error generado -> ", err)
+      //console.log("Error generado -> ", err)
       //window.alert(errorMessage); 
     }
     return throwError(errorMessage);

@@ -93,7 +93,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.router.navigate(['/payment']);
           },
           err => {
-            console.log(err)
+            //console.log(err)
             this.showSnack(false, err.error.message || "No se pudo Iniciar sesión");   
             //Reiniciar formlario
             this.angForm.reset();

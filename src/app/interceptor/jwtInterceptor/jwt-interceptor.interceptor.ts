@@ -33,7 +33,7 @@ export class JwtInterceptorInterceptor implements HttpInterceptor {
           if(err.status === 401){ 
             return this.authService.refreshToken(authToken)
               .pipe(concatMap((data: any)  => {
-                console.log('Refreshing...')
+                //console.log('Refreshing...')
                 const reauthReq = request.clone({
                   setHeaders: {
                     authorization: `Bearer ${data.jwt}`

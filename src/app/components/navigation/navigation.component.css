@@ -80,7 +80,7 @@
    
 .sidenav-content { 
   overflow-x: hidden;
-  background-color: #e4e4e4;
+  background-color: #bdc3c7;
   width: -webkit-fill-available;
   margin-left: 250px !important;
   transition: all, 0.5s;
@@ -88,7 +88,7 @@
 
 .sidenav-content-close {
   overflow-x: hidden;
-  background-color: #e4e4e4;
+  background-color: #bdc3c7;
   width: -webkit-fill-available;
   transition: all, 0.5s;
   margin-left: 80px !important;

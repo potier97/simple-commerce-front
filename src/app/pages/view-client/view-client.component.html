@@ -1,5 +1,5 @@
 <div class="root">
-    <div class="container" *ngIf="client != undefined; else spinnerView">
+    <div class="container" *ngIf="client != undefined && loadingData === true; else spinnerView">
         <div class="space"></div>
         <mat-card >  
             <!-- product -->
@@ -54,61 +54,76 @@
         </mat-card>
 
         <div class="space"></div> 
+        <mat-card  *ngIf="dataSource.data.length > 0;" >  
+            <!-- COMPRAS QUE HA REALIZADO EL CLIENTE - SE MESTRA SI HA COMPRADO -->
+            <table mat-table matSort [dataSource]="dataSource" > 
+                <!-- Id Column -->
+                <ng-container matColumnDef="idBuy">
+                    <th mat-header-cell width="5%" *matHeaderCellDef> Id. </th>
+                    <td mat-cell *matCellDef="let element"> {{element.idBuy}} </td>
+                </ng-container>
 
-        <mat-card >  
-            <!-- product -->
-            <div class="title-text">
-                <h2 style="color: #226706"> Datos Personales del Cliente</h2>
-            </div>
-            <div class="container-user-info">
-                <div class="title-info-text">
-                    <h3 style="color: #226706"> Id Usuario: {{idClient}}</h3>
-                </div>
+                <!-- Fecha - Column -->
+                <ng-container matColumnDef="purchaseDate">
+                    <th mat-header-cell width="10%"  mat-sort-header *matHeaderCellDef> Fecha </th>
+                    <td mat-cell *matCellDef="let element"> {{element.purchaseDate | date: "shortDate" }} </td>
+                </ng-container>
 
-                <div class="title-info-text">
-                    <h3 style="color: #226706"> Nombre: {{client.name}} {{client.lastName | uppercase }}</h3>
-                </div>
+                <!-- Subtotal de la compra - Column -->
+                <ng-container matColumnDef="subtotal">
+                    <th mat-header-cell width="15%"  mat-sort-header *matHeaderCellDef>Subtotal</th>
+                    <td mat-cell *matCellDef="let element">$ {{element.subtotal }} </td>
+                </ng-container>
 
-                <div class="title-info-text">
-                    <h3 style="color: #226706"> Tipo Cliente:  {{client.idUserType.name | uppercase }}</h3>
-                </div>
+                <!-- Cliente - Name -  Column -->
+                <ng-container matColumnDef="tax">
+                    <th mat-header-cell width="15%"  mat-sort-header *matHeaderCellDef>Iva</th>
+                    <td mat-cell *matCellDef="let element">$ {{element.tax }} </td>
+                </ng-container>
 
-                <div class="title-info-text">
-                    <h3 style="color: #226706">Identificación: {{client.idDocType.name | uppercase }} {{client.userDoc }}</h3>
-                </div>
+                <!-- Cliente - Name -  Column -->
+                <ng-container matColumnDef="discount">
+                    <th mat-header-cell width="15%"  mat-sort-header *matHeaderCellDef>Descuento</th>
+                    <td mat-cell *matCellDef="let element">$ {{element.discount }} </td>
+                </ng-container>
 
-                <div class="title-info-text">
-                    <h3 style="color: #226706"> Correo:  {{client.userMail | uppercase }}</h3>
-                </div>
 
-                <div class="title-info-text">
-                    <h3 style="color: #226706"> Dirección: {{client.userAddress | uppercase }} </h3>
-                </div>
+                <!-- Total Pago - Column -->
+                <ng-container matColumnDef="total">
+                    <th mat-header-cell width="15%"  mat-sort-header *matHeaderCellDef>Total</th>
+                    <td mat-cell *matCellDef="let element">$ {{element.total}} </td>
+                </ng-container>
 
-                <div class="title-info-text">
-                    <h3 style="color: #226706"> Teléfono: {{client.userPhone}} </h3>
-                </div>
+                <!-- Tipo Pago - Column -->
+                <ng-container matColumnDef="idPayType">
+                    <th mat-header-cell width="15%"  mat-sort-header *matHeaderCellDef>Tipo Pago</th>
+                    <td mat-cell *matCellDef="let element"> {{element.idPayType.name}} </td>
+                </ng-container>
 
-                <div class="title-info-text">
-                    <h3 style="color: #226706"> Fecha de Creación: {{client.userCreated | date: "longDate"  }} </h3>
-                </div>
-            </div>
-             
+                <!-- Accion - Column -->
+                <ng-container matColumnDef="accion">
+                    <th mat-header-cell *matHeaderCellDef  width="10%">Acción</th>
+                    <td mat-cell *matCellDef="let element"> 
+                        <div class="example-button-container"> 
+                            <button mat-flat-button [matMenuTriggerFor]="menu" style="color: #fff;" color="primary">
+                                <mat-icon style="color: #fff;">settings</mat-icon>
+                                Opciones
+                            </button>
+                            <mat-menu #menu="matMenu"> 
+                                <button mat-menu-item [routerLink]="['/invoces/datailsInvoice/', element.idBuy]">Ver Detalle</button> 
+                            </mat-menu>
+            
+                          </div>    
+                    </td>       
+                </ng-container>
 
-            <div fxLayout="row" fxLayoutAlign="end stretch" fxLayoutGap="16px"> 
-                <button
-                mat-raised-button
-                type="button"
-                color="primary" 
-                class="btn-block"
-                routerLink="/clients">
-                Volver
-                </button> 
-            </div> 
+ 
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table> 
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator> 
         </mat-card>
-
-        
-        <div class="space"></div> 
+        <div class="space"  *ngIf="dataSource.data.length > 0;"></div> 
     </div> 
 
     <ng-template #spinnerView >

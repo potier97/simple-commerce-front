@@ -227,7 +227,7 @@ export class EditClientComponent implements OnInit, OnDestroy {
       this.subscription.push(
         this.usersService.updateClient(userData).subscribe(
           res => {
-            console.log('Response from update User ->', res)
+            //console.log('Response from update User ->', res)
             this.resetForm();
             this.showSnack(true, res.message); 
             this.router.navigate(['/clients']);

@@ -177,7 +177,7 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
               this.showSnack(true, res.message);
             },
             err => {
-              console.log(err.error)  
+              //console.log(err.error)  
               Swal.fire({
                 title: 'Error',
                 text: `Producto ${product.idCode} no ha podido ser desactivado`,

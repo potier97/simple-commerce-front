@@ -15,7 +15,14 @@
 }
 
 table {
-  width: 100%;
+  width: 100% !important;
+  table-layout: fixed;
+}
+
+th, td {
+  overflow: hidden; 
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .full-width-field {
@@ -104,6 +111,10 @@ table {
 .client-container {
   margin-top: 16px;
   margin-bottom: 16px;
+}
+
+.add-button{
+  box-shadow: none;
 }
 
 .btn-block {  

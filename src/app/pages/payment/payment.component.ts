@@ -68,10 +68,10 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedColumns: string[] = ['name', 'amount', 'price', 'accion']; 
   dataSource = new MatTableDataSource<ProductsData>();
   columns = [ 
-    { title: 'Nombre', name: 'name',  size: "55%"}, 
-    { title: 'Stock', name: 'amount',  size: "15%"}, 
-    { title: 'Precio', name: 'price',  size: "15%"},
-    { title: 'Agregar', name: 'accion', size: "15%"},
+    { title: 'Nombre', name: 'name',  size: "40%"}, 
+    { title: 'Stock', name: 'amount',  size: "20%"}, 
+    { title: 'Precio', name: 'price',  size: "20%"},
+    { title: 'Agregar', name: 'accion', size: "20%"},
   ] 
   @ViewChild(MatPaginator) paginator: MatPaginator; 
   @ViewChild(MatSort) sort: MatSort;
@@ -98,7 +98,7 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
           this.userAdmin = res.content; 
         },
         err => {
-          console.log(err)   
+          //console.log(err)   
         }
       )
     )
@@ -110,7 +110,7 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
           //console.log('METODOS ->', res.content)  
         },
         err => {
-          console.log("Error al obtener los MÉTODOS de pago -> ", err)  
+          //console.log("Error al obtener los MÉTODOS de pago -> ", err)  
         }
       )  
     )
@@ -122,7 +122,7 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
           //console.log('TIPOS ->', res.content)  
         },
         err => {
-          console.log("Error al obtener los TIPOS de pago -> ", err)  
+          //console.log("Error al obtener los TIPOS de pago -> ", err)  
         }
       )  
     )  
@@ -398,7 +398,7 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.buyCancel(); 
               },
               err => {
-                console.log(err.error) 
+                //console.log(err.error) 
                 this.showSnack(false, err.error.message || `No se pudo registrar la compra`); 
               }
             ) 

@@ -38,7 +38,7 @@ export class AuthService {
     return this.httpClient.post<LogInResponse>(`${environment.API_PATH}/auth/authenticate`, authData)
     .pipe(
       map( (res: LogInResponse) => {
-        console.log('Ingresando al sistema')
+        //console.log('Ingresando al sistema')
         this.loggedIn.next(true);
         this.userToken.next(res.jwt);
         this.saveToken(res.jwt);
@@ -49,7 +49,7 @@ export class AuthService {
   }
 
   logout(): void{
-    console.log("Saliendo...")
+    //console.log("Saliendo...")
     localStorage.removeItem("token");
     this.loggedIn.next(false);
     this.userToken.next('');

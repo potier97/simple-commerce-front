@@ -17,7 +17,7 @@
                 <button 
                     fxFlex
                     mat-raised-button
-                    color="secundary"
+                    color="accent"
                     type="submit"   
                     class="btn-block" 
                     (click)="clearSearch()"> 
@@ -31,13 +31,13 @@
             <table mat-table matSort [dataSource]="dataSource" >  
                 <!-- Id Column -->
                 <ng-container matColumnDef="idMistake">
-                    <th mat-header-cell width="20%" *matHeaderCellDef> No. </th>
+                    <th mat-header-cell width="5%" *matHeaderCellDef> No. </th>
                     <td mat-cell *matCellDef="let element"> {{element.idMistake}} </td>
                 </ng-container>
 
                 <!-- Description Column -->
                 <ng-container matColumnDef="description">
-                    <th mat-header-cell width="20%"  mat-sort-header *matHeaderCellDef> Descripción </th>
+                    <th mat-header-cell width="35%"  mat-sort-header *matHeaderCellDef> Descripción </th>
                     <td mat-cell *matCellDef="let element"> {{element.description}} </td>
                 </ng-container>
 

@@ -81,7 +81,7 @@ export class ProductsService {
     let errorMessage = "Ocurrió un error"; 
     if(err){
       errorMessage = `Error code: ${err.code}`;
-      console.log("Error generado -> ", err)
+      //console.log("Error generado -> ", err)
       //window.alert(errorMessage); 
     }
     return throwError(errorMessage);
