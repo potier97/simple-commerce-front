@@ -17,11 +17,15 @@ export class ViewInvoiceComponent implements OnInit, AfterViewInit, OnDestroy  {
 
   private subscription: Subscription[] = [];
   
+  //TABLA PARA EL DETALLE DE LACOMPRA
   displayedColumns: string[] = ['id', 'name', 'tax', 'price', 'amount', 'totalPrice']; 
   dataSource = new MatTableDataSource<ProductDetailsData>(); 
 
   @ViewChild(MatSort) sort: MatSort;
 
+  // TABLA PARA EL LISTADO DE FACTURAS PAGAS A CREDITO
+  displayedAsociatedColumns: string[] = ['id', 'date', 'value', 'state']; 
+  subDataSource = new MatTableDataSource<ProductDetailsData>(); 
  
   //Datos del cliente de la compra
   invoice: InvoiceData;
@@ -66,8 +70,25 @@ export class ViewInvoiceComponent implements OnInit, AfterViewInit, OnDestroy  {
           this.subscription.push(
             this.invoiceService.getInvoiceById(this.idInvoice).subscribe(
               res => {
-                //console.log('Detalles de la Factura ->', res);
+                // console.log('Detalles de la Factura ->', res);
                 this.invoice = res.content;
+
+                //OBTENER TODOS LAS FACTURAS DE CUENTA DE COBRO
+                if(res.content.idPayType.idPayType == 2){
+                  this.subscription.push(
+                    this.invoiceService.getAllInvoicesCreditDebt(res.content.idCreditDebt.idDebt).subscribe(
+                      res => {
+                        // console.log('Response ->', res);   
+                        this.subDataSource.data = res.content;
+                      },
+                      err => {
+                        //console.log("Error -> ", err);
+                        this.showSnack(false, err.error.message || "No se encontró la facturas asociadas");   
+                      }
+                    )
+                  ) 
+                }
+                //getAllInvoicesCreditDebt
                 this.showSnack(true, res.message);   
               },
               err => {

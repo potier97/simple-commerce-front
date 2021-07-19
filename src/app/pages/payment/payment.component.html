@@ -116,8 +116,8 @@
                                 (change)="onChangeAmontProduct($event, product)" 
                                 placeholder="Cantidad" >
                         </mat-form-field>  
-                        <h3 class="product-text" fxFlex="15" align="center"> {{ "$ " +  product.precio }} </h3>
-                        <h3 class="product-text" fxFlex="15" align="center"> {{ "$ " + product.total }} </h3>
+                        <h3 class="product-text" fxFlex="15" align="center"> {{  product.precio  | currency: 'COP'}} </h3>
+                        <h3 class="product-text" fxFlex="15" align="center"> {{ product.total | currency: 'COP'}} </h3>
                         <button lass="product-button"  mat-icon-button fxFlex="10"  color="warn" (click)="removeProduct(product)">
                             <mat-icon>delete</mat-icon>
                         </button>
@@ -132,9 +132,9 @@
                             <h3 class="product-text bold-text" fxFlex="15" align="right"> Total </h3>
                         </div>
                         <div fxFlex="25" fxLayout="column" fxLayoutAlign="space-between stretch" >
-                            <h3 class="product-text bold-text" fxFlex="45" align="left"> {{ "$ " + preSubtotal }} </h3> 
-                            <h3 class="product-text bold-text" fxFlex="15" align="left"> {{ "$ " + preTax }} </h3>
-                            <h3 class="product-text bold-text" fxFlex="15" align="left"> {{ "$ " + preTotal }} </h3>
+                            <h3 class="product-text bold-text" fxFlex="45" align="left"> {{  preSubtotal | currency: 'COP' }} </h3> 
+                            <h3 class="product-text bold-text" fxFlex="15" align="left"> {{  preTax | currency: 'COP'}} </h3>
+                            <h3 class="product-text bold-text" fxFlex="15" align="left"> {{ preTotal | currency: 'COP' }} </h3>
                         </div>
                     </div>  
                 </mat-card-content> 
@@ -181,7 +181,7 @@
                         <!-- Columns -- DATA --> 
                             <ng-container *ngIf="column.name!=='accion'; else doActions"> 
                                 <td mat-cell *matCellDef="let element; let i = index;">  
-                                    {{column.name === 'price' ?  "$ " + element[column.name] : element[column.name]   }}
+                                    {{column.name === 'price' ?  [element[column.name]  | currency: 'COP'] : element[column.name]   }}
                                 </td>      
                             </ng-container> 
                             <!-- COLUMN -- ACTIONS -->

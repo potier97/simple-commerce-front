@@ -229,6 +229,7 @@ export class PayComponent  implements OnInit, AfterViewInit, OnDestroy  {
       res => {
         //console.log('documento enviado -> ', res);
         this.showSnack(true, 'Documento Procesado');    
+        this.getPayments();
         this.file = null;
       },
       err => {

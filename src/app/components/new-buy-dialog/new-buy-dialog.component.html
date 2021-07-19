@@ -93,10 +93,10 @@ fxLayoutAlign="space-around stretch"
                 <h3 class="product-text bold-text" fxFlex="15" align="right"> Total </h3>
             </div>
             <div fxFlex="50" fxLayout="column" fxLayoutAlign="space-between stretch" >
-                <h3 class="product-text bold-text" fxFlex="45" align="left"> {{ "  $ " + subtotal }} </h3> 
-                <h3 class="product-text bold-text" fxFlex="15" align="left"> {{ "  $ " + tax }} </h3>
-                <h3 class="product-text bold-text" fxFlex="15" align="left"> {{ discount > 0 ?  "- $ " + discount : "  $ " + discount }} </h3>
-                <h3 class="product-text bold-text" fxFlex="15" align="left"> {{ "  $ " + total }} </h3>
+                <h3 class="product-text bold-text" fxFlex="45" align="left"> {{ subtotal | currency: 'COP'}} </h3> 
+                <h3 class="product-text bold-text" fxFlex="15" align="left"> {{ tax | currency: 'COP'}} </h3>
+                <h3 class="product-text bold-text" fxFlex="15" align="left"> {{ discount > 0 ?  "- " +  [discount | currency: 'COP'] : [discount | currency: 'COP'] }} </h3>
+                <h3 class="product-text bold-text" fxFlex="15" align="left"> {{  total | currency: 'COP'}} </h3>
             </div>
         </div>
     </div> 

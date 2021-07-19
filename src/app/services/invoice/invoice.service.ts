@@ -96,7 +96,7 @@ export class InvoiceService {
     );
   }
 
-  //Generar las facturas del mes para compras que tengan cuotas pendientes
+  //Generar las facturas del mes para compras que tengan cuotas pendientes - PROCESO MASIVO
   generateMonthInvoices(data: MonthData): Observable<CustomResponse>{
     return this.httpClient.post<CustomResponse>(`${environment.API_PATH}/invoicesMonth/`, data)
     .pipe(
@@ -105,6 +105,18 @@ export class InvoiceService {
         return res;
       }),
       //catchError( err => this.handleError(err))
+    );
+  }
+
+  //Obtener todas las FACTURAS DE CREDITO DE UNA DEUDA 
+  getAllInvoicesCreditDebt(id: number): Observable<CustomResponse>{
+    return this.httpClient.get<CustomResponse>(`${environment.API_PATH}/invoice/getCreditDebtInvoices/${id}`)
+    .pipe(
+      map((res: CustomResponse) => {
+        //console.log('Listando facturas', res) 
+        return res;
+      }),
+      catchError( err => this.handleError(err))
     );
   }
   

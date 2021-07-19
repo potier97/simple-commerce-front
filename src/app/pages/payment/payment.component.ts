@@ -367,7 +367,7 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
             paymentsType: result.data.inputDataOne,     // TIPOS DE PAGO
             paymentMethod: result.data.inputDataThree,  // METODO DE PAGO
             dues: result.data.inputDataTwo,             // NUMERO DE CUOTAS
-            initialFee: result.data.inputDataFour,      // CUOTA INICIAL DE PAGO
+            initialFee: 0,                              // CUOTA INICIAL DE PAGO -- result.data.inputDataFour
             offer: this.offer!,                         // OFERTA APLICADA 
             invoiceDate: invoiceDate,                   // FECHA DE
             subtotal: result.data.subtotal,             // SUBTOTAL DE LA COMPRA

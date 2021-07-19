@@ -85,7 +85,7 @@
                 <!-- Total Pago - Column -->
                 <ng-container matColumnDef="total">
                     <th mat-header-cell width="15%"  mat-sort-header *matHeaderCellDef> Total Pago </th>
-                    <td mat-cell *matCellDef="let element">$ {{element.total}} </td>
+                    <td mat-cell *matCellDef="let element">{{element.total | currency: 'COP'}} </td>
                 </ng-container>
 
                 <!-- Tipo Pago - Column -->

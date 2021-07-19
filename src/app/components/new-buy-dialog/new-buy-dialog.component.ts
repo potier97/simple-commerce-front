@@ -89,7 +89,7 @@ export class NewBuyDialogComponent implements OnInit {
         ])
       ),
       inputDataFour: new FormControl(
-        0,  // CUOTA INICIAL
+        {value: 0, disabled: true},  // CUOTA INICIAL
         Validators.compose([  
           Validators.pattern('^[0-9]*$'), 
         ])
