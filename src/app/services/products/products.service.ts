@@ -1,89 +1,64 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { CustomResponse } from '@app/models/custom-response';
-import { IncrementeProduct, ProductsData } from '@app/models/products'; 
+import { ProductsResponse } from '@app/models/products';
 import { environment } from '@environments/environment'; 
-import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductsService {
 
+  private general_url: string = environment.API_URL;
+
   constructor(private httpClient: HttpClient) { }
 
-  getAllProducts(): Observable<CustomResponse>{
-    return this.httpClient.get<CustomResponse>(`${environment.API_PATH}/product/all`)
+  getAllProducts(): Observable<ProductsResponse[]>{
+    return this.httpClient.get<ProductsResponse[]>(`${this.general_url}product`)
     .pipe(
-      map((res: CustomResponse) => {
+      map((res: ProductsResponse[]) => {
         //console.log('Listando los prodctos', res) 
         return res;
       }),
-      catchError( err => this.handleError(err))
     );
   }
 
-  createProduct(newProduct: ProductsData): Observable<CustomResponse>{
-    return this.httpClient.post<CustomResponse>(`${environment.API_PATH}/product/`, newProduct)
+  createProduct(newProduct: ProductsResponse): Observable<ProductsResponse>{
+    return this.httpClient.post<ProductsResponse>(`${this.general_url}product`, newProduct)
     .pipe(
-      map((res: CustomResponse) => {
+      map((res: ProductsResponse) => {
         return res;
       }),
-      //catchError( err => this.handleError(err))
     );
   }
 
-  increaseProduct(productData: IncrementeProduct): Observable<CustomResponse>{
-    return this.httpClient.put<CustomResponse>(`${environment.API_PATH}/product/stock/`, productData)
+  deleteProduct(id: number): Observable<ProductsResponse>{
+    return this.httpClient.delete<ProductsResponse>(`${this.general_url}product/${id}`)
     .pipe(
-      map((res: CustomResponse) => {
-        return res;
-      }),
-      //catchError( err => this.handleError(err))
-    );
-  }
-
-  deleteProduct(id: number): Observable<CustomResponse>{
-    return this.httpClient.delete<CustomResponse>(`${environment.API_PATH}/product/${id}`)
-    .pipe(
-      map((res: CustomResponse) => {
+      map((res: ProductsResponse) => {
         //console.log('Eliminado la oferta', res) 
         return res;
       }),
-      catchError( err => this.handleError(err))
     );
   }
 
-  getProduct(id: number): Observable<CustomResponse>{
-    return this.httpClient.get<CustomResponse>(`${environment.API_PATH}/product/${id}`)
+  getProduct(id: number): Observable<ProductsResponse>{
+    return this.httpClient.get<ProductsResponse>(`${this.general_url}product/${id}`)
     .pipe(
-      map((res: CustomResponse) => {
+      map((res: ProductsResponse) => {
         //console.log('Producto Obtenido', res) 
         return res;
       }),
-      //catchError( err => this.handleError(err))
     );
   }   
  
-  updateProduct(product: ProductsData): Observable<CustomResponse>{
-    return this.httpClient.put<CustomResponse>(`${environment.API_PATH}/product/`, product)
+  updateProduct(product: ProductsResponse): Observable<ProductsResponse>{
+    return this.httpClient.put<ProductsResponse>(`${this.general_url}product/`, product)
     .pipe(
-      map((res: CustomResponse) => {
+      map((res: ProductsResponse) => {
         return res;
       }),
-      //catchError( err => this.handleError(err))
     );
-  }
-  
-  
-  private handleError(err: any): Observable<never>{
-    let errorMessage = "Ocurrió un error"; 
-    if(err){
-      errorMessage = `Error code: ${err.code}`;
-      //console.log("Error generado -> ", err)
-      //window.alert(errorMessage); 
-    }
-    return throwError(errorMessage);
   }
 }

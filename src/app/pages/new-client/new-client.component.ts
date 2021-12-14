@@ -126,43 +126,43 @@ export class NewClientComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {  
-    this.subscription.push(
-      this.usersService.getAllDocTypes().subscribe(
-        res => { 
-          //console.log('Reponse DocTypes -> ', res.content)
-          this.listDocType = res.content;  
-        },
-        err => {
-          //console.log(err)
-          this.showSnack(false, err.error.message || "No se pudo obtener los tipos de Documentos");   
-        }
-      )  
-    )
-    this.subscription.push(
-      this.usersService.getAllCorpUsers().subscribe(
-        res => { 
-          //console.log('Reponse Users Corporations -> ', res.content)
-          this.listCorporative = res.content;  
-        },
-        err => {
-          //console.log(err)
-          this.showSnack(false, err.error.message || "No se pudo obtener los Corporativos");   
-        }
-      )  
-    )
-    this.subscription.push(
-      this.usersService.getAllUserTypes().subscribe(
-        res => { 
-          //console.log('Reponse Users Types -> ', res.content)
-          this.listUserType = res.content;  
-          this.loadingData = true
-        },
-        err => {
-          //console.log(err)
-          this.showSnack(false, err.error.message || "No se pudo obtener los tipos de Usuario");   
-        }
-      )  
-    ) 
+    // this.subscription.push(
+    //   this.usersService.getAllDocTypes().subscribe(
+    //     res => { 
+    //       //console.log('Reponse DocTypes -> ', res.content)
+    //       this.listDocType = res.content;  
+    //     },
+    //     (err: any) => {
+    //       //console.log(err)
+    //       this.showSnack(false, err.error.message || "No se pudo obtener los tipos de Documentos");   
+    //     }
+    //   )  
+    // )
+    // this.subscription.push(
+    //   this.usersService.getAllCorpUsers().subscribe(
+    //     res => { 
+    //       //console.log('Reponse Users Corporations -> ', res.content)
+    //       this.listCorporative = res.content;  
+    //     },
+    //     (err: any) => {
+    //       //console.log(err)
+    //       this.showSnack(false, err.error.message || "No se pudo obtener los Corporativos");   
+    //     }
+    //   )  
+    // )
+    // this.subscription.push(
+    //   this.usersService.getAllUserTypes().subscribe(
+    //     res => { 
+    //       //console.log('Reponse Users Types -> ', res.content)
+    //       this.listUserType = res.content;  
+    //       this.loadingData = true
+    //     },
+    //     (err: any) => {
+    //       //console.log(err)
+    //       this.showSnack(false, err.error.message || "No se pudo obtener los tipos de Usuario");   
+    //     }
+    //   )  
+    // ) 
 
     this.angForm = this.fb.group({ 
       idDocType: new FormControl(
@@ -257,22 +257,22 @@ export class NewClientComponent implements OnInit, OnDestroy {
         userCreated: userCreated, 
       }     
       //console.log("Usuario a crear -> ", userData)
-      this.subscription.push(
-        this.usersService.createClient(userData).subscribe(
-          res => {
-            //console.log('Response ->', res)
-            this.resetForm();
-            this.showSnack(true, res.message); 
-            this.router.navigate(['/clients']);
-          },
-          err => {
-            //console.log(err)
-            this.showSnack(false, err.error.message || 'No se pudo crear el cliente');  
-            this.resetForm();
-            this.router.navigate(['/clients']);
-          }
-        ) 
-      )
+      // this.subscription.push(
+      //   this.usersService.createClient(userData).subscribe(
+      //     res => {
+      //       //console.log('Response ->', res)
+      //       this.resetForm();
+      //       this.showSnack(true, res.message); 
+      //       this.router.navigate(['/clients']);
+      //     },
+      //     (err: any) => {
+      //       //console.log(err)
+      //       this.showSnack(false, err.error.message || 'No se pudo crear el cliente');  
+      //       this.resetForm();
+      //       this.router.navigate(['/clients']);
+      //     }
+      //   ) 
+      // )
     }
       
   }

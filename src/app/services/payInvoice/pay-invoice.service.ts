@@ -11,18 +11,19 @@ import { map } from 'rxjs/operators';
 })
 export class PayInvoiceService {
 
+  private general_url: string = environment.API_URL;
+
   constructor(private httpClient: HttpClient) { }
  
 
   //ACTUALIZAR EL PAGO que FALTA POR SER PAGADO - PENDIENTE - A CREDITO -- ACTUALIZAR UN PAGO - CUOTA
   payInvoice(data: PaymentInvoiceData): Observable<CustomResponse>{
-    return this.httpClient.post<CustomResponse>(`${environment.API_PATH}/payinvoice/`, data)
+    return this.httpClient.post<CustomResponse>(`${this.general_url}/payinvoice/`, data)
     .pipe(
       map((res: CustomResponse) => {
         //console.log('Pago Realizado', res) 
         return res;
       }),
-      //catchError( err => this.handleError(err))
     );
   }  
    

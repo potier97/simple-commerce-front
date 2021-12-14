@@ -3,8 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceService } from '@app/services/invoice/invoice.service';
 import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar'; 
-import { InvoiceData } from '@app/models/invoice';
-import { ProductDetailsData } from '@app/models/product-details';
+import { InvoiceResponse, DetailsResponse } from '@app/models/invoice';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 
@@ -19,16 +18,12 @@ export class ViewInvoiceComponent implements OnInit, AfterViewInit, OnDestroy  {
   
   //TABLA PARA EL DETALLE DE LACOMPRA
   displayedColumns: string[] = ['id', 'name', 'tax', 'price', 'amount', 'totalPrice']; 
-  dataSource = new MatTableDataSource<ProductDetailsData>(); 
+  dataSource = new MatTableDataSource<DetailsResponse>(); 
 
   @ViewChild(MatSort) sort: MatSort;
-
-  // TABLA PARA EL LISTADO DE FACTURAS PAGAS A CREDITO
-  displayedAsociatedColumns: string[] = ['id', 'date', 'value', 'state']; 
-  subDataSource = new MatTableDataSource<ProductDetailsData>(); 
  
   //Datos del cliente de la compra
-  invoice: InvoiceData;
+  invoice: InvoiceResponse;
   //Id de la factura
   idInvoice: number; 
 
@@ -50,48 +45,18 @@ export class ViewInvoiceComponent implements OnInit, AfterViewInit, OnDestroy  {
     //Obtener el id de la factura
     this.subscription.push(
       this.route.params.subscribe(params => {
-        this.idInvoice = params['id'];
-
-        //Obtener el detalle de la factura
-        this.subscription.push(
-          this.invoiceService.getDetailsInvoiceById(this.idInvoice).subscribe(
-            res => {
-              //console.log('Response ->', res); 
-              this.dataSource.data = res.content;
-              //this.showSnack(true, res.message);   
-            },
-            err => {
-              //console.log("Error -> ", err);
-              this.showSnack(false, err.error.message || "No se encontró la factura");   
-            }
-          )
-        ) 
+        this.idInvoice = params['id'] || 1;
          //Obtener los datos de esa factura
           this.subscription.push(
             this.invoiceService.getInvoiceById(this.idInvoice).subscribe(
               res => {
                 // console.log('Detalles de la Factura ->', res);
-                this.invoice = res.content;
-
-                //OBTENER TODOS LAS FACTURAS DE CUENTA DE COBRO
-                if(res.content.idPayType.idPayType == 2){
-                  this.subscription.push(
-                    this.invoiceService.getAllInvoicesCreditDebt(res.content.idCreditDebt.idDebt).subscribe(
-                      res => {
-                        // console.log('Response ->', res);   
-                        this.subDataSource.data = res.content;
-                      },
-                      err => {
-                        //console.log("Error -> ", err);
-                        this.showSnack(false, err.error.message || "No se encontró la facturas asociadas");   
-                      }
-                    )
-                  ) 
-                }
+                this.dataSource.data = res.detalles;
+                this.invoice = res;
                 //getAllInvoicesCreditDebt
-                this.showSnack(true, res.message);   
+                this.showSnack(true, `Factura ${this.idInvoice} Obtenid`);   
               },
-              err => {
+              (err: any) => {
                 //console.log("Error -> ", err);
                 this.showSnack(false, err.error.message || "No se encontró la factura");   
                 this.router.navigate(['/invoces'])

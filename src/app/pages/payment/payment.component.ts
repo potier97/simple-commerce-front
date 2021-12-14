@@ -6,10 +6,9 @@ import { UserData } from '@app/models/user';
 import { InvoiceToPdfService } from '@app/services/invoiceToPdf/invoice-to-pdf.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductsService } from '@app/services/products/products.service';
-import { OfferService } from '@app/services/offer/offer.service';
 import { UsersService } from '@app/services/users/users.service';
 import { BuyService } from '@app/services/buy/buy.service';
-import { ProductsData } from '@app/models/products'; 
+// import { ProductsData } from '@app/models/products'; 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 import { FormControl, Validators } from '@angular/forms';
@@ -17,7 +16,7 @@ import { ProductDetailsData } from '@app/models/product-details';
 import { NewBuyDialogComponent } from '@app/components/new-buy-dialog/new-buy-dialog.component';
 import { PaymentTypeData } from '@app/models/payment-type';
 import { FinancingTypesData } from '@app/models/financing-type';
-import { PayService } from '@app/services/pay/pay.service';
+// import { PayService } from '@app/services/pay/pay.service';
 import { OfferData } from '@app/models/offer';
 import { PreOrderData } from '@app/models/pre-order';
 import * as moment from 'moment';
@@ -66,7 +65,7 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
   preTax: number = 0;
   //Nombres de cada columna de la tabla de productos
   displayedColumns: string[] = ['name', 'amount', 'price', 'accion']; 
-  dataSource = new MatTableDataSource<ProductsData>();
+  dataSource = new MatTableDataSource<any>();
   columns = [ 
     { title: 'Nombre', name: 'name',  size: "40%"}, 
     { title: 'Stock', name: 'amount',  size: "20%"}, 
@@ -79,8 +78,6 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private buyService: BuyService,
     private userService: UsersService,
-    private payService: PayService, 
-    private offerService: OfferService, 
     private pdfGenerator: InvoiceToPdfService,
     private dialog: MatDialog,  
     private snackbar: MatSnackBar, 
@@ -91,41 +88,41 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
     //OBTENER LA LISTA DE TODOS LOS PRODUCTOS
     this.getProducts();
     //OBTENER LA INFO DEL ADMIN
-    this.subscription.push(
-      this.userService.getAdminProfile().subscribe(
-        async res => { 
-          //console.log("Admin ", res) 
-          this.userAdmin = res.content; 
-        },
-        err => {
-          //console.log(err)   
-        }
-      )
-    )
+    // this.subscription.push(
+    //   this.userService.getAdminProfile().subscribe(
+    //     async res => { 
+    //       //console.log("Admin ", res) 
+    //       this.userAdmin = res.content; 
+    //     },
+    //     (err: any) => {
+    //       //console.log(err)   
+    //     }
+    //   )
+    // )
     //OBTENER LA INFO DE TODOS LOS METODOS DE PAGO - EFECTIVO - COMBINADO - TARJETA
-    this.subscription.push(
-      this.payService.getAllMethodsPayments().subscribe(
-        res => {
-          this.paymentsMethods = res.content;
-          //console.log('METODOS ->', res.content)  
-        },
-        err => {
-          //console.log("Error al obtener los MÉTODOS de pago -> ", err)  
-        }
-      )  
-    )
-    //OBTENER LA INFO DE TODOS LOS TIPOS DE PAGO - CONTADO O A CREDITO
-    this.subscription.push(
-      this.payService.getAllTypesPayments().subscribe(
-        res => {
-          this.paymentsTypes = res.content;
-          //console.log('TIPOS ->', res.content)  
-        },
-        err => {
-          //console.log("Error al obtener los TIPOS de pago -> ", err)  
-        }
-      )  
-    )  
+    // this.subscription.push(
+    //   this.payService.getAllMethodsPayments().subscribe(
+    //     res => {
+    //       this.paymentsMethods = res.content;
+    //       //console.log('METODOS ->', res.content)  
+    //     },
+    //     (err: any) => {
+    //       //console.log("Error al obtener los MÉTODOS de pago -> ", err)  
+    //     }
+    //   )  
+    // )
+    // //OBTENER LA INFO DE TODOS LOS TIPOS DE PAGO - CONTADO O A CREDITO
+    // this.subscription.push(
+    //   this.payService.getAllTypesPayments().subscribe(
+    //     res => {
+    //       this.paymentsTypes = res.content;
+    //       //console.log('TIPOS ->', res.content)  
+    //     },
+    //     (err: any) => {
+    //       //console.log("Error al obtener los TIPOS de pago -> ", err)  
+    //     }
+    //   )  
+    // )  
   }
 
   ngOnDestroy(): void { 
@@ -139,7 +136,7 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
     //Configuración de datos iniciales
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator; 
-    this.dataSource.filterPredicate = (data: ProductsData, filter: string): boolean => { 
+    this.dataSource.filterPredicate = (data: any, filter: string): boolean => { 
       return data.idCode.toString().includes(filter) &&  data.active === 1 ;
      };
   }
@@ -147,42 +144,42 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
   //Buscar cliente por su documento
   searchClient(): void { 
     //Buscar los productos por el documento
-    if(this.searchClientDoc.valid){
-      this.subscription.push(
-        this.userService.findByDoc(this.searchClientDoc.value).subscribe(
-          res => {
-            //console.log('Dato del cliente ->', res.content);  
-            if(res.content[0] !== undefined){
-              this.client = res.content[0];
-              this.showSnack(true,  res.message || 'Cliente Obtenido'); 
-              //OBTENER LA INFO DE TODOS LOS TIPOS DE FINANCICIÓN - 12 - 24 - 36 MESES
-              //this.financingTypes = this.client?.idUserType.financiateTypes!;
-              this.subscription.push(
-                this.userService.getAllFinancings(this.client?.idUser!).subscribe(
-                  res => {
-                    //console.log('Dato del Financiacion ->', res.content);  
-                    //OBTENER LA INFO DE TODOS LOS TIPOS DE FINANCICIÓN - 12 - 24 - 36 MESES
-                    this.financingTypes = res.content;
-                  },
-                  err => {
-                    //console.log(err) 
-                    this.showSnack(false,  err.error.message || 'Cliente No Encontrado'); 
-                  }
-                )
-              )
-              this.searchClientDoc.reset();
-              this.searchClientDoc.disable();
-            }else{
-              this.showSnack(false, 'Cliente No Encontrado'); 
-            }
-          },
-          err => {
-            //console.log(err) 
-            this.showSnack(false,  err.error.message || 'Cliente No Encontrado'); 
-          }
-        )
-      )
-    }
+    // if(this.searchClientDoc.valid){
+    //   this.subscription.push(
+    //     this.userService.findByDoc(this.searchClientDoc.value).subscribe(
+    //       res => {
+    //         //console.log('Dato del cliente ->', res.content);  
+    //         if(res.content[0] !== undefined){
+    //           this.client = res.content[0];
+    //           this.showSnack(true,  res.message || 'Cliente Obtenido'); 
+    //           //OBTENER LA INFO DE TODOS LOS TIPOS DE FINANCICIÓN - 12 - 24 - 36 MESES
+    //           //this.financingTypes = this.client?.idUserType.financiateTypes!;
+    //           // this.subscription.push(
+    //           //   this.userService.getAllFinancings(this.client?.idUser!).subscribe(
+    //           //     res => {
+    //           //       //console.log('Dato del Financiacion ->', res.content);  
+    //           //       //OBTENER LA INFO DE TODOS LOS TIPOS DE FINANCICIÓN - 12 - 24 - 36 MESES
+    //           //       this.financingTypes = res.content;
+    //           //     },
+    //           //     (err: any) => {
+    //           //       //console.log(err) 
+    //           //       this.showSnack(false,  err.error.message || 'Cliente No Encontrado'); 
+    //           //     }
+    //           //   )
+    //           // )
+    //           this.searchClientDoc.reset();
+    //           this.searchClientDoc.disable();
+    //         }else{
+    //           this.showSnack(false, 'Cliente No Encontrado'); 
+    //         }
+    //       },
+    //       (err: any) => {
+    //         //console.log(err) 
+    //         this.showSnack(false,  err.error.message || 'Cliente No Encontrado'); 
+    //       }
+    //     )
+    //   )
+    // }
   } 
 
   //Limpiar entrada de búsqueda de usuario
@@ -206,10 +203,10 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subscription.push(
       this.productService.getAllProducts().subscribe(
         res => {
-          this.dataSource.data = res.content; 
+          this.dataSource.data = res; 
           this.loadingData = true
         },
-        err => { 
+        (err: any) => { 
           this.showSnack(false, err.error.message || 'Imposible Obtener Productos'); 
           this.loadingData = true
         }
@@ -256,7 +253,7 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   // Agregar productos a la canasta
-  async addProduct(product: ProductsData): Promise<void> {
+  async addProduct(product: any): Promise<void> {
     const idProduct = product.idProduct;
     const existOnList: boolean = await this.productsToBuy.some((p: ProductDetailsData) => p.idNumProducto === idProduct);
     //console.log("El producto existe -> ", existOnList)
@@ -319,19 +316,19 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
       products: this.productsToBuy,
       client: this.client!,
     } 
-    this.offerService.calculateOffer(preOrder).subscribe(
-      res => { 
-        //console.log('RESULTADO OFERTA ->', res); 
-        this.offer = res.content;
-        this.showSnack(true,  res.message); 
-        this.showBuyDialog(res.content.percentage);
-      },
-      err => {
-        //console.log("Error al obtener las OFERTAS de pago -> ", err)
-        this.showSnack(false, err.error.message || `No se pudo Obtener Oferta`); 
-        this.showBuyDialog(0);
-      }
-    )   
+    // this.offerService.calculateOffer(preOrder).subscribe(
+    //   (res: any) => { 
+    //     //console.log('RESULTADO OFERTA ->', res); 
+    //     this.offer = res.content;
+    //     this.showSnack(true,  res.message); 
+    //     this.showBuyDialog(res.content.percentage);
+    //   },
+    //   (err: any) => {
+    //     //console.log("Error al obtener las OFERTAS de pago -> ", err)
+    //     this.showSnack(false, err.error.message || `No se pudo Obtener Oferta`); 
+    //     this.showBuyDialog(0);
+    //   }
+    // )   
   }
 
   //Al abrir el dialogo se le pasa el valor o porcentaje de la oferta - cuando se cierra se llama al callback para realizar la compra
@@ -342,7 +339,7 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
       //height: '70%',
       disableClose: true, 
       data: {
-        tittle: 'Pago de Compra - Te lo Tengo',  
+        tittle: 'Pago de Compra - Doki PetSotre',  
         buttonLabel: "Confirmar Compra",  
         paymentsMethods: this.paymentsMethods,  // Lista de los metodos de pago  
         paymentsTypes: this.paymentsTypes,       //Lista de los tipos de pago  
@@ -397,7 +394,7 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
                 await this.getProducts();
                 this.buyCancel(); 
               },
-              err => {
+              (err: any) => {
                 //console.log(err.error) 
                 this.showSnack(false, err.error.message || `No se pudo registrar la compra`); 
               }

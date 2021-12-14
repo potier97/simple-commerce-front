@@ -1,23 +1,26 @@
-import { CreditDebtData } from "./credit-debt";
-import { OfferData } from "./offer";
-import { PaymentData } from "./payment";
-import { PaymentTypeData } from "./payment-type";
-import { UserData } from "./user";
- 
-export interface InvoiceData {
-    idBuy: number | null,
-    idClient: UserData,
-    idPayType: PaymentTypeData,
-    idCreditDebt: CreditDebtData, 
-    idDiscount: OfferData, 
-    idPay: PaymentData,
-    purchaseDate: string,
-    feePayment: number,
-    shareValue: number,
-    discount: number,
-    tax: number,
-    subtotal: number,
-    total: number,
-    state: number, 
+import { ClientsResponse } from './clients';
+import { PaidModesResponse } from './paid-modes';
+
+export interface InvoiceResponse {
+  id: number;
+  total: string;
+  subtotal: string;
+  fecha: Date;
+  iva: number;
+  estado: number;
+  creadoEn: Date;
+  ActualizadoEn: Date;
+  idCliente: ClientsResponse;
+  idModoPago: PaidModesResponse;
+  detalles: DetailsResponse[];
 }
-          
+
+export interface DetailsResponse {
+  id: number;
+  nombre: string;
+  cantidad: number;
+  precio: number;
+  estado: number;
+  creadoEn: Date;
+  ActualizadoEn: Date;
+}

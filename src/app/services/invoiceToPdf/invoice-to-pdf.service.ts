@@ -229,8 +229,8 @@ export class InvoiceToPdfService {
         subject: `Factura de Compra ${facturaId}`,
         creationDate: new Date(),
         keywords: 'Factura',
-        creator: 'Te lo tengo', 
-        producer: 'Te lo tengo', 
+        creator: 'Doki PetSotre', 
+        producer: 'Doki PetSotre', 
       },
       pageSize: 'A4', 
         
@@ -349,7 +349,7 @@ export class InvoiceToPdfService {
           margin: [15, 0, 0, 5 ], 
         },
         {
-          text: 'Te lo Tengo ® - 2021 - Marca Registrada desde 1950', 
+          text: 'Doki PetSotre ® - 2021 - Marca Registrada desde 1950', 
           bold: false, 
           color: "#226706",   
           fontSize: 8,    

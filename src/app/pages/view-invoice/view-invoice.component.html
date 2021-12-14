@@ -10,7 +10,7 @@
                     type="button"
                     color="primary" 
                     class="btn-block"
-                    routerLink="/invoces">
+                    routerLink="/buy">
                     Regresar
                 </button> 
             </div>
@@ -21,18 +21,14 @@
             <!-- DATOS DEL CLIENTE -->
             <div class="container-user-info" fxLayout="column" fxLayoutAlign="space-evenly stretch">  
                 <div class="title-info-text" fxLayout="row wrap" fxFlex="100">
-                    <h3 class="text-data" fxFlex="33" align="left" >Nombre: {{invoice.idClient.name  | uppercase }}</h3> 
-                    <h3 class="text-data" fxFlex="33" align="left">Documento: {{invoice.idClient.userDoc }}</h3> 
-                    <h3 class="text-data" fxFlex="33" align="left">Correo: {{invoice.idClient.userMail  | uppercase }}</h3>
+                    <h3 class="text-data" fxFlex="33" align="left" >Nombre: {{invoice.idCliente.nombre | uppercase }}</h3> 
+                    <h3 class="text-data" fxFlex="33" align="left">Documento: {{invoice.idCliente.cedula }}</h3> 
+                    <h3 class="text-data" fxFlex="33" align="left">Correo: {{invoice.idCliente.correo  | uppercase }}</h3>
                 </div> 
                 <div class="title-info-text" fxLayout="row wrap" fxFlex="100">
-                    <h3 class="text-data" fxFlex="33" align="left" >Apellido: {{invoice.idClient.lastName  | uppercase }} </h3> 
-                    <h3 class="text-data" fxFlex="33" align="left" >Tipo Documento: {{invoice.idClient.idDocType.name  | uppercase }}</h3> 
-                    <h3 class="text-data" fxFlex="33" align="left" >Teléfono: {{invoice.idClient.userPhone  | uppercase }} </h3>
-                </div> 
-                <div class="title-info-text" fxLayout="row wrap" fxFlex="100">
-                    <h3 class="text-data" fxFlex="33" align="left" >Inscrito: {{invoice.idClient.userCreated  | date: 'longDate' }} </h3> 
-                    <h3 class="text-data" fxFlex="66" align="left" >Dirección: {{invoice.idClient.userAddress  | uppercase }} </h3> 
+                    <h3 class="text-data" fxFlex="33" align="left" >Apellido: {{invoice.idCliente.apellido  | uppercase }} </h3> 
+                    <h3 class="text-data" fxFlex="33" align="left" >Teléfono: {{invoice.idCliente.telefono  | uppercase }} </h3>
+                    <h3 class="text-data" fxFlex="33" align="left" >Inscrito: {{invoice.idCliente.creadoEn  | date: 'longDate' }} </h3> 
                 </div> 
             </div> 
         </mat-card> 
@@ -48,38 +44,38 @@
             <table mat-table matSort [dataSource]="dataSource" >  
                 <!-- Id Column -->
                 <ng-container matColumnDef="id">
-                    <th mat-header-cell  width="10%" *matHeaderCellDef> No. </th>
+                    <th mat-header-cell  width="5%" *matHeaderCellDef> No. </th>
                     <td mat-cell *matCellDef="let element; let i = index"> {{i + 1 }} </td>
                 </ng-container> 
 
                 <!-- Name Column -->
                 <ng-container matColumnDef="name">
-                    <th mat-header-cell width="30%" mat-sort-header *matHeaderCellDef> Nombre </th>
-                    <td mat-cell *matCellDef="let element" class="details-element-row"> {{element.idProduct.name | uppercase}} </td>
+                    <th mat-header-cell width="25%" mat-sort-header *matHeaderCellDef> Nombre </th>
+                    <td mat-cell *matCellDef="let element" class="details-element-row"> {{element.nombre | uppercase}} </td>
                 </ng-container>
 
-                <!-- Tax Column -->
-                <ng-container matColumnDef="tax">
-                    <th mat-header-cell  width="10%" mat-sort-header *matHeaderCellDef> Iva </th>
-                    <td mat-cell *matCellDef="let element" class="details-element-row"> {{element.tax  + "%"}} </td>
-                </ng-container>
+                 <!-- Cantidad Column -->
+                 <ng-container matColumnDef="amount">
+                    <th mat-header-cell width="10%" mat-sort-header *matHeaderCellDef> Cantidad </th>
+                    <td mat-cell *matCellDef="let element" class="details-element-row"> {{element.cantidad}} </td>
+                </ng-container> 
 
                 <!-- Precio Column -->
                 <ng-container matColumnDef="price">
                     <th mat-header-cell  width="20%" mat-sort-header *matHeaderCellDef> Precio </th>
-                    <td mat-cell *matCellDef="let element" class="details-element-row"> {{ element.price | currency: 'COP' }} </td>
+                    <td mat-cell *matCellDef="let element" class="details-element-row"> {{ element.precio | currency: 'COP' }} </td>
                 </ng-container>
 
-                <!-- Cantidad Column -->
-                <ng-container matColumnDef="amount">
-                    <th mat-header-cell width="10%" mat-sort-header *matHeaderCellDef> Cantidad </th>
-                    <td mat-cell *matCellDef="let element" class="details-element-row"> {{element.amount}} </td>
-                </ng-container> 
+                <!-- Tax Column -->
+                <ng-container matColumnDef="tax">
+                    <th mat-header-cell  width="20%" mat-sort-header *matHeaderCellDef> Iva </th>
+                    <td mat-cell *matCellDef="let element" class="details-element-row"> {{((element.precio / 100) * 19) | number | currency: 'COP'}} </td>
+                </ng-container>
 
                 <!-- TOTAL Column -->
                 <ng-container matColumnDef="totalPrice">
                     <th mat-header-cell  width="20%" mat-sort-header *matHeaderCellDef> Monto </th>
-                    <td mat-cell *matCellDef="let element" class="details-element-row"> {{(element.amount*element.price) | currency: 'COP'}} </td>
+                    <td mat-cell *matCellDef="let element" class="details-element-row"> {{(element.cantidad*element.precio) | currency: 'COP'}} </td>
                 </ng-container> 
                 <tr mat-header-row  *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
@@ -90,127 +86,36 @@
         <mat-card >   
             <!-- DETALLE PAGO -- PAGOS DE CONTADO -->
             <div
-                *ngIf="invoice.idPayType.idPayType === 1;" 
                 class="title-text" 
                 fxLayout="row" 
                 fxLayoutAlign="start center"  >
-                <h2 style="color: #226706">Detalle Factura {{ invoice.idBuy }} - 
+                <h2 style="color: #226706">Detalle Factura {{ invoice.id }} - 
                     {{ "La Factura ha sido Pagada" }}
                 </h2> 
             </div>  
-            <!-- DETALLE PAGO -- PAGOS DE CREDITO -->
-            <div
-            *ngIf="invoice.idPayType.idPayType === 2;" 
-            class="title-text" 
-            fxLayout="row" 
-            fxLayoutAlign="start center"  >
-            <h2 style="color: #226706">Detalle Crédito {{ invoice.idCreditDebt.idDebt }} - 
-                {{ invoice.idCreditDebt.debtStatus === 1 ? "El Crédito ha sido Pagada en su Totalidad" :   "El Crédito no ha sido Pagado en su totalidad" }}
-            </h2> 
-        </div> 
 
             <!-- DETALLE PAGO -- PAGOS DE CONTADO -->
             <!-- DETALLE PAGO -- PAGOS DE CONTADO -->
             <!-- DETALLE PAGO -- PAGOS DE CONTADO -->
             <!-- DETALLE PAGO -- PAGOS DE CONTADO -->
             <div 
-                *ngIf="invoice.idPayType.idPayType === 1;"
                 class="container-user-info" 
                 fxLayout="column" 
                 fxLayoutAlign="space-evenly stretch">  
                 <div class="title-info-text" fxLayout="row wrap" fxFlex="100">
-                    <h3 class="text-data" fxFlex="33" align="left" >Fecha: {{invoice.purchaseDate | date: "longDate" }}</h3> 
-                    <h3 class="text-data" fxFlex="33" align="left">Tipo Pago: {{invoice.idPayType.name }}</h3> 
-                    <h3 class="text-data" fxFlex="33" align="left" >Método Compra: {{invoice.idPay.idPayMethod.name }}</h3>
+                    <h3 class="text-data" fxFlex="33" align="left" >Fecha: {{invoice.fecha | date: "longDate" }}</h3> 
+                    <h3 class="text-data" fxFlex="33" align="left">Tipo Pago: {{invoice.idModoPago.tipo }}</h3> 
                 </div>  
                 <div class="title-info-text" fxLayout="row wrap" fxFlex="100">
                     <h3  
                         class="text-data" 
                         fxFlex="33" 
-                        align="left" >Descuento:  {{invoice.discount | currency: 'COP' }} </h3> 
+                        align="left" >Impestos:  {{invoice.iva | currency: 'COP' }} </h3> 
                     <h3 class="text-data" fxFlex="33" align="left" >SubTotal:  {{ invoice.subtotal | currency: 'COP' }}</h3> 
-                    <h3 class="text-data" fxFlex="33" align="left" >Iva:  {{invoice.tax | currency: 'COP' }} </h3> 
-                </div> 
-                <div class="title-info-text" fxLayout="row wrap" fxFlex="100">
-                    <h3 class="text-data" fxFlex="33" align="left" >Total: {{invoice.total | currency: 'COP' }}</h3> 
-                    <h3 class="text-data" fxFlex="33" align="left" >Saldo Pagado:  {{invoice.idPay.paidOut | currency: 'COP' }}</h3> 
-                </div> 
-                <div class="title-info-text" fxLayout="row wrap" fxFlex="100">
-                    <h3 
-                        *ngIf="invoice.idDiscount !== null"
-                        class="text-data" 
-                        fxFlex="100" 
-                        align="left" >{{invoice.idDiscount.description}}</h3> 
-                </div> 
-            </div> 
-            <!-- DETALLE PAGO -- PAGOS DE CRÉDITO -->
-            <!-- DETALLE PAGO -- PAGOS DE CRÉDITO -->
-            <!-- DETALLE PAGO -- PAGOS DE CRÉDITO -->
-            <!-- DETALLE PAGO -- PAGOS DE CRÉDITO -->
-            <div 
-                *ngIf="invoice.idPayType.idPayType === 2;"
-                class="container-user-info" 
-                fxLayout="column" 
-                fxLayoutAlign="space-evenly stretch">  
-                <div class="title-info-text" fxLayout="row wrap" fxFlex="100">
-                    <h3 class="text-data" fxFlex="33" align="left" >Fecha: {{invoice.purchaseDate | date: "longDate" }}</h3> 
-                    <h3 class="text-data" fxFlex="33" align="left">Tipo Pago: {{invoice.idPayType.name }}</h3> 
-                </div> 
-                <div class="title-info-text" fxLayout="row wrap" fxFlex="100">
-                    <h3 class="text-data" fxFlex="33" align="left" >Cuota Actual: {{invoice.idCreditDebt.currentQuota }}</h3> 
-                    <h3 class="text-data" fxFlex="33" align="left" >No. Cuotas: {{invoice.idCreditDebt.numInstallments }} </h3>
-                    <h3 class="text-data" fxFlex="33" align="left" >Cuotas Pendientes: {{invoice.idCreditDebt.pendingFees }}</h3> 
-                </div> 
-                <div class="title-info-text" fxLayout="row wrap" fxFlex="100">
-                    <h3 class="text-data" fxFlex="33" align="left" >SubTotal: {{ invoice.subtotal | currency: 'COP' }}</h3> 
-                    <h3 class="text-data" fxFlex="33" align="left" >Iva: {{invoice.tax | currency: 'COP' }} </h3> 
-                    <h3 class="text-data" fxFlex="33" align="left" >Total:  {{invoice.total | currency: 'COP'}}</h3> 
-                </div> 
-                <div class="title-info-text" fxLayout="row wrap" fxFlex="100">
-                    <h3 class="text-data" fxFlex="33" align="left" >Saldo Pagado:  {{invoice.idCreditDebt.balancePaid | currency: 'COP'}}</h3> 
-                    <h3 class="text-data" fxFlex="33" align="left" >Deuda:  {{invoice.idCreditDebt.totalDebt - invoice.idCreditDebt.balancePaid | currency: 'COP'}}</h3> 
+                    <h3 class="text-data" fxFlex="33" align="left" >Total:  {{invoice.total | currency: 'COP' }} </h3> 
                 </div> 
             </div> 
              
-        </mat-card> 
-        <div class="space"></div>  
-        <mat-card *ngIf="subDataSource.data.length > 0 && invoice.idPayType.idPayType === 2;">   
-            <div class="title-text" fxLayout="row" fxLayoutAlign="start center"  >
-                <h2 style="color: #226706">Facturas de Credito</h2> 
-            </div> 
-            <!-- DETALLE DE LA FACTURA -->
-            <!-- DETALLE DE LA FACTURA -->
-            <!-- DETALLE DE LA FACTURA -->
-            <!-- DETALLE DE LA FACTURA -->
-            <table mat-table [dataSource]="subDataSource" >  
-               
-                <!-- Tax Column -->
-                <ng-container matColumnDef="id">
-                    <th mat-header-cell  width="10%" *matHeaderCellDef> Id Factura </th>
-                    <td mat-cell *matCellDef="let element" class="details-element-row"> {{element.idBuy}} </td>
-                </ng-container>
-
-                <!-- Precio Column -->
-                <ng-container matColumnDef="date">
-                    <th mat-header-cell  width="35%" *matHeaderCellDef> Fecha </th>
-                    <td mat-cell *matCellDef="let element" class="details-element-row"> {{element.purchaseDate  | date: 'longDate' }} </td>
-                </ng-container>
-
-                <!-- Cantidad Column -->
-                <ng-container matColumnDef="value">
-                    <th mat-header-cell width="35%" *matHeaderCellDef> Pago </th>
-                    <td mat-cell *matCellDef="let element" class="details-element-row"> {{  element.shareValue | currency: 'COP'}} </td>
-                </ng-container> 
-
-                <!-- TOTAL Column -->
-                <ng-container matColumnDef="state">
-                    <th mat-header-cell  width="20%" *matHeaderCellDef> Estado </th>
-                    <td mat-cell *matCellDef="let element" class="details-element-row"> {{ element.state == 1 ?  'Pagada' :  'No Pagada' }} </td>
-                </ng-container> 
-                <tr mat-header-row  *matHeaderRowDef="displayedAsociatedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedAsociatedColumns;"></tr>
-            </table> 
-            <div class="space"></div> 
         </mat-card> 
         <div class="space"></div> 
     </div> 

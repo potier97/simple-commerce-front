@@ -5,9 +5,9 @@ import { MatSort} from '@angular/material/sort';
 import { UsersService } from '@app/services/users/users.service';
 import { Subscription } from 'rxjs'; 
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { UserData } from '@app/models/user';
 import Swal from 'sweetalert2' 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ClientsResponse } from '@app/models/clients';
 
 
 @Component({
@@ -19,21 +19,23 @@ export class ClientsComponent implements OnInit, AfterViewInit, OnDestroy  {
 
   private subscription: Subscription[] = [];
  
-  
+  searchDni: string = "";
+
   angForm: FormGroup = new FormGroup({ 
     searchUser: new FormControl(''),
   }); 
 
   //Flag to Spinner data 
   loadingData: boolean = false;
-  displayedColumns: string[] = ['idUser', 'name', 'userDoc', 'idUserType', 'associated', 'accion']; 
-  dataSource = new MatTableDataSource<UserData>();
+  displayedColumns: string[] = ['id', 'name', 'userDoc', 'phone', 'email', 'created', 'accion']; 
+  dataSource = new MatTableDataSource<ClientsResponse>();
   columns = [
-    { title: 'Id.', name: 'idUser',  size: "8%"},
-    { title: 'Nombre', name: 'name',  size: "25%"},
+    { title: 'Id.', name: 'id',  size: "5%"},
+    { title: 'Nombre', name: 'name',  size: "15%"},
     { title: 'Documento', name: 'userDoc',  size: "15%"},
-    { title: 'Tipo Usuario', name: 'idUserType',  size: "15%"},
-    { title: 'Asociado', name: 'associated',  size:"15%"}, 
+    { title: 'Telefono', name: 'phone',  size: "15%"},
+    { title: 'Correo', name: 'email',  size: "20%"},
+    { title: 'Creación', name: 'created',  size:"20%"}, 
     { title: 'Acción', name: 'accion', size: "10%"},
   ] 
   @ViewChild(MatPaginator) paginator: MatPaginator; 
@@ -41,11 +43,9 @@ export class ClientsComponent implements OnInit, AfterViewInit, OnDestroy  {
 
   account_validation_messages = {
     searchUser: [
-      { type: 'required', message: 'Ingrese el documento' },  
-      { type: 'pattern', message: 'Ingrese un documento válido' }, 
+      { type: 'required', message: 'Ingrese un nombre' },
     ], 
   }; 
-
 
   constructor(  
       private snackbar: MatSnackBar,  
@@ -54,27 +54,26 @@ export class ClientsComponent implements OnInit, AfterViewInit, OnDestroy  {
     ) { }
 
   ngOnInit(): void { 
-    this.getProducts();
+    this.getClients();
     this.angForm = this.fb.group({  
       searchUser: new FormControl(
         '',
         Validators.compose([ 
           Validators.required,
-          Validators.pattern('^[0-9]*$'), 
         ])
       ) 
     }); 
   }
 
-  getProducts(): void {
+  getClients(): void {
     this.subscription.push(
       this.usersService.getAllClients().subscribe(
         res => {
-          this.dataSource.data = res.content;
-          //console.log('Clientes ->', res.content) 
+          this.dataSource.data = res;
+          // console.log('Clientes ->', res) 
           this.loadingData = true
         },
-        err => {
+        (err: any) => {
           //console.log(err) 
           this.showSnack(false, 'Imposible Obtener Clientes'); 
           this.loadingData = true
@@ -86,7 +85,10 @@ export class ClientsComponent implements OnInit, AfterViewInit, OnDestroy  {
   ngAfterViewInit() { 
     //Configuración de datos iniciales
     this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;  
+    this.dataSource.paginator = this.paginator; 
+    this.dataSource.filterPredicate = (data: ClientsResponse, filter: string): boolean => { 
+      return data.cedula.toString().includes(filter);
+     };
   }
 
   ngOnDestroy(): void { 
@@ -97,38 +99,21 @@ export class ClientsComponent implements OnInit, AfterViewInit, OnDestroy  {
   } 
    
   clearSearch(): void {   
-    this.angForm.controls["searchUser"].reset(); 
-    this.getProducts();
+    this.searchDni = '';
+    this.dataSource.filter = "";
   }
 
-  searchClient(): void { 
-    if(this.angForm.valid){ 
-      //Buscar los clientes por documento de id
-      //console.log('buscanco.....') 
-      const searchUser = this.angForm.value.searchUser;
-      this.subscription.push(
-        this.usersService.findByDoc(searchUser).subscribe(
-          res => { 
-            this.dataSource.data = res.content;
-            //console.log('Clientes ->', res.content)  
-            this.loadingData = true
-          },
-          err => {
-            //console.log(err)  
-            this.showSnack(false, err.error.message || 'Imposible Obtener resultados');
-            this.clearSearch();
-          }
-        ) 
-      )
-    }
+  applyFilter(): void { 
+    //Filtra los porductos por el DNI
+    this.dataSource.filter = this.searchDni.trim().toLowerCase();
   }  
    
-  deleteProduct(user: UserData): void {
+  deleteProduct(user: ClientsResponse): void {
     //console.log('desactivar usuario -> ' , user.idUser)
     //Modal de desactivar el producto
     Swal.fire({
       title: 'Desactivar usuario',
-      text: `¿Desea desactivar el usuario ${user.idUser}?`,
+      text: `¿Desea desactivar el usuario ${user.id}?`,
       icon: 'warning',
       iconColor:'#c1c164',
       heightAuto: false,
@@ -143,23 +128,21 @@ export class ClientsComponent implements OnInit, AfterViewInit, OnDestroy  {
     }).then((result) => {
       if (result.isConfirmed) {
         //Se comenta la fncionalidad de eleiminar n usario (logico)
-        //en el que se le pregnta si esta segro de eliminar el cliente
-        // const idProduct: number = user.idUser as number
-        // this.subscription.push(
-        //   this.usersService.deleteUser(idProduct).subscribe(
-        //     res => {  
-        //       this.getProducts(); 
-        //       this.showSnack(true, res.message);
-        //     },
-        //     err => {
-        //       console.log(err.error)   
-        //       this.showSnack(false, err.error.message || 'Imposible Borrar Producto');
-        //     }
-        //   ) 
-        // )
+        this.subscription.push(
+          this.usersService.deleteClient(user.id!).subscribe(
+            res => {  
+              this.getClients(); 
+              this.showSnack(true, `Usuario ${user.id} eliminado`);
+            },
+            err => {
+              console.log(err.error)   
+              this.showSnack(false, err.error.message || 'Imposible Borrar Producto');
+            }
+          ) 
+        )
         Swal.fire({
           title: 'Desactivado',
-          text: `Usuario ${user.idUser} desactivado`,
+          text: `Usuario ${user.id} desactivado`,
           icon: 'success',
           iconColor:'#c1c164',
           heightAuto: false, 
@@ -172,7 +155,7 @@ export class ClientsComponent implements OnInit, AfterViewInit, OnDestroy  {
       }else {
         Swal.fire({
           title: 'Cancelado',
-          text: `Usuario ${user.idUser} no ha sido desactivado`,
+          text: `Usuario ${user.id} no ha sido desactivado`,
           icon: 'info',
           iconColor:'#c1c164',
           heightAuto: false, 

@@ -1,14 +1,13 @@
 import { AfterViewInit, Component, ViewChild, OnInit, OnDestroy} from '@angular/core';
 import { MatPaginator} from '@angular/material/paginator';
 import { MatTableDataSource} from '@angular/material/table'; 
-import { MatSort} from '@angular/material/sort';
-import { MatDialog } from '@angular/material/dialog';
+import { MatSort} from '@angular/material/sort'; 
 import { ProductsService } from '@app/services/products/products.service';
-import { Subscription } from 'rxjs';
-import { IncrementeProduct, ProductsData } from '@app/models/products';
-import { CustomDialogComponent } from '@app/components/custom-dialog/custom-dialog.component';
+import { Subscription } from 'rxjs'; 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2' 
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ProductsResponse } from '@app/models/products';
 
 
 @Component({
@@ -19,40 +18,76 @@ import Swal from 'sweetalert2'
 export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
 
   private subscription: Subscription[] = [];
+ 
+  searchDni: string = "";
 
-  searchDni: string = ""
+  angForm: FormGroup = new FormGroup({ 
+    searchUser: new FormControl(''),
+  }); 
+
   //Flag to Spinner data 
   loadingData: boolean = false;
-  displayedColumns: string[] = ['idProduct', 'name', 'idCode', 'amount', 'tax', 'accion']; 
-  dataSource = new MatTableDataSource<ProductsData>();
+  displayedColumns: string[] = ['id', 'name', 'dni', 'quantity', 'price', 'created', 'accion']; 
+  dataSource = new MatTableDataSource<ProductsResponse>();
   columns = [
-    { title: 'No.', name: 'idProduct',  size: "8%"},
-    { title: 'Nombre', name: 'name',  size: "25%"},
-    { title: 'DNI', name: 'idCode',  size: "15%"},
-    { title: 'Stock', name: 'amount',  size: "15%"},
-    { title: 'Iva', name: 'tax',  size:"15%"},
-    { title: 'Precio', name: 'price',  size: "10%"},
+    { title: 'Id.', name: 'id',  size: "5%"},
+    { title: 'Nombre', name: 'name',  size: "15%"},
+    { title: 'Documento', name: 'dni',  size: "15%"},
+    { title: 'Telefono', name: 'quantity',  size: "15%"},
+    { title: 'Correo', name: 'price',  size: "20%"},
+    { title: 'Creación', name: 'created',  size:"20%"}, 
     { title: 'Acción', name: 'accion', size: "10%"},
   ] 
   @ViewChild(MatPaginator) paginator: MatPaginator; 
   @ViewChild(MatSort) sort: MatSort;
 
+  account_validation_messages = {
+    searchUser: [
+      { type: 'required', message: 'Ingrese un nombre' },
+    ], 
+  }; 
+
   constructor(  
-      private snackbar: MatSnackBar, 
-      private dialog: MatDialog,  
-      private productService: ProductsService,  
+      private snackbar: MatSnackBar,  
+      private fb: FormBuilder,  
+      private productsService: ProductsService,  
     ) { }
 
   ngOnInit(): void { 
-    this.getProducts();
-  } 
-  
+    this.getClients();
+    this.angForm = this.fb.group({  
+      searchUser: new FormControl(
+        '',
+        Validators.compose([ 
+          Validators.required,
+        ])
+      ) 
+    }); 
+  }
+
+  getClients(): void {
+    this.subscription.push(
+      this.productsService.getAllProducts().subscribe(
+        res => {
+          this.dataSource.data = res;
+          console.log('Productos ->', res) 
+          this.loadingData = true
+        },
+        (err: any) => {
+          //console.log(err) 
+          this.showSnack(false, 'Imposible Obtener Productos'); 
+          this.loadingData = true
+        }
+      ) 
+    )
+  }
+ 
   ngAfterViewInit() { 
     //Configuración de datos iniciales
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator; 
-    this.dataSource.filterPredicate = (data: ProductsData, filter: string): boolean => { 
-      return data.idCode.toString().includes(filter) &&  data.active === 1 ;
+    this.dataSource.filterPredicate = (data: ProductsResponse, filter: string): boolean => { 
+      return data.nombre.toString().includes(filter);
      };
   }
 
@@ -62,73 +97,8 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
       sub.unsubscribe();
     } 
   } 
-
-  getProducts(): void {
-    this.subscription.push(
-      this.productService.getAllProducts().subscribe(
-        res => {
-          this.dataSource.data = res.content;
-          //console.log('Productos ->', res.content) 
-          this.loadingData = true
-        },
-        err => {
-          //console.log(err) 
-          this.showSnack(false, 'Imposible Obtener Productos'); 
-          this.loadingData = true
-        }
-      ) 
-    )
-  }
- 
-  updateStock(product: ProductsData): void {
-    const dialogRef = this.dialog.open(CustomDialogComponent, {
-      panelClass: ['animate__animated','animate__swing'],
-      width: '50%',  
-      disableClose: true, 
-      data: {
-        tittle: `Añadir Stock a ${product.name}`,
-        label: 'Stock',
-        placeholder: 'Cantidad',
-        buttonLabel: "Incrementar",
-        account_validation_messages: { 
-          inputData: [
-            { type: 'required', message: 'Ingrese la cantidad de productos disponibles' },
-            { type: 'pattern', message: 'Ingrese un número valido de solo números' },
-            { type: 'min', message: 'Ingrese un valor positivo' },  
-          ],  
-        },
-        constrainInput: '^[0-9]*$'  
-        }
-    });
-    this.subscription.push(
-      dialogRef.afterClosed().subscribe((result: any) => {
-        if(result.status){  
-          const updateProductData: IncrementeProduct = {
-            idProduct: product.idProduct as number,
-            amount: result.data.inputData,
-            idCode: product.idCode
-          } 
-          //console.log(updateProductData);
-          //Al cerrar el modal - se envia al api la peticion de incrementar la cantidad de registros
-          this.subscription.push(
-            this.productService.increaseProduct(updateProductData).subscribe(
-              res => { 
-                //console.log('de actualizar el producto', res.content) 
-                this.showSnack(true, res.message);  
-                this.getProducts();
-              },
-              err => {
-                //console.log(err.error) 
-                this.showSnack(false, err.error.message || `No se pudo incrementar el Stock de ${product.name}`); 
-              }
-            ) 
-          )
-        }
-      })
-    )
-  }
-
-  clearSearch(): void { 
+   
+  clearSearch(): void {   
     this.searchDni = '';
     this.dataSource.filter = "";
   }
@@ -136,14 +106,14 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
   applyFilter(): void { 
     //Filtra los porductos por el DNI
     this.dataSource.filter = this.searchDni.trim().toLowerCase();
-  }  
+  } 
    
-  deleteProduct(product: ProductsData): void {
-    //console.log('desactivar producto -> ' , product.idCode)
+  deleteProduct(user: ProductsResponse): void {
+    //console.log('desactivar usuario -> ' , user.idUser)
     //Modal de desactivar el producto
     Swal.fire({
-      title: 'Desactivar producto',
-      text: `¿Desea desactivar el producto ${product.idCode}?`,
+      title: 'Desactivar usuario',
+      text: `¿Desea desactivar el usuario ${user.id}?`,
       icon: 'warning',
       iconColor:'#c1c164',
       heightAuto: false,
@@ -154,48 +124,48 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
       confirmButtonText: 'Desactivar',
       showClass: {
         popup: 'animate__animated animate__swing'
-      },
+      }, 
     }).then((result) => {
       if (result.isConfirmed) {
-        const idProduct: number = product.idProduct as number
+        //Se comenta la fncionalidad de eleiminar n usario (logico)
         this.subscription.push(
-          this.productService.deleteProduct(idProduct).subscribe(
+          this.productsService.deleteProduct(user.id!).subscribe(
             res => {  
-              this.getProducts();
-              Swal.fire({
-                title: 'Desactivar',
-                text: `Producto ${product.idCode} desactivado`,
-                icon: 'success',
-                iconColor:'#c1c164',
-                heightAuto: false, 
-                confirmButtonColor: '#c1c164', 
-                confirmButtonText: 'Cerrar',
-                showClass: {
-                  popup: 'animate__animated animate__swing'
-                }  
-              })
-              this.showSnack(true, res.message);
+              this.getClients(); 
+              this.showSnack(true, `Usuario ${user.id} eliminado`);
             },
             err => {
-              //console.log(err.error)  
-              Swal.fire({
-                title: 'Error',
-                text: `Producto ${product.idCode} no ha podido ser desactivado`,
-                icon: 'error',
-                iconColor:'#c1c164',
-                heightAuto: false, 
-                confirmButtonColor: '#c1c164', 
-                confirmButtonText: 'Cerrar',
-                showClass: {
-                  popup: 'animate__animated animate__swing'
-                }  
-              })
+              console.log(err.error)   
               this.showSnack(false, err.error.message || 'Imposible Borrar Producto');
             }
           ) 
         )
-        
-      }
+        Swal.fire({
+          title: 'Desactivado',
+          text: `Usuario ${user.id} desactivado`,
+          icon: 'success',
+          iconColor:'#c1c164',
+          heightAuto: false, 
+          confirmButtonColor: '#c1c164', 
+          confirmButtonText: 'Cerrar',
+          showClass: {
+            popup: 'animate__animated animate__swing'
+          }  
+        }) 
+      }else {
+        Swal.fire({
+          title: 'Cancelado',
+          text: `Usuario ${user.id} no ha sido desactivado`,
+          icon: 'info',
+          iconColor:'#c1c164',
+          heightAuto: false, 
+          confirmButtonColor: '#c1c164', 
+          confirmButtonText: 'Cerrar',
+          showClass: {
+            popup: 'animate__animated animate__swing'
+          }  
+        }) 
+      }  
     })
   }
 

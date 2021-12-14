@@ -1,0 +1,52 @@
+.root {
+  background-color: #bdc3c7;
+  min-height: calc(100% - 80px);
+  width: -webkit-fill-available;
+}
+
+.space {
+  height: 24px;
+}
+
+.container-form {
+  margin-top: 32px;
+  /* background-color: green; */
+  /* margin: 24px, 64px !important; */
+}
+
+.title-form-text {
+  margin-top: 24px !important;
+  margin-left: 16px;
+}
+ 
+.imput-form-text {
+  margin-left: 8px;
+  margin-right: 8px;
+  margin-top: 12px;
+}
+
+.error-message-form {
+  margin-left: 8px;
+  margin-right: 8px;
+  padding-top: 4px; 
+}
+
+.container {
+  height: 100%;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.btn-block {
+  color: #fff;
+  font-size: large;
+  padding: 8px 24px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; 
+}
+
+.succesSnack {
+  background-color: green !important;
+  color: #fff !important;
+}

@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProductsService } from '@app/services/products/products.service';
 import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ProductsData } from '@app/models/products'; 
+import { ProductsResponse } from '@app/models/products'; 
  
 
 @Component({
@@ -23,7 +23,7 @@ export class EditProductComponent implements OnInit, OnDestroy  {
     tax: new FormControl(''),
     price: new FormControl(''),
   });
-  product: ProductsData;
+  product: ProductsResponse;
   idProduct: number;
 
   constructor( 
@@ -73,42 +73,42 @@ export class EditProductComponent implements OnInit, OnDestroy  {
           this.idProduct = params['id'];
         }) 
       ) 
-      this.subscription.push(
-        this.productService.getProduct(this.idProduct).subscribe(
-          res => {
-            //console.log('Response ->', res)
-            this.product = res.content;
-            this.showSnack(true, res.message);  
-            this.loadData();
-          },
-          err => {
-            //console.log(err)
-            this.showSnack(false, err.error.message);   
-            this.router.navigate(['/products'])
-          }
-        )
-      )  
+      // this.subscription.push(
+      //   this.productService.getProduct(this.idProduct).subscribe(
+      //     res => {
+      //       //console.log('Response ->', res)
+      //       this.product = res.content;
+      //       this.showSnack(true, res.message);  
+      //       this.loadData();
+      //     },
+      //     (err: any) => {
+      //       //console.log(err)
+      //       this.showSnack(false, err.error.message);   
+      //       this.router.navigate(['/products'])
+      //     }
+      //   )
+      // )  
     
   }
 
   loadData(): void {
     this.angForm = this.fb.group({
       name: new FormControl(
-        this.product.name,
+        this.product.nombre,
         Validators.compose([
           Validators.required, 
           Validators.maxLength(30),
         ])
       ),
       idCode: new FormControl(
-        this.product.idCode,
+        this.product.dni,
         Validators.compose([ 
           Validators.required,
           Validators.pattern('^[0-9]*$'),
         ])
       ),
       amount: new FormControl(
-        this.product.amount,
+        this.product.cantidad,
         Validators.compose([ 
           Validators.required,
           Validators.pattern('^[0-9]*$'),
@@ -116,7 +116,7 @@ export class EditProductComponent implements OnInit, OnDestroy  {
         ])
       ),
       tax: new FormControl(
-        this.product.tax,
+        this.product.precio,
         Validators.compose([ 
           Validators.required,
           Validators.pattern('^[0-9]*$'),
@@ -124,7 +124,7 @@ export class EditProductComponent implements OnInit, OnDestroy  {
         ])
       ),
       price: new FormControl(
-        this.product.price,
+        this.product.precio,
         Validators.compose([ 
           Validators.required,
           Validators.pattern('^[0-9]*$'),
@@ -138,7 +138,7 @@ export class EditProductComponent implements OnInit, OnDestroy  {
     if (this.angForm.valid) {
       const userReq = this.angForm.value;
       const productData = {
-        idProduct:  this.product.idProduct,
+        idProduct:  this.product.id!,
         name: userReq.name,
         idCode: userReq.idCode,
         amount: userReq.amount,
@@ -147,21 +147,21 @@ export class EditProductComponent implements OnInit, OnDestroy  {
         tax: userReq.tax,
       }     
       //console.log("Producto creado -> ", productData)
-      this.subscription.push(
-        this.productService.updateProduct(productData).subscribe(
-          res => {
-            //console.log('Response ->', res)
-            this.resetForm();
-            this.showSnack(true, res.message); 
-            this.router.navigate(['/products']);
-          },
-          err => {
-            //console.log(err)
-            this.showSnack(false, err.error.message);  
-            this.resetForm();
-          }
-        ) 
-      )
+      // this.subscription.push(
+      //   this.productService.updateProduct(productData).subscribe(
+      //     res => {
+      //       //console.log('Response ->', res)
+      //       this.resetForm();
+      //       this.showSnack(true, res.message); 
+      //       this.router.navigate(['/products']);
+      //     },
+      //     (err: any) => {
+      //       //console.log(err)
+      //       this.showSnack(false, err.error.message);  
+      //       this.resetForm();
+      //     }
+      //   ) 
+      // )
     } 
   }
 

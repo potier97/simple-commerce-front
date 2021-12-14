@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "TELOTENGO-FRONT": {
+    "doki-store": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:application": {
@@ -21,7 +21,7 @@
               "lodash",
               "pdfmake/build/pdfmake" 
             ],
-            "outputPath": "dist/TELOTENGO-FRONT",
+            "outputPath": "dist/doki-store",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -73,11 +73,10 @@
           "builder": "@angular-devkit/build-angular:dev-server", 
           "configurations": {
             "production": {
-              "browserTarget": "TELOTENGO-FRONT:build:production"
+              "browserTarget": "doki-store:build:production"
             },
             "development": {
-              "browserTarget": "TELOTENGO-FRONT:build:development",
-              "proxyConfig": "proxy.config.json"
+              "browserTarget": "doki-store:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -85,7 +84,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "TELOTENGO-FRONT:build"
+            "browserTarget": "doki-store:build"
           }
         },
         "test": {
@@ -109,5 +108,5 @@
       }
     }
   },
-  "defaultProject": "TELOTENGO-FRONT"
+  "defaultProject": "doki-store"
 }

@@ -2,7 +2,6 @@ import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PaymentMethodData } from '@app/models/payment-method';
-import { PayService } from '@app/services/pay/pay.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -39,7 +38,6 @@ export class PayInvoiceDialogComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,  
-    private payService: PayService, 
     // public dialogRef: MatDialogRef<CustomDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
@@ -55,19 +53,7 @@ export class PayInvoiceDialogComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     if(this.data.methods) this.methodsPayments = this.data.methods
-    else{
-      this.subscription.push(
-        this.payService.getAllMethodsPayments().subscribe(
-          res => {
-            this.methodsPayments = res.content;
-            //console.log('LISTA DE METODOS DE PAGO ->', res.content)  
-          },
-          err => {
-            //console.log("Error al obtener los metodos de pago -> ", err)  
-          }
-        )  
-      )
-    }
+    
     //console.log(this.methodsPayments)
     if(this.data.account_validation_messages) this.account_validation_messages = this.data.account_validation_messages; 
     this.angForm = this.fb.group({ 

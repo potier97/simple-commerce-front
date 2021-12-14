@@ -1,0 +1,98 @@
+<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
+    <mat-card class="box">
+      <mat-card-header class="login-tittle">
+        <div mat-card-avatar class="example-header-image"></div>
+        <mat-card-title>Crear Admin</mat-card-title>
+      </mat-card-header>
+  
+      <form
+        class="example-form"
+        [formGroup]="angForm" 
+        (submit)="createUser()"
+        novalidate >
+        <mat-card-content>
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              type="text"
+              required  
+              placeholder="Correo"
+              formControlName="userDocument"
+            /> 
+            <mat-error *ngFor="let validation of account_validation_messages.userDocument">
+              <mat-error class="error-message" 
+                *ngIf="angForm.get('userDocument')?.hasError(validation.type) && (angForm.get('userDocument')?.dirty || angForm.get('userDocument')?.touched)"
+                >
+                {{validation.message}}
+              </mat-error>
+            </mat-error>
+          </mat-form-field>
+  
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              type="password"
+              required 
+              placeholder="Contraseña"
+              formControlName="password"
+            /> 
+            <mat-error *ngFor="let validation of account_validation_messages.password">
+              <mat-error class="error-message" 
+              *ngIf="angForm.get('password')?.hasError(validation.type) && (angForm.get('password')?.dirty || angForm.get('password')?.touched)"
+              >{{validation.message}}
+            </mat-error>
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              type="password"
+              required 
+              placeholder="Repetir Contraseña"
+              formControlName="repetedPassword"
+            /> 
+            <mat-error *ngFor="let validation of account_validation_messages.repetedPassword">
+              <mat-error class="error-message" 
+              *ngIf="angForm.get('passwordr')?.hasError(validation.type) && (angForm.get('passwordr')?.dirty || angForm.get('passwordr')?.touched)"
+              >{{validation.message}}
+            </mat-error>
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width">
+            <input
+              matInput
+              type="text"
+              required 
+              placeholder="Tipo Usuario"
+              formControlName="typeUser"
+            /> 
+            <mat-error *ngFor="let validation of account_validation_messages.typeUser">
+              <mat-error class="error-message" 
+              *ngIf="angForm.get('typeUser')?.hasError(validation.type) && (angForm.get('typeUser')?.dirty || angForm.get('password')?.touched)"
+              >{{validation.message}}
+            </mat-error>
+            </mat-error>
+          </mat-form-field>
+        </mat-card-content>
+        <button
+          mat-stroked-button
+          color="accent"
+          type="submit"
+          class="btn-block"
+          [disabled]="angForm.invalid">
+          Crear
+        </button>
+        <button
+          mat-stroked-button
+          color="accent"
+          routerLink="/login"
+          type="submit"
+          class="btn-block">
+          Ingresar
+        </button>
+      </form>
+    </mat-card>
+</div>
+  

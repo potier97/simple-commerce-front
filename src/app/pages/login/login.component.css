@@ -54,9 +54,9 @@
     background-position: center;
     background-size: cover;
     position: absolute;
-    bottom: 88%;
+    bottom: 90%;
     right: 37%;
-    height: 25%;
+    height: 21%;
     width: 25%;
   }
   
@@ -71,6 +71,8 @@
   .login-wrapper .example-full-width,
   .login-wrapper .btn-block {
     width: 100%;
+    margin-top: 8px;
+    margin-bottom: 8px;
   }
   
   /* Espaciado de titulo del formlario */

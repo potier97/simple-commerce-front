@@ -92,37 +92,37 @@ export class EditClientComponent implements OnInit, OnDestroy {
         this.idClient = params['id'];
 
         //OBTENER TODOS LOS TIPOS DE DOCUMENTOS
-        this.subscription.push(
-          this.usersService.getAllDocTypes().subscribe(
-            res => { 
-              //console.log('Reponse DocTypes -> ', res.content)
-              this.listDocType = res.content;   
-                //OBTENER EL CLIENTE A ACTUALIZARTODOS LOS TIPOS DE DOCUMENTOS
-                this.subscription.push(
-                  this.usersService.getClientById(this.idClient).subscribe(
-                    response => { 
-                      //console.log('Reponse User Data -> ', response.content)
-                      this.client = response.content; 
-                      //OFF FLAG TO SHOW SER DATA
-                      this.loadData(response.content);
-                      setTimeout(() => {
-                        this.loadingData = true  
-                      }, 250);
-                    },
-                    err => {
-                      //console.log(err)
-                      this.showSnack(false, err.error.message || "No se pudo obtener el usuario");   
-                      this.router.navigate(['/products'])
-                    }
-                  )  
-                ) 
-            },
-            err => {
-              //console.log(err)
-              this.showSnack(false, err.error.message || "No se pudo obtener los tipos de Documentos");   
-            }
-          )  
-        )  
+        // this.subscription.push(
+        //   this.usersService.getAllDocTypes().subscribe(
+        //     res => { 
+        //       //console.log('Reponse DocTypes -> ', res.content)
+        //       this.listDocType = res.content;   
+        //         //OBTENER EL CLIENTE A ACTUALIZARTODOS LOS TIPOS DE DOCUMENTOS
+        //         this.subscription.push(
+        //           this.usersService.getClientById(this.idClient).subscribe(
+        //             response => { 
+        //               //console.log('Reponse User Data -> ', response.content)
+        //               this.client = response.content; 
+        //               //OFF FLAG TO SHOW SER DATA
+        //               this.loadData(response.content);
+        //               setTimeout(() => {
+        //                 this.loadingData = true  
+        //               }, 250);
+        //             },
+        //             (err: any) => {
+        //               //console.log(err)
+        //               this.showSnack(false, err.error.message || "No se pudo obtener el usuario");   
+        //               this.router.navigate(['/products'])
+        //             }
+        //           )  
+        //         ) 
+        //     },
+        //     (err: any) => {
+        //       //console.log(err)
+        //       this.showSnack(false, err.error.message || "No se pudo obtener los tipos de Documentos");   
+        //     }
+        //   )  
+        // )  
       }) 
     )  
   }
@@ -224,22 +224,22 @@ export class EditClientComponent implements OnInit, OnDestroy {
       }     
       //console.log("Usuario a actualizar -> ", userData)
       //Servicio para actualizar el cliente
-      this.subscription.push(
-        this.usersService.updateClient(userData).subscribe(
-          res => {
-            //console.log('Response from update User ->', res)
-            this.resetForm();
-            this.showSnack(true, res.message); 
-            this.router.navigate(['/clients']);
-          },
-          err => {
-            //console.log(err)
-            this.showSnack(false, err.error.message || 'No se pudo actualizar el cliente');  
-            this.resetForm();
-            this.router.navigate(['/clients']);
-          }
-        ) 
-      )
+      // this.subscription.push(
+      //   this.usersService.updateClient(userData).subscribe(
+      //     res => {
+      //       //console.log('Response from update User ->', res)
+      //       this.resetForm();
+      //       this.showSnack(true, res.message); 
+      //       this.router.navigate(['/clients']);
+      //     },
+      //     (err: any) => {
+      //       //console.log(err)
+      //       this.showSnack(false, err.error.message || 'No se pudo actualizar el cliente');  
+      //       this.resetForm();
+      //       this.router.navigate(['/clients']);
+      //     }
+      //   ) 
+      // )
     }else{
       this.showSnack(false, 'Los datos del cliente no han cambiado'); 
     }

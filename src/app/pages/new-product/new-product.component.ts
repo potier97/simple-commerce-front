@@ -119,21 +119,21 @@ export class NewProductComponent implements OnInit, OnDestroy {
         tax: userReq.tax,
       }     
       //console.log("Producto creado -> ", productData)
-      this.subscription.push(
-        this.productService.createProduct(productData).subscribe(
-          res => {
-            //console.log('Response ->', res)
-            this.resetForm();
-            this.showSnack(true, res.message); 
-            this.router.navigate(['/products']);
-          },
-          err => {
-            //console.log(err)
-            this.showSnack(false, err.error.message);  
-            this.resetForm();
-          }
-        ) 
-      )
+      // this.subscription.push(
+      //   this.productService.createProduct(productData).subscribe(
+      //     res => {
+      //       //console.log('Response ->', res)
+      //       this.resetForm();
+      //       this.showSnack(true, res.message); 
+      //       this.router.navigate(['/products']);
+      //     },
+      //     (err: any) => {
+      //       //console.log(err)
+      //       this.showSnack(false, err.error.message);  
+      //       this.resetForm();
+      //     }
+      //   ) 
+      // )
     }
       
   }

@@ -7,31 +7,19 @@
 }
 
 .sidenav {
-  width: 250px;
+  /* width: 250px; */
   overflow-x: hidden;
-  transition: all, 0.5s;
+  /* transition: all, 0.5s; */
   background-color: #e4e4e4;
 }
 
-.sidenavClose {
-  width: 80px;
-  transition: all, 0.5s;
-  overflow-x: hidden;
-  background-color: #e4e4e4;
-}
-
-.generalNav{
-  color: red
-}
- 
-.toolbar-sidenav {
-  height: 72px;
-  background-color: #e4e4e4;
+.btn {
+  margin-left: 4px;
 }
 
 .toolbar {
   height: 80px;
-  background-color: #C1C164;
+  background-color: #c1c164;
 }
 
 .tittle {
@@ -46,50 +34,14 @@
   margin: 8px;
 }
 
-.logoTienda {
-  width: -webkit-fill-available;
-  padding: 10px 0px; 
-}
-
-.logoTiendacirculo{ 
-  padding: 10px 0px;
-  height: -webkit-fill-available; 
-}
- 
-.child-2, .child-1 {
-  color: #fff;
-}
-
-.container-button {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch; 
-  justify-content: center;
-  margin: 10px 8px;
-}
-
-.navigation-button {
-  border-radius: 16px;
-  margin: 0px 4px;
-  background-color: #bdbdbd; 
-}
-
 .active-link {
-  background-color: #C1C164AA; 
-}
-   
-.sidenav-content { 
-  overflow-x: hidden;
-  background-color: #bdc3c7;
-  width: -webkit-fill-available;
-  margin-left: 250px !important;
-  transition: all, 0.5s;
+  color: orangered !important;
 }
 
-.sidenav-content-close {
+.sidenav-content {
   overflow-x: hidden;
   background-color: #bdc3c7;
   width: -webkit-fill-available;
+  /* margin-left: 250px !important; */
   transition: all, 0.5s;
-  margin-left: 80px !important;
 }

@@ -39,14 +39,12 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   account_validation_messages = {
     userDocument: [
-      { type: 'required', message: 'Cédula requerida' },
-      { type: 'pattern', message: 'Ingrese una cédula valida' },
+      { type: 'required', message: 'Correo requerida' },
+      { type: 'email', message: 'Correo Invalido' },
     ],
     password: [
       { type: 'required', message: 'Contraseña requerida' },
       { type: 'minlength', message: 'La contraseña debe ser de mínimo 3 carácterres', }, 
-      { type: 'pattern', message: 'Su contraseña debe contener letras y números',
-      },
     ],
   };
 
@@ -59,18 +57,17 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnInit(): void { 
     this.angForm = this.fb.group({
       userDocument: new FormControl(
-        '132565895',
+        '',
         Validators.compose([
           Validators.required, 
-          Validators.pattern('^[0-9]*$'),
+          Validators.email,
         ])
       ),
       password: new FormControl(
-        'pass123',
+        '',
         Validators.compose([
           Validators.minLength(3),
           Validators.required,
-          Validators.pattern('^(?=.*[a-z])(?=.*[0-9])[a-zA-Z0-9]+$'),
         ])
       ),
     }); 
@@ -83,18 +80,18 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (this.angForm.valid) {
       const userReq = this.angForm.value;
       const userCredentials = {
-        username: userReq.userDocument,
+        email: userReq.userDocument,
         password: userReq.password
       }
       this.subscription.push(
         this.authService.login(userCredentials).subscribe(
           res => {
-            //console.log('del formato', res)
-            this.router.navigate(['/payment']);
+            // console.log('del formato', res)
+            this.router.navigate(['/buy']);
           },
-          err => {
+          (err: any) => {
             //console.log(err)
-            this.showSnack(false, err.error.message || "No se pudo Iniciar sesión");   
+            this.showSnack(false, "No se pudo Iniciar sesión");   
             //Reiniciar formlario
             this.angForm.reset();
           }

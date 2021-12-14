@@ -16,7 +16,7 @@
               matInput
               type="text"
               required  
-              placeholder="Cédula"
+              placeholder="Correo"
               formControlName="userDocument"
             /> 
             <mat-error *ngFor="let validation of account_validation_messages.userDocument">
@@ -44,14 +44,25 @@
             </mat-error>
           </mat-form-field>
         </mat-card-content>
-        <button
-          mat-stroked-button
-          color="primary"
-          type="submit"
-          class="btn-block"
-          [disabled]="angForm.invalid">
-          Enviar
-        </button>
+        <div fxLayoutGap="20px">
+          <button
+            mat-stroked-button
+            color="accent"
+            type="submit"
+            class="btn-block"
+            [disabled]="angForm.invalid">
+            Enviar
+          </button>
+          <br/>
+          <button
+            mat-stroked-button
+            color="accent"
+            type="submit"
+            routerLink="/singup"
+            class="btn-block">
+            Crear
+          </button>
+        </div>
       </form>
     </mat-card>
 </div>

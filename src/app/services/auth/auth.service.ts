@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { environment } from '@environments/environment'
 import { HttpClient } from '@angular/common/http'
-import { LogInResponse, LogInUser } from '@app/models/log-in-user';
+import { LogInResponse, LogInUser, SingUpResponse, SingUpUser } from '@app/models/log-in-user';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators'; 
+import { map } from 'rxjs/operators'; 
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { Router } from '@angular/router';
 //import { Token } from '@app/models/token';
@@ -14,6 +14,8 @@ const helper = new JwtHelperService();
   providedIn: 'root'
 })
 export class AuthService {
+
+  private general_url: string = environment.API_URL;
 
   private loggedIn = new BehaviorSubject<boolean>(false);
   
@@ -35,16 +37,24 @@ export class AuthService {
   }
  
   login(authData: LogInUser): Observable<LogInResponse | void >{
-    return this.httpClient.post<LogInResponse>(`${environment.API_PATH}/auth/authenticate`, authData)
+    return this.httpClient.post<LogInResponse>(`${this.general_url}auth`, authData)
     .pipe(
       map( (res: LogInResponse) => {
-        //console.log('Ingresando al sistema')
         this.loggedIn.next(true);
-        this.userToken.next(res.jwt);
-        this.saveToken(res.jwt);
+        this.userToken.next(res.access_token);
+        this.saveToken("token", res.access_token);
+        this.saveToken("userMail", res.user.email);
         return res;
       }),
-      //catchError( err => this.handleError(err))
+    );
+  }
+
+  singUp(authData: SingUpUser): Observable<SingUpResponse | void >{
+    return this.httpClient.post<SingUpResponse>(`${this.general_url}user`, authData)
+    .pipe(
+      map( (res: SingUpResponse) => {
+        return res;
+      }),
     );
   }
 
@@ -74,31 +84,10 @@ export class AuthService {
     else return ''
 
   }
-
-  refreshToken(tokenData: string): Observable<LogInResponse | void | any >{
-    return this.httpClient.post<LogInResponse>(`${environment.API_PATH}/auth/refresh`, tokenData)
-    .pipe(
-      map( (res: LogInResponse) => {  
-        this.saveToken(res.jwt);
-        return res;
-      }),
-      catchError( err => this.handleError(err))
-    );
-  }
  
-  
-  private saveToken(token: string): void{
-    localStorage.setItem("token", token);
+  private saveToken(name: string, token: string): void{
+    localStorage.setItem(name, token);
   }
-
-
-  private handleError(err: any): Observable<never>{
-    let errorMessage = "Ocurrió un error en login"; 
-    if(err) errorMessage = `Error code Login: ${errorMessage}`;
-    //window.alert(errorMessage); 
-    return throwError(errorMessage);
-  }
-
 }
 
 

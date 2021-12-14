@@ -25,7 +25,7 @@ module.exports = function (config) {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/TELOTENGO-FRONT'),
+      dir: require('path').join(__dirname, './coverage/doki-store'),
       subdir: '.',
       reporters: [
         { type: 'html' },

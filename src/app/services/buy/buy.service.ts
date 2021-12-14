@@ -11,17 +11,18 @@ import {  map } from 'rxjs/operators';
 })
 export class BuyService {
 
+  private general_url: string = environment.API_URL;
+
   constructor(private httpClient: HttpClient) { }
  
 
   // GENERAR UNA NUEVA COMPRA
   newBuy(newBuy: OrderData): Observable<CustomResponse>{
-    return this.httpClient.post<CustomResponse>(`${environment.API_PATH}/buy/`, newBuy)
+    return this.httpClient.post<CustomResponse>(`${this.general_url}/buy`, newBuy)
     .pipe(
       map((res: CustomResponse) => {
         return res;
       }),
-      //catchError( err => this.handleError(err))
     );
   } 
   
