@@ -45,7 +45,9 @@
                              <!-- dato de la columna -->
                              <!-- Ennmeración de paginación --> 
                             <td mat-cell *matCellDef="let element; let i = index;">   
-                                {{column.name ==='idOfferType' ?  element[column.name].name :  element[column.name] }}
+                                {{column.name ==='idOfferType' ?  element[column.name].name :  
+                                column.name ==='percentage' ? [element[column.name] + ' %'] :
+                                element[column.name] }}
                                
                             </td>      
                         </ng-container> 
