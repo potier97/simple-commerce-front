@@ -16,7 +16,7 @@ export class JwtInterceptorInterceptor implements HttpInterceptor {
   constructor( private authService: AuthService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    console.log("Interceptor generated", request.url)
+    // console.log("Interceptor generated", request.url)
 
     const authReq = request.clone({
       setHeaders: {

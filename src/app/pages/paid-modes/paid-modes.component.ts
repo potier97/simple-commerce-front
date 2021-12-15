@@ -106,11 +106,10 @@ export class PaidModesComponent implements OnInit, AfterViewInit, OnDestroy  {
   }  
    
   deleteProduct(user: PaidModesResponse): void {
-    //console.log('desactivar usuario -> ' , user.idUser)
     //Modal de desactivar el producto
     Swal.fire({
-      title: 'Desactivar usuario',
-      text: `¿Desea desactivar el usuario ${user.id}?`,
+      title: 'Desactivar modos de pago',
+      text: `¿Desea desactivar el modo de pago ${user.id}?`,
       icon: 'warning',
       iconColor:'#c1c164',
       heightAuto: false,
@@ -129,17 +128,17 @@ export class PaidModesComponent implements OnInit, AfterViewInit, OnDestroy  {
           this.paidModesService.deletePaidMode(user.id!).subscribe(
             res => {  
               this.getClients(); 
-              this.showSnack(true, `Usuario ${user.id} eliminado`);
+              this.showSnack(true, `Modo de pago ${user.id} eliminado`);
             },
             err => {
-              console.log(err.error)   
-              this.showSnack(false, err.error.message || 'Imposible Borrar Producto');
+              // console.log(err.error)   
+              this.showSnack(false, 'Imposible Borrar Modo de pago');
             }
           ) 
         )
         Swal.fire({
           title: 'Desactivado',
-          text: `Usuario ${user.id} desactivado`,
+          text: `Modo de pago ${user.id} desactivado`,
           icon: 'success',
           iconColor:'#c1c164',
           heightAuto: false, 
@@ -152,7 +151,7 @@ export class PaidModesComponent implements OnInit, AfterViewInit, OnDestroy  {
       }else {
         Swal.fire({
           title: 'Cancelado',
-          text: `Usuario ${user.id} no ha sido desactivado`,
+          text: `Modo de pago ${user.id} no ha sido desactivado`,
           icon: 'info',
           iconColor:'#c1c164',
           heightAuto: false, 

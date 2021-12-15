@@ -43,7 +43,7 @@ export class PaidModesService {
     );
   }
 
-  getPaidMode(id: number): Observable<PaidModesResponse>{
+  getPaidModeById(id: number): Observable<PaidModesResponse>{
     return this.httpClient.get<PaidModesResponse>(`${this.general_url}pay/${id}`)
     .pipe(
       map((res: PaidModesResponse) => {
@@ -53,8 +53,8 @@ export class PaidModesService {
     );
   }   
  
-  updatePaidMode(product: PaidModesResponse): Observable<PaidModesResponse>{
-    return this.httpClient.put<PaidModesResponse>(`${this.general_url}pay`, product)
+  updatePaidMode(id: number, product: PaidModesResponse): Observable<PaidModesResponse>{
+    return this.httpClient.put<PaidModesResponse>(`${this.general_url}pay/${id}`, product)
     .pipe(
       map((res: PaidModesResponse) => {
         return res;

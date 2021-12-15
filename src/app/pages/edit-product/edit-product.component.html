@@ -62,22 +62,6 @@
                     </mat-error>
 
                     <mat-form-field class="imput-form-text" appearance="outline">
-                        <mat-label>Iva</mat-label>
-                        <input
-                        matInput
-                        type="text"
-                        required 
-                        placeholder="Iva"
-                        formControlName="tax" /> 
-                    </mat-form-field>
-                    <mat-error *ngFor="let validation of account_validation_messages.tax" class="error-message-form">
-                        <mat-error class="error-message" 
-                        *ngIf="angForm.get('tax')?.hasError(validation.type) && (angForm.get('tax')?.dirty || angForm.get('tax')?.touched)">
-                        {{validation.message}}
-                        </mat-error>
-                    </mat-error>
-
-                    <mat-form-field class="imput-form-text" appearance="outline">
                         <mat-label>Precio</mat-label>
                         <input
                         matInput

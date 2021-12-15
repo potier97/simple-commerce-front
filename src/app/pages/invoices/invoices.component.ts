@@ -70,7 +70,7 @@ export class InvoicesComponent implements OnInit, AfterViewInit, OnDestroy  {
       this.invoiceService.getAllInvoices().subscribe(
         res => {
           this.dataSource.data = res;
-          console.log('Facturas ->', res) 
+          // console.log('Facturas ->', res) 
           this.loadingData = true
         },
         (err: any) => {
@@ -81,11 +81,14 @@ export class InvoicesComponent implements OnInit, AfterViewInit, OnDestroy  {
       ) 
     )
   }
- 
+
   ngAfterViewInit() { 
     //Configuración de datos iniciales
     this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+    this.dataSource.paginator = this.paginator; 
+    this.dataSource.filterPredicate = (data: InvoiceResponse, filter: string): boolean => { 
+      return data.id.toString().includes(filter) || data.idCliente.nombre.includes(filter);
+     };
   }
 
   ngOnDestroy(): void { 
@@ -94,13 +97,23 @@ export class InvoicesComponent implements OnInit, AfterViewInit, OnDestroy  {
       sub.unsubscribe();
     } 
   } 
+   
+  clearSearch(): void {   
+    this.searchDni = '';
+    this.dataSource.filter = "";
+  }
+
+  applyFilter(): void { 
+    //Filtra los porductos por el DNI
+    this.dataSource.filter = this.searchDni.trim().toLowerCase();
+  } 
 
   deleteProduct(user: InvoiceResponse): void {
     //console.log('desactivar usuario -> ' , user.idUser)
     //Modal de desactivar el producto
     Swal.fire({
-      title: 'Desactivar usuario',
-      text: `¿Desea desactivar el usuario ${user.id}?`,
+      title: 'Desactivar Factura',
+      text: `¿Desea desactivar la factura ${user.id}?`,
       icon: 'warning',
       iconColor:'#c1c164',
       heightAuto: false,
@@ -119,17 +132,16 @@ export class InvoicesComponent implements OnInit, AfterViewInit, OnDestroy  {
           this.invoiceService.deleteInvoice(user.id!).subscribe(
             res => {  
               this.getClients(); 
-              this.showSnack(true, `Usuario ${user.id} eliminado`);
+              this.showSnack(true, `Factura ${user.id} eliminada`);
             },
             err => {
-              console.log(err.error)   
-              this.showSnack(false, err.error.message || 'Imposible Borrar Producto');
+              this.showSnack(false, 'Imposible Borrar Factura');
             }
           ) 
         )
         Swal.fire({
           title: 'Desactivado',
-          text: `Usuario ${user.id} desactivado`,
+          text: `Factura ${user.id} desactivada`,
           icon: 'success',
           iconColor:'#c1c164',
           heightAuto: false, 
@@ -142,7 +154,7 @@ export class InvoicesComponent implements OnInit, AfterViewInit, OnDestroy  {
       }else {
         Swal.fire({
           title: 'Cancelado',
-          text: `Usuario ${user.id} no ha sido desactivado`,
+          text: `Factura ${user.id} no ha sido desactivada`,
           icon: 'info',
           iconColor:'#c1c164',
           heightAuto: false, 

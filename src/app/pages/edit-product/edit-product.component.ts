@@ -20,7 +20,6 @@ export class EditProductComponent implements OnInit, OnDestroy  {
     name: new FormControl(''),
     idCode: new FormControl(''),
     amount: new FormControl(''),
-    tax: new FormControl(''),
     price: new FormControl(''),
   });
   product: ProductsResponse;
@@ -46,11 +45,6 @@ export class EditProductComponent implements OnInit, OnDestroy  {
       { type: 'required', message: 'Ingrese la cantidad de productos disponibles' },
       { type: 'pattern', message: 'Ingrese una cantidad valida (solo números)' },
       { type: 'min', message: 'Ingrese un valor positivo' },  
-    ], 
-    tax: [
-      { type: 'required', message: 'Ingrese el Impuesto al consumidor' },
-      { type: 'pattern', message: 'Ingrese un porcentaje valido de solo números' },
-      { type: 'min', message: 'Ingrese un valor positivo' },  
     ],
     price: [
       { type: 'required', message: 'Contraseña requerida' },
@@ -61,7 +55,6 @@ export class EditProductComponent implements OnInit, OnDestroy  {
 
 
   ngOnDestroy(): void {
-    //console.log("Desubs all observers") 
     for(const sub of this.subscription) {
       sub.unsubscribe();
     }
@@ -73,21 +66,18 @@ export class EditProductComponent implements OnInit, OnDestroy  {
           this.idProduct = params['id'];
         }) 
       ) 
-      // this.subscription.push(
-      //   this.productService.getProduct(this.idProduct).subscribe(
-      //     res => {
-      //       //console.log('Response ->', res)
-      //       this.product = res.content;
-      //       this.showSnack(true, res.message);  
-      //       this.loadData();
-      //     },
-      //     (err: any) => {
-      //       //console.log(err)
-      //       this.showSnack(false, err.error.message);   
-      //       this.router.navigate(['/products'])
-      //     }
-      //   )
-      // )  
+      this.subscription.push(
+        this.productService.getProduct(this.idProduct).subscribe(
+          res => {
+            this.product = res;  
+            this.loadData();
+          },
+          (err: any) => {
+            this.showSnack(false, 'Producto no existe');   
+            this.router.navigate(['/products'])
+          }
+        )
+      )  
     
   }
 
@@ -115,14 +105,6 @@ export class EditProductComponent implements OnInit, OnDestroy  {
           Validators.min(1), 
         ])
       ),
-      tax: new FormControl(
-        this.product.precio,
-        Validators.compose([ 
-          Validators.required,
-          Validators.pattern('^[0-9]*$'),
-          Validators.min(0), 
-        ])
-      ),
       price: new FormControl(
         this.product.precio,
         Validators.compose([ 
@@ -137,31 +119,26 @@ export class EditProductComponent implements OnInit, OnDestroy  {
   updateProduct(): void {
     if (this.angForm.valid) {
       const userReq = this.angForm.value;
-      const productData = {
-        idProduct:  this.product.id!,
-        name: userReq.name,
-        idCode: userReq.idCode,
-        amount: userReq.amount,
-        active: 1,
-        price: userReq.price,   
-        tax: userReq.tax,
+      const productData: ProductsResponse = {
+        nombre: userReq.name,
+        dni: userReq.idCode,
+        cantidad: userReq.amount,
+        estado: 1,
+        precio: userReq.price,   
       }     
-      //console.log("Producto creado -> ", productData)
-      // this.subscription.push(
-      //   this.productService.updateProduct(productData).subscribe(
-      //     res => {
-      //       //console.log('Response ->', res)
-      //       this.resetForm();
-      //       this.showSnack(true, res.message); 
-      //       this.router.navigate(['/products']);
-      //     },
-      //     (err: any) => {
-      //       //console.log(err)
-      //       this.showSnack(false, err.error.message);  
-      //       this.resetForm();
-      //     }
-      //   ) 
-      // )
+      this.subscription.push(
+        this.productService.updateProduct(this.idProduct, productData).subscribe(
+          res => {
+            this.resetForm();
+            this.showSnack(true, `producto ${res.id} actualizado`); 
+            this.router.navigate(['/products']);
+          },
+          (err: any) => {
+            this.showSnack(false, err.error.message);  
+            this.resetForm();
+          }
+        ) 
+      )
     } 
   }
 

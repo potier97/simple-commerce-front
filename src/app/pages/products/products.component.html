@@ -5,11 +5,11 @@
             <h2 class="title">Buscador</h2>
             <div fxLayout="row" fxLayoutAlign="start stretch" fxLayoutGap="12px">
                 <mat-form-field fxFlex="70" class="full-width-field" appearance="outline" color="red">
-                    <mat-label>Nombre</mat-label>
+                    <mat-label>Nombre o Dni</mat-label>
                     <input 
                         matInput  
                         type="text" 
-                        placeholder="Cliente"
+                        placeholder="Nombre o Dni"
                         [(ngModel)]="searchDni"
                         name="searchDni"
                         (keyup)="applyFilter()">
@@ -63,7 +63,7 @@
                                         Opciones
                                     </button>
                                     <mat-menu #menu="matMenu">
-                                        <button mat-menu-item [routerLink]="['/clients/editClient/', element.idUser]">Editar</button> 
+                                        <button mat-menu-item [routerLink]="['editProduct/', element.id]">Editar</button> 
                                         <button mat-menu-item (click)="deleteProduct(element)">Eliminar</button>
                                     </mat-menu>
                     
@@ -80,11 +80,11 @@
         <div class="space"></div>
     </div>
     
-    <!-- <div class="fav-add-product">
-        <button mat-fab color="primary" class="mat-elevation-z4" routerLink="/clients/newClient" >
+    <div class="fav-add-product">
+        <button mat-fab color="primary" class="mat-elevation-z4" [routerLink]="['newProduct']" >
             <mat-icon style="color: #fff">add</mat-icon>
         </button>
-    </div> -->
+    </div>
 
     <div 
         class="container-spinner" 

@@ -9,7 +9,7 @@
                     <input 
                         matInput  
                         type="text" 
-                        placeholder="Cliente"
+                        placeholder="Método de Pago"
                         [(ngModel)]="searchDni"
                         name="searchDni"
                         (keyup)="applyFilter()">
@@ -61,7 +61,7 @@
                                         Opciones
                                     </button>
                                     <mat-menu #menu="matMenu">
-                                        <button mat-menu-item [routerLink]="['/clients/editClient/', element.idUser]">Editar</button> 
+                                        <button mat-menu-item [routerLink]="['editPaidModes/', element.id]">Editar</button> 
                                         <button mat-menu-item (click)="deleteProduct(element)">Eliminar</button>
                                     </mat-menu>
                     
@@ -78,11 +78,11 @@
         <div class="space"></div>
     </div>
     
-    <!-- <div class="fav-add-product">
-        <button mat-fab color="primary" class="mat-elevation-z4" routerLink="/clients/newClient" >
+    <div class="fav-add-product">
+        <button mat-fab color="primary" class="mat-elevation-z4" routerLink="newPaidModes" >
             <mat-icon style="color: #fff">add</mat-icon>
         </button>
-    </div> -->
+    </div>
 
     <div 
         class="container-spinner" 

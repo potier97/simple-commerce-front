@@ -3,7 +3,7 @@
         <div class="space"></div>
         <mat-card>  
             <div class="title-form-text">
-                <h2 style="color: #226706">Ingrese todos los valores para poder crear un producto</h2>
+                <h2 style="color: #226706">Ingrese todos los valores para poder crear un metodo de pago</h2>
             </div>
             <form
                 class="example-form"
@@ -13,82 +13,18 @@
                  <!-- novalidate -->
                 <mat-card-content fxLayout="column" fxLayoutAlign="space-between stretch" class="container-form">
                     <mat-form-field class="imput-form-text" appearance="outline">
-                        <mat-label>Nombre Producto</mat-label>
+                        <mat-label>Nombre del Método de Pago</mat-label>
                         <input
                         matInput
                         type="text"
                         required  
-                        placeholder="Nombre"
+                        placeholder="Método de pago"
                         formControlName="name"/> 
                     </mat-form-field>
                     <mat-error *ngFor="let validation of account_validation_messages.name" class="error-message-form">
                         <mat-error class="error-message" 
                             *ngIf="angForm.get('name')?.hasError(validation.type) && (angForm.get('name')?.dirty || angForm.get('name')?.touched)">
                             {{validation.message}}
-                        </mat-error>
-                    </mat-error>
-            
-                    <mat-form-field class="imput-form-text" appearance="outline">
-                        <mat-label>DNI</mat-label>
-                        <input
-                        matInput
-                        type="text"
-                        required 
-                        placeholder="DNI"
-                        formControlName="idCode" /> 
-                    </mat-form-field>
-                    <mat-error *ngFor="let validation of account_validation_messages.idCode" class="error-message-form">
-                        <mat-error class="error-message" 
-                        *ngIf="angForm.get('idCode')?.hasError(validation.type) && (angForm.get('idCode')?.dirty || angForm.get('idCode')?.touched)">
-                            {{validation.message}}
-                        </mat-error>
-                    </mat-error>
-
-                    <mat-form-field class="imput-form-text" appearance="outline">
-                        <mat-label>Stock</mat-label>
-                        <input
-                        matInput
-                        type="text"
-                        required 
-                        placeholder="Stock"
-                        formControlName="amount" /> 
-                    </mat-form-field>
-                    <mat-error *ngFor="let validation of account_validation_messages.amount" class="error-message-form">
-                        <mat-error class="error-message" 
-                        *ngIf="angForm.get('amount')?.hasError(validation.type) && (angForm.get('amount')?.dirty || angForm.get('amount')?.touched)" >
-                        {{validation.message}}
-                        </mat-error>
-                    </mat-error>
-
-                    <mat-form-field class="imput-form-text" appearance="outline">
-                        <mat-label>Iva</mat-label>
-                        <input
-                        matInput
-                        type="text"
-                        required 
-                        placeholder="Iva"
-                        formControlName="tax" /> 
-                    </mat-form-field>
-                    <mat-error *ngFor="let validation of account_validation_messages.tax" class="error-message-form">
-                        <mat-error class="error-message" 
-                        *ngIf="angForm.get('tax')?.hasError(validation.type) && (angForm.get('tax')?.dirty || angForm.get('tax')?.touched)">
-                        {{validation.message}}
-                        </mat-error>
-                    </mat-error>
-
-                    <mat-form-field class="imput-form-text" appearance="outline">
-                        <mat-label>Precio</mat-label>
-                        <input
-                        matInput
-                        type="text"
-                        required 
-                        placeholder="Precio"
-                        formControlName="price" /> 
-                    </mat-form-field> 
-                    <mat-error *ngFor="let validation of account_validation_messages.price" class="error-message-form">
-                        <mat-error class="error-message" 
-                        *ngIf="angForm.get('price')?.hasError(validation.type) && (angForm.get('price')?.dirty || angForm.get('price')?.touched)">
-                        {{validation.message}}
                         </mat-error>
                     </mat-error>
                 </mat-card-content>

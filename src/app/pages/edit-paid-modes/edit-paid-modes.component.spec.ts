@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EditPaidModesComponent } from './edit-paid-modes.component';
 
-describe('EditProductComponent', () => {
+describe('EditPaidModesComponent', () => {
   let component: EditPaidModesComponent;
   let fixture: ComponentFixture<EditPaidModesComponent>;
 

@@ -70,7 +70,7 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
       this.productsService.getAllProducts().subscribe(
         res => {
           this.dataSource.data = res;
-          console.log('Productos ->', res) 
+          // console.log('Productos ->', res) 
           this.loadingData = true
         },
         (err: any) => {
@@ -87,7 +87,7 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator; 
     this.dataSource.filterPredicate = (data: ProductsResponse, filter: string): boolean => { 
-      return data.nombre.toString().includes(filter);
+      return data.nombre.toString().includes(filter) || data.dni.toString().includes(filter);
      };
   }
 
@@ -112,8 +112,8 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
     //console.log('desactivar usuario -> ' , user.idUser)
     //Modal de desactivar el producto
     Swal.fire({
-      title: 'Desactivar usuario',
-      text: `¿Desea desactivar el usuario ${user.id}?`,
+      title: 'Desactivar producto',
+      text: `¿Desea desactivar el producto ${user.id}?`,
       icon: 'warning',
       iconColor:'#c1c164',
       heightAuto: false,
@@ -132,17 +132,16 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
           this.productsService.deleteProduct(user.id!).subscribe(
             res => {  
               this.getClients(); 
-              this.showSnack(true, `Usuario ${user.id} eliminado`);
+              this.showSnack(true, `Producto ${user.id} eliminado`);
             },
-            err => {
-              console.log(err.error)   
-              this.showSnack(false, err.error.message || 'Imposible Borrar Producto');
+            err => {  
+              this.showSnack(false, 'Imposible Borrar Producto');
             }
           ) 
         )
         Swal.fire({
           title: 'Desactivado',
-          text: `Usuario ${user.id} desactivado`,
+          text: `Producto ${user.id} desactivado`,
           icon: 'success',
           iconColor:'#c1c164',
           heightAuto: false, 
@@ -155,7 +154,7 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy  {
       }else {
         Swal.fire({
           title: 'Cancelado',
-          text: `Usuario ${user.id} no ha sido desactivado`,
+          text: `Producto ${user.id} no ha sido desactivado`,
           icon: 'info',
           iconColor:'#c1c164',
           heightAuto: false, 

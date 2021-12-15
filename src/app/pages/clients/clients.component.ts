@@ -70,11 +70,9 @@ export class ClientsComponent implements OnInit, AfterViewInit, OnDestroy  {
       this.usersService.getAllClients().subscribe(
         res => {
           this.dataSource.data = res;
-          // console.log('Clientes ->', res) 
           this.loadingData = true
         },
         (err: any) => {
-          //console.log(err) 
           this.showSnack(false, 'Imposible Obtener Clientes'); 
           this.loadingData = true
         }

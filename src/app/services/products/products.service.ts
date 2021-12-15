@@ -53,8 +53,8 @@ export class ProductsService {
     );
   }   
  
-  updateProduct(product: ProductsResponse): Observable<ProductsResponse>{
-    return this.httpClient.put<ProductsResponse>(`${this.general_url}product/`, product)
+  updateProduct(id: number, product: ProductsResponse): Observable<ProductsResponse>{
+    return this.httpClient.put<ProductsResponse>(`${this.general_url}product/${id}`, product)
     .pipe(
       map((res: ProductsResponse) => {
         return res;

@@ -63,6 +63,43 @@
                 </div> 
             </mat-card>
         </div>
+
+        <div class="space"></div>
+        <div fxLayout="row" fxLayoutGap="16px">
+            <mat-card [fxFlex]="100" *ngIf="client !== null;"> 
+                <h2 class="title">Buscar Modo Pago</h2>
+                <div fxLayout="row" fxLayoutAlign="start stretch" fxLayoutGap="12px">
+                    <mat-form-field fxFlex="70" class="full-width-field" appearance="outline" color="red">
+                        <mat-label>Id Modo Pago</mat-label>
+                        <input 
+                            matInput     
+                            type="text" 
+                            [formControl]="searchPaidMode"
+                            placeholder="Documento Cliente"  
+                            (keyup.enter)="searchPaidMode.valid ? onSearchPaidMode() : null">
+                    </mat-form-field> 
+                    <button 
+                        fxFlex
+                        mat-raised-button
+                        color="accent"
+                        [disabled]="!searchPaidMode.valid"
+                        type="submit"   
+                        class="btn-block" 
+                        (click)="onSearchPaidMode()">Buscar</button>
+                    <button 
+                        fxFlex
+                        mat-raised-button
+                        color="accent"
+                        type="submit"   
+                        class="btn-block"
+                        [disabled]="paidmode !== null" 
+                        (click)="clearPaidModeSearch()">
+                        Limpiar
+                    </button>
+                </div> 
+            </mat-card>
+        </div>
+        
         
         <div class="space"></div> 
 
@@ -74,7 +111,7 @@
                 <!-- Nombre del cliente que va arealizar la compra -->
                 <div fxLayout="row" fxLayoutAlign="space-evenly center" class="client-container" fxLayoutGap="12px">
                     <h3 class="title show-dots"> {{"Cliente Compra: " | uppercase}}</h3>
-                    <h3 class="title show-dots">{{client.name + " " + client.lastName | uppercase}}</h3>
+                    <h3 class="title show-dots">{{client.nombre + " " + client.apellido | uppercase}}</h3>
                     <button mat-mini-fab color="warn" (click)="buyCancel()">
                         <mat-icon style="color: #fff;">close</mat-icon>
                     </button>
@@ -94,7 +131,7 @@
                         <h2 class="title show-dots" fxFlex="15" align="center"> Subtotal</h2>
                         <h2 class="title" fxFlex="10" align="left"> </h2> 
                     </div>
-    
+
                     <!-- Listado de lo q ue se está comprando -->
                     <div 
                         fxLayout="row" 
@@ -102,7 +139,7 @@
                         [ngClass]="i % 2 ? 'parStyleProduct' : 'inparStyleProduct' "
                         fxLayoutAlign="space-around center" 
                         fxLayoutGap="12px">
-                        <h3 class="product-text-tittle" fxFlex="45" align="left"> {{ product.name | uppercase}} </h3>
+                        <h3 class="product-text-tittle" fxFlex="45" align="left"> {{ product.nombre | uppercase}} </h3>
                         <!-- <h3 class="product-text" fxFlex="15" align="center"> {{ product.cantidad }} </h3> -->
                         <!-- <input class="product-text" fxFlex="15"    type="number" > -->
                         <mat-form-field fxFlex="15" class="product-text" appearance="outline">
@@ -122,24 +159,7 @@
                             <mat-icon>delete</mat-icon>
                         </button>
                     </div> 
-                    <!-- Totales de la compra -->
-                    <div *ngIf="productsToBuy.length > 0" 
-                        fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="12px">
-                        <div fxFlex="50"> </div>
-                        <div fxFlex="25" fxLayout="column" fxLayoutAlign="space-between stretch" >
-                            <h3 class="product-text bold-text" fxFlex="45" align="right"> Subtotal </h3> 
-                            <h3 class="product-text bold-text" fxFlex="15" align="right"> Iva </h3>
-                            <h3 class="product-text bold-text" fxFlex="15" align="right"> Total </h3>
-                        </div>
-                        <div fxFlex="25" fxLayout="column" fxLayoutAlign="space-between stretch" >
-                            <h3 class="product-text bold-text" fxFlex="45" align="left"> {{  preSubtotal | currency: 'COP' }} </h3> 
-                            <h3 class="product-text bold-text" fxFlex="15" align="left"> {{  preTax | currency: 'COP'}} </h3>
-                            <h3 class="product-text bold-text" fxFlex="15" align="left"> {{ preTotal | currency: 'COP' }} </h3>
-                        </div>
-                    </div>  
                 </mat-card-content> 
-                <!-- IMAGEN DE PRUEBA -->
-                <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">  -->
  
                 <mat-card-actions fxLayout="row" fxLayoutAlign="end stretch" class="pay-purchase-actions" fxLayoutGap="16px">
                     <button
@@ -181,7 +201,7 @@
                         <!-- Columns -- DATA --> 
                             <ng-container *ngIf="column.name!=='accion'; else doActions"> 
                                 <td mat-cell *matCellDef="let element; let i = index;">  
-                                    {{column.name === 'price' ?  [element[column.name]  | currency: 'COP'] : element[column.name]   }}
+                                    {{column.name === 'precio' ?  [element[column.name]  | currency: 'COP'] : element[column.name]   }}
                                 </td>      
                             </ng-container> 
                             <!-- COLUMN -- ACTIONS -->

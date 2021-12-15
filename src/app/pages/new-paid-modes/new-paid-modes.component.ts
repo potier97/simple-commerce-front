@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ProductsService } from '@app/services/products/products.service';
+import { PaidModesService } from '@app/services/paid-modes/paid-modes.service';
 import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { PaidModesResponse } from '@app/models/paid-modes';
 
 
 @Component({
@@ -17,47 +18,23 @@ export class NewPaidModesComponent implements OnInit, OnDestroy {
 
   angForm: FormGroup = new FormGroup({
     name: new FormControl(''),
-    idCode: new FormControl(''),
-    amount: new FormControl(''),
-    tax: new FormControl(''),
-    price: new FormControl(''),
   });
 
   constructor( 
     private snackbar: MatSnackBar, 
     private fb: FormBuilder,  
     private router: Router,
-    private productService: ProductsService) { }
+    private paidModesService: PaidModesService) { }
 
   account_validation_messages = {
     name: [
-      { type: 'required', message: 'Ingrese el nombre del producto' }, 
+      { type: 'required', message: 'Ingrese el nombre del metodo de pago' }, 
       { type: 'maxlength', message: 'El nombre es demasiado grande' }, 
-    ],
-    idCode: [
-      { type: 'required', message: 'Ingrese el DNI del producto' },
-      { type: 'pattern', message: 'Ingrese un código valido de solo números' },
-    ],
-    amount: [
-      { type: 'required', message: 'Ingrese la cantidad de productos disponibles' },
-      { type: 'pattern', message: 'Ingrese una cantidad valida (solo números)' },
-      { type: 'min', message: 'Ingrese un valor positivo' },  
-    ], 
-    tax: [
-      { type: 'required', message: 'Ingrese el Impuesto al consumidor' },
-      { type: 'pattern', message: 'Ingrese un porcentaje valido de solo números' },
-      { type: 'min', message: 'Ingrese un valor positivo' },  
-    ],
-    price: [
-      { type: 'required', message: 'Contraseña requerida' },
-      { type: 'pattern', message: 'Ingrese un precio valido de solo números' },
-      { type: 'min', message: 'Ingrese un valor positivo' },  
     ],
   }; 
 
 
   ngOnDestroy(): void {
-    //console.log("Desubs all observers") 
     for(const sub of this.subscription) {
       sub.unsubscribe();
     }
@@ -72,68 +49,30 @@ export class NewPaidModesComponent implements OnInit, OnDestroy {
           Validators.maxLength(30),
         ])
       ),
-      idCode: new FormControl(
-        '',
-        Validators.compose([ 
-          Validators.required,
-          Validators.pattern('^[0-9]*$'),
-        ])
-      ),
-      amount: new FormControl(
-        '',
-        Validators.compose([ 
-          Validators.required,
-          Validators.pattern('^[0-9]*$'),
-          Validators.min(1), 
-        ])
-      ),
-      tax: new FormControl(
-        '',
-        Validators.compose([ 
-          Validators.required,
-          Validators.pattern('^[0-9]*$'),
-          Validators.min(0), 
-        ])
-      ),
-      price: new FormControl(
-        '',
-        Validators.compose([ 
-          Validators.required,
-          Validators.pattern('^[0-9]*$'),
-          Validators.min(1), 
-        ])
-      ),
     }); 
   }
 
   createProduct(): void {
     if (this.angForm.valid) {
       const userReq = this.angForm.value;
-      const productData = {
-        idProduct: null,
-        name: userReq.name,
-        idCode: userReq.idCode,
-        amount: userReq.amount,
-        active: 1,
-        price: userReq.price,   
-        tax: userReq.tax,
+      const paidModeData: PaidModesResponse = {
+        tipo: userReq.name,
+        estado: 1,
       }     
-      //console.log("Producto creado -> ", productData)
-      // this.subscription.push(
-      //   this.productService.createProduct(productData).subscribe(
-      //     res => {
-      //       //console.log('Response ->', res)
-      //       this.resetForm();
-      //       this.showSnack(true, 'PAGO CREADO'); 
-      //       this.router.navigate(['/products']);
-      //     },
-      //     (err: any) => {
-      //       //console.log(err)
-      //       this.showSnack(false, 'No se puede crear');  
-      //       this.resetForm();
-      //     }
-      //   ) 
-      // )
+      // console.log("Producto creado -> ", productData)
+      this.subscription.push(
+        this.paidModesService.createPaidModes(paidModeData).subscribe(
+          res => {
+            this.resetForm();
+            this.showSnack(true, `Método de pago ${res.id} creado`); 
+            this.router.navigate(['/paid-modes']);
+          },
+          (err: any) => {
+            this.showSnack(false,'Método de pago no ha podido ser creado');  
+            this.resetForm();
+          }
+        ) 
+      )
     }
       
   }

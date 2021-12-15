@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ProductsService } from '@app/services/products/products.service';
 import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ProductsResponse } from '@app/models/products';
 
 
 @Component({
@@ -19,7 +20,6 @@ export class NewProductComponent implements OnInit, OnDestroy {
     name: new FormControl(''),
     idCode: new FormControl(''),
     amount: new FormControl(''),
-    tax: new FormControl(''),
     price: new FormControl(''),
   });
 
@@ -43,11 +43,6 @@ export class NewProductComponent implements OnInit, OnDestroy {
       { type: 'pattern', message: 'Ingrese una cantidad valida (solo números)' },
       { type: 'min', message: 'Ingrese un valor positivo' },  
     ], 
-    tax: [
-      { type: 'required', message: 'Ingrese el Impuesto al consumidor' },
-      { type: 'pattern', message: 'Ingrese un porcentaje valido de solo números' },
-      { type: 'min', message: 'Ingrese un valor positivo' },  
-    ],
     price: [
       { type: 'required', message: 'Contraseña requerida' },
       { type: 'pattern', message: 'Ingrese un precio valido de solo números' },
@@ -87,14 +82,6 @@ export class NewProductComponent implements OnInit, OnDestroy {
           Validators.min(1), 
         ])
       ),
-      tax: new FormControl(
-        '',
-        Validators.compose([ 
-          Validators.required,
-          Validators.pattern('^[0-9]*$'),
-          Validators.min(0), 
-        ])
-      ),
       price: new FormControl(
         '',
         Validators.compose([ 
@@ -109,31 +96,29 @@ export class NewProductComponent implements OnInit, OnDestroy {
   createProduct(): void {
     if (this.angForm.valid) {
       const userReq = this.angForm.value;
-      const productData = {
-        idProduct: null,
-        name: userReq.name,
-        idCode: userReq.idCode,
-        amount: userReq.amount,
-        active: 1,
-        price: userReq.price,   
-        tax: userReq.tax,
+      const productData: ProductsResponse = {
+        nombre: userReq.name,
+        cantidad: userReq.amount,
+        estado: 1,
+        dni: userReq.idCode,
+        precio: userReq.price,
       }     
-      //console.log("Producto creado -> ", productData)
-      // this.subscription.push(
-      //   this.productService.createProduct(productData).subscribe(
-      //     res => {
-      //       //console.log('Response ->', res)
-      //       this.resetForm();
-      //       this.showSnack(true, res.message); 
-      //       this.router.navigate(['/products']);
-      //     },
-      //     (err: any) => {
-      //       //console.log(err)
-      //       this.showSnack(false, err.error.message);  
-      //       this.resetForm();
-      //     }
-      //   ) 
-      // )
+      // console.log("Producto creado -> ", productData)
+      this.subscription.push(
+        this.productService.createProduct(productData).subscribe(
+          res => {
+            console.log('Response ->', res)
+            this.resetForm();
+            this.showSnack(true, `Producto ${res.id} creado`); 
+            this.router.navigate(['/products']);
+          },
+          (err: any) => {
+            //console.log(err)
+            this.showSnack(false,'Producto no ha podido ser creado');  
+            this.resetForm();
+          }
+        ) 
+      )
     }
       
   }

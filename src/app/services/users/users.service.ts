@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ClientsResponse } from '@app/models/clients';
-import { CustomResponse } from '@app/models/custom-response';
 import { environment } from '@environments/environment'; 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -27,10 +26,10 @@ export class UsersService {
   }
 
   //Crear un cliente
-  createClient(newProduct: ClientsResponse): Observable<CustomResponse>{
-    return this.httpClient.post<CustomResponse>(`${this.general_url}client`, newProduct)
+  createClient(newProduct: ClientsResponse): Observable<ClientsResponse>{
+    return this.httpClient.post<ClientsResponse>(`${this.general_url}client`, newProduct)
     .pipe(
-      map((res: CustomResponse) => {
+      map((res: ClientsResponse) => {
         return res;
       }),
     );

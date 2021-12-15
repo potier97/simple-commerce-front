@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UsersService } from '@app/services/users/users.service';
 import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { DocTypeData, UserData } from '@app/models/user'; 
+import { ClientsResponse } from '@app/models/clients';
 
 
 @Component({
@@ -14,234 +14,148 @@ import { DocTypeData, UserData } from '@app/models/user';
 })
 export class EditClientComponent implements OnInit, OnDestroy {
 
-  
-  //Flag to Spinner data 
-  loadingData: boolean = false; 
-  private subscription: Subscription[] = []; 
-  //Lista de tipos de documento
-  public listDocType: DocTypeData[]= []; 
-  //DATO DEL  CLIENTE A ACTUALIZAR
-  client: UserData;
-  //ID DEL CLIENTE ACTUALIZADO
-  idClient: number;
+  private subscription: Subscription[] = [];
 
   angForm: FormGroup = new FormGroup({
-    idDocType: new FormControl(''),
-    userDoc: new FormControl(''),
     name: new FormControl(''),
-    lastName: new FormControl(''), 
-    userMail: new FormControl(''),
-    userAddress: new FormControl(''),
+    lastname: new FormControl(''),
+    userId: new FormControl(''),
+    email: new FormControl(''),
     userPhone: new FormControl(''),
-  }); 
-  
+  });
+  client: ClientsResponse;
+  idClient: number;
 
   constructor( 
-    private route: ActivatedRoute, 
     private snackbar: MatSnackBar, 
     private fb: FormBuilder,  
     private router: Router,
+    private route: ActivatedRoute, 
     private usersService: UsersService) { }
 
   account_validation_messages = {
-    idDocType: [
-      { type: 'required', message: 'Seleccione el tipo de documento' },  
-    ],  
-    userDoc: [
-      { type: 'required', message: 'Ingrese el Documento del Cliente' },
-      { type: 'pattern', message: 'Ingrese un documento válido - solo números' },
-      { type: 'min', message: 'Ingrese un valor positivo' },  
-    ],
     name: [
-      { type: 'required', message: 'Ingrese el Nombre del Cliente' }, 
-      { type: 'maxlength', message: 'Ingrese un Nombre menor a 30 carácteres' }, 
+      { type: 'required', message: 'Ingrese el nombre del cliente' }, 
+      { type: 'maxlength', message: 'El nombre es demasiado grande' }, 
+      { type: 'minLength', message: 'El nombre es demasiado pequeño' }, 
     ],
-    lastName: [
-      { type: 'required', message: 'Ingrese los Apellidos del Cliente' },  
-      { type: 'maxlength', message: 'Los Apellidos deben ser menor a 30 carácteres' },
+    lastname: [
+      { type: 'required', message: 'Ingrese el apellido del cliente' }, 
+      { type: 'maxlength', message: 'El apellido es demasiado grande' }, 
+      { type: 'minLength', message: 'El apellido es demasiado pequeño' }, 
+    ],
+    userId: [
+      { type: 'required', message: 'Ingrese la cedula del cliente' },
+      { type: 'pattern', message: 'Ingrese una cantidad valida (solo números)' },
+      { type: 'minLength', message: 'Ingrese una cedula valida' },  
     ], 
-    userMail: [
-      { type: 'required', message: 'Ingrese el Correo del Cliente' },
-      { type: 'pattern', message: 'Ingrese un correo válido' }, 
-      { type: 'maxlength', message: 'Ingrese un correo menor a 30 carácteres' }, 
-    ],
-    userAddress: [
-      { type: 'required', message: 'Ingrese la dirección del Cliente' },
-      { type: 'maxlength', message: 'Ingrese un precio valido de solo números' },
-      { type: 'minlength', message: 'Ingrese una dirección valida' },  
+    email: [
+      { type: 'required', message: 'Ingrese el correo del cliente' },
+      { type: 'email', message: 'Ingrese un correo valido' },
     ],
     userPhone: [
-      { type: 'required', message: 'Ingrese el Teléfono del Cliente' },
-      { type: 'pattern', message: 'Ingrese un Teléfono de solo números' },
-      { type: 'maxlength', message: 'Ingrese un Teléfono de menos carácteres ' },  
+      { type: 'required', message: 'Ingrese el teléfono del cliente' },
+      { type: 'pattern', message: 'Ingrese un teléfono valido (solo números)' },
+      { type: 'minLength', message: 'Ingrese un teléfono valido' },  
     ],
   }; 
 
 
   ngOnDestroy(): void {
-    //console.log("Desubs all observers") 
     for(const sub of this.subscription) {
       sub.unsubscribe();
     }
   }
 
-   
-  ngOnInit(): void {  
+  ngOnInit(): void { 
     this.subscription.push(
       this.route.params.subscribe(params => {
         this.idClient = params['id'];
-
-        //OBTENER TODOS LOS TIPOS DE DOCUMENTOS
-        // this.subscription.push(
-        //   this.usersService.getAllDocTypes().subscribe(
-        //     res => { 
-        //       //console.log('Reponse DocTypes -> ', res.content)
-        //       this.listDocType = res.content;   
-        //         //OBTENER EL CLIENTE A ACTUALIZARTODOS LOS TIPOS DE DOCUMENTOS
-        //         this.subscription.push(
-        //           this.usersService.getClientById(this.idClient).subscribe(
-        //             response => { 
-        //               //console.log('Reponse User Data -> ', response.content)
-        //               this.client = response.content; 
-        //               //OFF FLAG TO SHOW SER DATA
-        //               this.loadData(response.content);
-        //               setTimeout(() => {
-        //                 this.loadingData = true  
-        //               }, 250);
-        //             },
-        //             (err: any) => {
-        //               //console.log(err)
-        //               this.showSnack(false, err.error.message || "No se pudo obtener el usuario");   
-        //               this.router.navigate(['/products'])
-        //             }
-        //           )  
-        //         ) 
-        //     },
-        //     (err: any) => {
-        //       //console.log(err)
-        //       this.showSnack(false, err.error.message || "No se pudo obtener los tipos de Documentos");   
-        //     }
-        //   )  
-        // )  
       }) 
-    )  
+    ) 
+    this.subscription.push(
+      this.usersService.getClientById(this.idClient).subscribe(
+        res => {
+          this.client = res;  
+          this.loadData();
+        },
+        (err: any) => {
+          this.showSnack(false, 'Cliente no existe');   
+          this.router.navigate(['/clients'])
+        }
+      )
+    )   
   }
 
-  loadData(data: UserData): void {
-    this.angForm = this.fb.group({ 
-      idDocType: new FormControl(
-        this.listDocType.find(doc => doc.idDocType === data.idDocType.idDocType),
-        //this.listDocType[0],
+
+  loadData(): void {
+    this.angForm = this.fb.group({
+      name: new FormControl(
+        this.client.nombre,
         Validators.compose([
-          Validators.required,  
+          Validators.required, 
+          Validators.maxLength(10),
+          Validators.minLength(3),
         ])
-      ),  
-      userDoc: new FormControl(
-        data.userDoc,
+      ),
+      lastname: new FormControl(
+        this.client.apellido,
+        Validators.compose([ 
+          Validators.required,
+          Validators.maxLength(10),
+          Validators.minLength(3),
+        ])
+      ),
+      userId: new FormControl(
+        this.client.cedula,
         Validators.compose([ 
           Validators.required,
           Validators.pattern('^[0-9]*$'),
-          Validators.min(1), 
+          Validators.minLength(3),
         ])
       ),
-      name: new FormControl(
-        data.name,
+      email: new FormControl(
+        this.client.correo,
         Validators.compose([ 
-          Validators.required, 
-          Validators.maxLength(30), 
-        ])
-      ),
-      lastName: new FormControl(
-        data.lastName,
-        Validators.compose([  
-          //Validators.required, 
-          Validators.maxLength(30), 
-        ])
-      ), 
-      userMail: new FormControl(
-        data.userMail,
-        Validators.compose([ 
-          Validators.required, 
-          Validators.pattern(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/),  // validacion de correo
-          Validators.maxLength(30),  
-        ])
-      ),
-      userAddress: new FormControl(
-        data.userAddress,
-        Validators.compose([ 
-          Validators.required, 
-          Validators.maxLength(30), 
-          Validators.minLength(3), 
+          Validators.required,
+          Validators.email,
         ])
       ),
       userPhone: new FormControl(
-        data.userPhone,
+        this.client.telefono,
         Validators.compose([ 
-          Validators.required, 
+          Validators.required,
           Validators.pattern('^[0-9]*$'),
-          Validators.maxLength(10),  
+          Validators.minLength(3),
         ])
       ),
-    });  
+    });
   }
 
-  validateChangeData(): boolean {
-    let isChange: boolean = false;
-    //Tipo documento
-    if(this.angForm.value.idDocType.idDocType !== this.client.idDocType.idDocType) isChange = true
-    // Documento Cliente
-    if(this.angForm.value.userDoc !== this.client.userDoc) isChange = true
-    // Nombre Cliente
-    if(this.angForm.value.name !== this.client.name) isChange = true
-    // Apellido Cliente
-    if(this.angForm.value.lastName !== this.client.lastName) isChange = true
-    // Correo Cliente
-    if(this.angForm.value.userMail !== this.client.userMail) isChange = true
-    // Direccion del cliente
-    if(this.angForm.value.userAddress !== this.client.userAddress) isChange = true
-    // Telefono del cliente
-    if(this.angForm.value.userPhone !== this.client.userPhone) isChange = true
-    return isChange
-  }
-
-  updateClient(): void {
-    const status = this.validateChangeData();
-    if (this.angForm.valid && status) { 
+  editClient(): void {
+    if (this.angForm.valid) {
       const userReq = this.angForm.value;
-      const userData = {
-        idUser: this.idClient,
-        idDocType: userReq.idDocType,
-        idUserType: this.client.idUserType,
-        associated: this.client.associated,
-        userDoc: userReq.userDoc,
-        name: userReq.name,
-        lastName: this.client.idUserType.idUserType === 2 ? this.client.lastName : userReq.lastName,
-        userPass: this.client.userPass,
-        userMail: userReq.userMail,
-        userAddress: userReq.userAddress,
-        userPhone: userReq.userPhone,   
-        userCreated: this.client.userCreated   
+      const clientData: ClientsResponse = {
+        nombre: userReq.name,
+        apellido: userReq.lastname,
+        cedula: userReq.userId,
+        correo: userReq.email,
+        telefono: userReq.userPhone,
+        estado: 1,
       }     
-      //console.log("Usuario a actualizar -> ", userData)
-      //Servicio para actualizar el cliente
-      // this.subscription.push(
-      //   this.usersService.updateClient(userData).subscribe(
-      //     res => {
-      //       //console.log('Response from update User ->', res)
-      //       this.resetForm();
-      //       this.showSnack(true, res.message); 
-      //       this.router.navigate(['/clients']);
-      //     },
-      //     (err: any) => {
-      //       //console.log(err)
-      //       this.showSnack(false, err.error.message || 'No se pudo actualizar el cliente');  
-      //       this.resetForm();
-      //       this.router.navigate(['/clients']);
-      //     }
-      //   ) 
-      // )
-    }else{
-      this.showSnack(false, 'Los datos del cliente no han cambiado'); 
+      this.subscription.push(
+        this.usersService.updateClient(this.idClient, clientData).subscribe(
+          res => {
+            this.resetForm();
+            this.showSnack(true, `Cliente ${res.id} actualizado`); 
+            this.router.navigate(['/clients']);
+          },
+          (err: any) => {
+            this.showSnack(false,'Cliente no ha podido ser actualizado');  
+            this.resetForm();
+          }
+        ) 
+      )
     }
       
   }

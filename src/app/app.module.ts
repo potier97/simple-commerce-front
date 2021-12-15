@@ -28,22 +28,19 @@ import { ClientsComponent } from './pages/clients/clients.component';
 import { LoginComponent } from './pages/login/login.component';  
 import { SingUpComponent } from './pages/singup/singup.component';
 import { NewProductComponent } from './pages/new-product/new-product.component';
-import { CustomDialogComponent } from './components/custom-dialog/custom-dialog.component';
 import { EditProductComponent } from './pages/edit-product/edit-product.component';
 import { NewClientComponent } from './pages/new-client/new-client.component';
 import { EditClientComponent } from './pages/edit-client/edit-client.component';
-import { ViewInvoiceComponent } from './pages/view-invoice/view-invoice.component';
-import { PayInvoiceDialogComponent } from './components/pay-invoice-dialog/pay-invoice-dialog.component';
-import { CovenantInvoicesDialogComponent } from './components/covenant-invoices-dialog/covenant-invoices-dialog.component';
-import { NewBuyDialogComponent } from './components/new-buy-dialog/new-buy-dialog.component';
-
-// Registro del tipo de datos y region a Colombia
-import localeCo from '@angular/common/locales/es-CO'
-import { registerLocaleData } from '@angular/common';
 import { PaidModesComponent } from './pages/paid-modes/paid-modes.component';
 import { NewPaidModesComponent } from './pages/new-paid-modes/new-paid-modes.component';
 import { EditPaidModesComponent } from './pages/edit-paid-modes/edit-paid-modes.component';
 import { InvoicesComponent } from './pages/invoices/invoices.component';
+
+import { ViewInvoiceComponent } from './pages/view-invoice/view-invoice.component';
+
+// Registro del tipo de datos y region a Colombia
+import localeCo from '@angular/common/locales/es-CO'
+import { registerLocaleData } from '@angular/common';
 registerLocaleData(localeCo);
 
 @NgModule({
@@ -57,7 +54,6 @@ registerLocaleData(localeCo);
     LoginComponent,  
     SingUpComponent,
     NewProductComponent,
-    CustomDialogComponent,
     EditProductComponent,
     PaidModesComponent,
     NewPaidModesComponent,
@@ -66,9 +62,6 @@ registerLocaleData(localeCo);
     InvoicesComponent,
     EditClientComponent,
     ViewInvoiceComponent,
-    PayInvoiceDialogComponent,
-    CovenantInvoicesDialogComponent,
-    NewBuyDialogComponent, 
   ],
   imports: [
     BrowserModule,

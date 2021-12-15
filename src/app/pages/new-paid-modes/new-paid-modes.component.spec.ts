@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NewPaidModesComponent } from './new-paid-modes.component';
 
-describe('NewProductComponent', () => {
+describe('NewPaidModesComponent', () => {
   let component: NewPaidModesComponent;
   let fixture: ComponentFixture<NewPaidModesComponent>;
 

@@ -18,7 +18,7 @@
   margin-top: 24px !important;
   margin-left: 16px;
 }
-
+ 
 .imput-form-text {
   margin-left: 8px;
   margin-right: 8px;
@@ -28,7 +28,7 @@
 .error-message-form {
   margin-left: 8px;
   margin-right: 8px;
-  padding-top: 4px;
+  padding-top: 4px; 
 }
 
 .container {
@@ -49,10 +49,4 @@
 .succesSnack {
   background-color: green !important;
   color: #fff !important;
-}
-
-.container-spinner {
-  height: 100%;
-  padding: 24px 16px;
-  min-height: calc(100vh - 80px);
 }
